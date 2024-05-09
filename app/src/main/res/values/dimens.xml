@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="medium_padding">8dp</dimen>
+    <dimen name="primary_text_size">22sp</dimen>
+    <dimen name="button_width">328dp</dimen>
+    <dimen name="button_high">220dp</dimen>
+    <dimen name="corner_radius">30dp</dimen>
+
+</resources>
