@@ -15,8 +15,8 @@
             android:layout_height="48dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="52dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="52dp"/>
 
 
         <TextView
@@ -33,6 +33,7 @@
 
     </FrameLayout>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -42,37 +43,49 @@
         android:paddingBottom="28dp"
         android:orientation="vertical">
 
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_gravity="center"
             android:backgroundTint="#ffffff"
+            app:cornerRadius="@dimen/corner_radius"
+            android:layout_gravity="center"
             android:text="@string/search"
+            android:textColor="#1A1B22"
             android:textSize="@dimen/primary_text_size"
-            app:cornerRadius="@dimen/corner_radius"
-            android:textColor="#1A1B22" />
+            app:icon="@drawable/vector_search"
+            app:iconTint="@color/black"
+            app:iconGravity="textStart"/>
+
         <Button
             android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_gravity="center"
             android:backgroundTint="#ffffff"
+            app:cornerRadius="@dimen/corner_radius"
+            android:layout_gravity="center"
             android:text="@string/mediateka"
+            android:textColor="#1A1B22"
             android:textSize="@dimen/primary_text_size"
-            app:cornerRadius="@dimen/corner_radius"
-            android:textColor="#1A1B22" />
+            app:icon="@drawable/vector_mediateka"
+            app:iconTint="@color/black"
+            app:iconGravity="textStart"/>
+
         <Button
             android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_gravity="center"
             android:backgroundTint="#ffffff"
-            android:text="@string/settings"
-            android:textSize="@dimen/primary_text_size"
             app:cornerRadius="@dimen/corner_radius"
-            android:textColor="#1A1B22" />
+            android:layout_gravity="center"
+            android:text="@string/settings"
+            android:textColor="#1A1B22"
+            android:textSize="@dimen/primary_text_size"
+            app:icon="@drawable/vector_settings"
+            app:iconTint="@color/black"
+            app:iconGravity="textStart"/>
+
     </LinearLayout>
+
 </LinearLayout>
