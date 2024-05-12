@@ -43,9 +43,11 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/buttonSearchMainActivity"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:foreground="?attr/selectableItemBackground"
             android:backgroundTint="#ffffff"
             app:cornerRadius="@dimen/corner_radius"
             android:layout_gravity="center"
@@ -57,9 +59,11 @@
             app:iconGravity="textStart"/>
 
         <Button
+            android:id="@+id/buttonMediatekaMainActivity"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:foreground="?attr/selectableItemBackground"
             android:backgroundTint="#ffffff"
             app:cornerRadius="@dimen/corner_radius"
             android:layout_gravity="center"
@@ -71,9 +75,11 @@
             app:iconGravity="textStart"/>
 
         <Button
+            android:id="@+id/buttonSettingsMainActivity"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:foreground="?attr/selectableItemBackground"
             android:backgroundTint="#ffffff"
             app:cornerRadius="@dimen/corner_radius"
             android:layout_gravity="center"
