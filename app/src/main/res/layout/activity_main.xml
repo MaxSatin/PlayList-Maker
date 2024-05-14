@@ -40,7 +40,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingBottom="28dp"
-        android:orientation="vertical">
+        android:orientation="vertical"      >
 
         <Button
             android:id="@+id/buttonSearchMainActivity"
@@ -52,6 +52,7 @@
             app:cornerRadius="@dimen/corner_radius"
             android:layout_gravity="center"
             android:text="@string/search"
+            android:textAllCaps="false"
             android:textColor="#1A1B22"
             android:textSize="@dimen/primary_text_size"
             app:icon="@drawable/vector_search"
@@ -68,6 +69,7 @@
             app:cornerRadius="@dimen/corner_radius"
             android:layout_gravity="center"
             android:text="@string/mediateka"
+            android:textAllCaps="false"
             android:textColor="#1A1B22"
             android:textSize="@dimen/primary_text_size"
             app:icon="@drawable/vector_mediateka"
@@ -84,6 +86,7 @@
             app:cornerRadius="@dimen/corner_radius"
             android:layout_gravity="center"
             android:text="@string/settings"
+            android:textAllCaps="false"
             android:textColor="#1A1B22"
             android:textSize="@dimen/primary_text_size"
             app:icon="@drawable/vector_settings"

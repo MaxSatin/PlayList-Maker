@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -15,30 +16,36 @@ class MainActivity : AppCompatActivity() {
         val mediatekaButton = findViewById<Button>(R.id.buttonMediatekaMainActivity)
         val settingsButton = findViewById<Button>(R.id.buttonSettingsMainActivity)
 
-        val searchButtonSetOnClickListener: View.OnClickListener = object : View.OnClickListener {
+        /*val searchButtonSetOnClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
                 Toast.makeText(
                     this@MainActivity, "Нажата кнопка 'Поиск'",
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        } */
+        searchButton.setOnClickListener {
+            startActivity(Intent(this, SearchActivity::class.java))
         }
-        searchButton.setOnClickListener(searchButtonSetOnClickListener)
+
 
         mediatekaButton.setOnClickListener {
-            Toast.makeText(
+            /*Toast.makeText(
                 this@MainActivity, "Нажата кнопка 'Медиатека'",
                 Toast.LENGTH_SHORT
-            ).show()
+            ).show()*/
+            startActivity(Intent(this, MediatekaActivity::class.java))
         }
 
-        val settingsButtonSetOnClickListener = object : View.OnClickListener {
+        /*val settingsButtonSetOnClickListener = object : View.OnClickListener {
             override fun onClick (v : View?) {
              Toast.makeText(this@MainActivity,"Нажата кнопка 'Настройки'",
                  Toast.LENGTH_SHORT).show()
             }
 
+        }*/
+        settingsButton.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
-        settingsButton.setOnClickListener(settingsButtonSetOnClickListener)
     }
 }
