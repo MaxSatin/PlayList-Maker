@@ -2,48 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    style="@style/SettingsActivityLayoutStyle">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="56dp">
 
         <FrameLayout
-            android:layout_width="304dp"
-            android:layout_height="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="52dp"/>
 
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="12dp"
+        <TextView style="@style/TitleTextStyle"
+            android:layout_marginTop="16dp"
             android:layout_marginLeft="52dp"
             android:layout_marginRight="100dp"
-            android:layout_gravity="start"
-            android:textSize="@dimen/primary_text_size"
-            android:text="@string/settings"
-            android:textColor="@color/black"/>
-        <Button
-            style="?android:attr/borderlessButtonStyle"
+            android:text="@string/settings" />
+
+        <Button style="@style/SettingsActivityButtonBack"
             android:id="@+id/buttonSettingsBack"
-            android:layout_width="45dp"
-            android:layout_height="match_parent"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginBottom="2dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="0dp"
-            android:backgroundTint="@color/white"
             android:layout_gravity="start"
             app:icon="@drawable/vector_arrow_back"
-            app:iconTint="@color/black"
             app:iconGravity="textStart"/>
 
 
@@ -55,108 +43,52 @@
         android:layout_marginTop="24dp"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="63dp"
-            android:paddingLeft="@dimen/padding"
-            android:paddingTop="21dp"
-            android:paddingRight="@dimen/padding">
+        <FrameLayout style="@style/SettingsActivityButtonFrame">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/Dark_Mode"
-                android:textColor="@color/black"
-                android:textSize="@dimen/element_text_size" />
+            <TextView style="@style/SettingsActivityButtonText"
+                android:text="@string/Dark_Mode"/>
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginBottom="16dp"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="63dp"
-            android:paddingLeft="@dimen/padding"
-            android:paddingTop="21dp"
-            android:paddingRight="@dimen/padding">
+        <FrameLayout style="@style/SettingsActivityButtonFrame">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/Share"
-                android:textColor="@color/black"
-                android:textSize="@dimen/element_text_size" />
+            <TextView style="@style/SettingsActivityButtonText"
+                android:text="@string/Share"/>
 
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+            <Button style="@style/SettingsActivityButton"
                 android:layout_gravity="end"
-                android:backgroundTint="@color/white"
                 app:icon="@drawable/share_light_mode"
-                app:iconGravity="textStart"
-                app:iconTint="@color/grey" />
+                app:iconGravity="textStart" />
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="63dp"
-            android:paddingLeft="@dimen/padding"
-            android:paddingTop="21dp"
-            android:paddingRight="@dimen/padding">
+        <FrameLayout style="@style/SettingsActivityButtonFrame">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/Support"
-                android:textColor="@color/black"
-                android:textSize="@dimen/element_text_size" />
+            <TextView style="@style/SettingsActivityButtonText"
+                android:text="@string/Support"/>
 
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+            <Button style="@style/SettingsActivityButton"
                 android:layout_gravity="end"
-                android:backgroundTint="@color/white"
                 app:icon="@drawable/light_mode_support"
-                app:iconGravity="textStart"
-                app:iconTint="@color/grey" />
+                app:iconGravity="textStart"/>
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="63dp"
-            android:paddingLeft="@dimen/padding"
-            android:paddingTop="21dp"
-            android:paddingRight="@dimen/padding">
+        <FrameLayout style="@style/SettingsActivityButtonFrame">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/user_Argeement"
-                android:textColor="@color/black"
-                android:textSize="@dimen/element_text_size" />
+            <TextView style="@style/SettingsActivityButtonText"
+                android:text="@string/user_Argeement"/>
 
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+            <Button style="@style/SettingsActivityButton"
                 android:layout_gravity="end"
-                android:backgroundTint="@color/white"
                 app:icon="@drawable/vector_arrow_forward"
-                app:iconGravity="textStart"
-                app:iconTint="@color/grey" />
+                app:iconGravity="textStart"/>
 
         </FrameLayout>
 

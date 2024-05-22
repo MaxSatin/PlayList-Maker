@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val searchButton = findViewById<Button>(R.id.buttonSearchMainActivity)
-        val mediatekaButton = findViewById<Button>(R.id.buttonMediatekaMainActivity)
+        val mediatekaButton = findViewById<Button>(R.id.buttonMediaLibraryMainActivity)
         val settingsButton = findViewById<Button>(R.id.buttonSettingsMainActivity)
 
         /*val searchButtonSetOnClickListener: View.OnClickListener = object : View.OnClickListener {
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity, "Нажата кнопка 'Медиатека'",
                 Toast.LENGTH_SHORT
             ).show()*/
-            startActivity(Intent(this, MediatekaActivity::class.java))
+            startActivity(Intent(this, MediaLibraryActivity::class.java))
         }
 
         /*val settingsButtonSetOnClickListener = object : View.OnClickListener {
