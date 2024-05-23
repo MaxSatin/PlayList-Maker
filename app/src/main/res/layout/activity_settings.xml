@@ -62,6 +62,7 @@
                 android:text="@string/Share"/>
 
             <Button style="@style/SettingsActivityButton"
+                android:id="@+id/buttonSettingsShare"
                 android:layout_gravity="end"
                 app:icon="@drawable/share_light_mode"
                 app:iconGravity="textStart" />
@@ -74,6 +75,7 @@
                 android:text="@string/Support"/>
 
             <Button style="@style/SettingsActivityButton"
+                android:id="@+id/buttonSettingsSupport"
                 android:layout_gravity="end"
                 app:icon="@drawable/light_mode_support"
                 app:iconGravity="textStart"/>
@@ -86,6 +88,7 @@
                 android:text="@string/user_Argeement"/>
 
             <Button style="@style/SettingsActivityButton"
+                android:id="@+id/buttonSettingsUserAgreement"
                 android:layout_gravity="end"
                 app:icon="@drawable/vector_arrow_forward"
                 app:iconGravity="textStart"/>
