@@ -2,19 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/SettingsActivityLayoutStyle">
+    style="@style/InnerActivityLayoutStyle">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="56dp">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="52dp"/>
+        <FrameLayout style="@style/InnerActivityHeaderFrameLayout" />
 
         <TextView style="@style/TitleTextStyle"
             android:layout_marginTop="16dp"
@@ -24,17 +18,9 @@
 
         <Button style="@style/SettingsActivityButtonBack"
             android:id="@+id/buttonSettingsBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="0dp"
             android:layout_gravity="start"
             app:icon="@drawable/vector_arrow_back"
             app:iconGravity="textStart"/>
-
-
     </FrameLayout>
 
     <LinearLayout
