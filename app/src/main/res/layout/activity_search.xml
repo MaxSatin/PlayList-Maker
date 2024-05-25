@@ -14,10 +14,10 @@
             android:layout_marginTop="16dp"
             android:layout_marginLeft="52dp"
             android:layout_marginRight="100dp"
-            android:text="@string/settings" />
+            android:text="@string/search" />
 
         <Button style="@style/SettingsActivityButtonBack"
-            android:id="@+id/buttonSettingsBack"
+            android:id="@+id/buttonSearchBack"
             android:layout_gravity="start"
             app:icon="@drawable/vector_arrow_back"
             app:iconGravity="textStart"/>
@@ -37,18 +37,31 @@
         android:paddingEnd="@dimen/padding">
 
         <EditText
+            android:id="@+id/editTextwather"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="32dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:hint="@string/search_hint"
+            android:textSize="@dimen/element_text_size"
+            android:fontFamily="@font/ys_display_regular"
+            android:drawableStart="@drawable/icon_search_small"
+            android:drawablePadding="@dimen/medium_padding"
+            android:background="@drawable/search_input"
             android:maxLength="50"
             android:maxLines="1"
             android:inputType="textCapWords"
             android:textColor="@color/black"
             android:textColorHint="@color/grey"
             android:textAlignment="textStart"/>
-
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="end"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:visibility="gone" />
 
     </FrameLayout>
     </FrameLayout>
-
     </LinearLayout>
