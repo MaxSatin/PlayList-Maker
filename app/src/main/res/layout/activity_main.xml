@@ -1,18 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    style="@style/MainActivityLayoutStyle">
+    
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <FrameLayout
+            android:layout_width="304dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="52dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView style="@style/TitleTextStyle"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="6dp"
+            android:text="@string/app_name"
+            android:textColor="@color/white"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
+        android:paddingLeft="@dimen/padding"
+        android:paddingRight="@dimen/padding"
+        android:paddingBottom="28dp"
+        android:orientation="vertical">
+
+        <Button style="@style/MainActivityButtonStyle"
+            android:id="@+id/buttonSearchMainActivity"
+            android:text="@string/search"
+            app:icon="@drawable/vector_search"
+            app:iconGravity="textStart"/>
+
+        <Button style="@style/MainActivityButtonStyle"
+            android:id="@+id/buttonMediaLibraryMainActivity"
+            android:text="@string/mediateka"
+            app:icon="@drawable/vector_mediateka"
+            app:iconGravity="textStart"/>
+
+        <Button style="@style/MainActivityButtonStyle"
+            android:id="@+id/buttonSettingsMainActivity"
+            android:text="@string/settings"
+            app:icon="@drawable/vector_settings"
+            app:iconGravity="textStart"/>
+
+    </LinearLayout>
+
+</LinearLayout>
