@@ -18,33 +18,29 @@ class SettingsActivity : AppCompatActivity() {
 
         val buttonShare = findViewById<Button>(R.id.buttonSettingsShare)
         buttonShare.setOnClickListener {
-            val shareTextMessage = getString(R.string.ShareAppText)
             val messengerIntent = Intent()
             messengerIntent.action = Intent.ACTION_SEND
-            messengerIntent.putExtra(Intent.EXTRA_TEXT, shareTextMessage)
+            messengerIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.ShareAppText))
             messengerIntent.type = "text/plain"
             startActivity(Intent(messengerIntent))
         }
 
         val buttonSupport = findViewById<Button>(R.id.buttonSettingsSupport)
         buttonSupport.setOnClickListener {
-            val supportTextMessageHeader = getString(R.string.SupportTextHeader)
-            val supportTextMessageBody = getString(R.string.SupportTextBody)
             val mailIntent = Intent()
             mailIntent.action = Intent.ACTION_SENDTO
             mailIntent.setData(Uri.parse("mailto:"))
-            mailIntent.putExtra(Intent.EXTRA_EMAIL, "praktikum@support.yandex.ru")
-            mailIntent.putExtra(Intent.EXTRA_SUBJECT, supportTextMessageHeader)
-            mailIntent.putExtra(Intent.EXTRA_TEXT, supportTextMessageBody)
+            mailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.practicum_support_mail)))
+            mailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.SupportTextHeader))
+            mailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.SupportTextBody))
             startActivity(Intent(mailIntent))
         }
 
         val buttonUserAgreement = findViewById<Button>(R.id.buttonSettingsUserAgreement)
         buttonUserAgreement.setOnClickListener {
-            val userOfferText = getString(R.string.Offer)
             val browserIntent = Intent ()
             browserIntent.action = Intent.ACTION_VIEW
-            browserIntent.setData(Uri.parse(userOfferText))
+            browserIntent.setData(Uri.parse(getString(R.string.Offer)))
             startActivity(Intent(browserIntent))
         }
     }
