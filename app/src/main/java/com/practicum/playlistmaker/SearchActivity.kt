@@ -3,6 +3,7 @@ package com.practicum.playlistmaker
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -12,6 +13,12 @@ import android.widget.EditText
 import android.widget.ImageView
 
 class SearchActivity : AppCompatActivity() {
+
+    companion object {
+        const val KEY = "KEY"
+    }
+    private var textInput = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -38,7 +45,8 @@ class SearchActivity : AppCompatActivity() {
               {
                   inputEditText.setBackgroundColor(getColor(R.color.grey_pale))
               } else {
-                  var input = s.toString()
+                  textInput= s.toString()
+
               }
                 clearButton.visibility = clearButtonVisibility(s)
             }
@@ -55,5 +63,15 @@ class SearchActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(KEY, textInput)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        textInput = savedInstanceState.getString(KEY, textInput)
     }
 }
