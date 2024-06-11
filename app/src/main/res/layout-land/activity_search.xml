@@ -37,7 +37,7 @@
         android:paddingEnd="@dimen/padding">
 
         <EditText
-            android:id="@+id/editTextwather"
+            android:id="@+id/editTextwatcher"
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:paddingStart="12dp"
