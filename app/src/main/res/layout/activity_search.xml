@@ -25,7 +25,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="52dp"
         android:orientation="vertical">
     <FrameLayout
         android:layout_width="match_parent"
@@ -63,5 +63,12 @@
             android:visibility="gone"/>
 
     </FrameLayout>
+
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/padding"/>
     </LinearLayout>
