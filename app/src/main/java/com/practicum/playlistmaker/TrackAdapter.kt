@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
-class TrackAdapter (
-    private var trackList : MutableList<TrackItem>
-) : RecyclerView.Adapter <TrackViewHolder> () {
+class TrackAdapter(
+    private var trackList: MutableList<TrackItem>
+) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
@@ -22,11 +22,11 @@ class TrackAdapter (
         holder.bind(trackList[position])
     }
 
-    fun updateItems(items : List<TrackItem>) {
+    fun updateItems(items: List<TrackItem>) {
 
         val oldItems = this.trackList
         val newItems = trackList.toMutableList()
-        val diffResult =DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {
                 return oldItems.size
             }
@@ -40,7 +40,7 @@ class TrackAdapter (
             }
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-               return oldItems[oldItemPosition] == newItems[newItemPosition]
+                return oldItems[oldItemPosition] == newItems[newItemPosition]
             }
         })
         this.trackList = newItems

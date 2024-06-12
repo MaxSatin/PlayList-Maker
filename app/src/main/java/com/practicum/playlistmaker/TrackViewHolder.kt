@@ -8,16 +8,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.databinding.TrackItemBinding
 
-class TrackViewHolder (itemView: View) : RecyclerView.ViewHolder (itemView) {
+class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val binding = TrackItemBinding.bind(itemView)
 
-    fun bind (item : TrackItem) {
+    fun bind(item: TrackItem) {
         binding.trackName.text = item.trackName
         binding.trackArtistName.text = item.artistName
         binding.trackLength.text = item.trackLength
         Glide.with(binding.root.context)
             .load(item.imageCoverUrl)
-            .transform(RoundedCorners(2))
+            .placeholder(R.drawable.placeholder_loading_icon)
             .into(binding.trackCoverImage)
     }
 }
