@@ -32,7 +32,7 @@
                 android:layout_height="14dp"
                 android:layout_marginTop="0dp">
             <TextView
-                android:id="@+id/trackAuthorName"
+                android:id="@+id/trackArtistName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <ImageView
@@ -48,6 +48,7 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/trackCoverImage"
         android:layout_marginTop="@dimen/medium_padding"
         android:layout_marginBottom="@dimen/medium_padding"
         android:layout_marginStart="14dp"
