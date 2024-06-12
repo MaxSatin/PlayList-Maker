@@ -18,6 +18,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         Glide.with(binding.root.context)
             .load(item.imageCoverUrl)
             .placeholder(R.drawable.placeholder_loading_icon)
+            .fitCenter()
             .into(binding.trackCoverImage)
     }
 }
