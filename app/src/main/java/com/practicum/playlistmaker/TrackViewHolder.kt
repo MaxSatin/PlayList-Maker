@@ -19,6 +19,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(item.imageCoverUrl)
             .placeholder(R.drawable.placeholder_loading_icon)
             .fitCenter()
+            .transform(RoundedCorners(10))
             .into(binding.trackCoverImage)
     }
 }
