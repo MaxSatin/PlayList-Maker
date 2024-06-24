@@ -36,8 +36,8 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     private val itunesApiService = retrofit.create(ItunesAPI::class.java)
-    private val trackList = ArrayList<CurrentTrack>()
-    private val adapter = TrackAdapter(trackList)
+    private val trackList = mutableListOf<CurrentTrack>()
+    private val adapter = TrackAdapter()
 
 
     private lateinit var refreshSearchButton: Button
@@ -67,10 +67,10 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
-        buttonBack = findViewById<Button>(R.id.buttonSearchBack)
-        queryInput = findViewById<EditText>(R.id.editTextwather)
-        clearButton = findViewById<ImageView>(R.id.clearIcon)
-        recyclerSearch = findViewById<RecyclerView>(R.id.recyclerSearch)
+        buttonBack = findViewById(R.id.buttonSearchBack)
+        queryInput = findViewById(R.id.editTextwather)
+        clearButton = findViewById(R.id.clearIcon)
+        recyclerSearch = findViewById(R.id.recyclerSearch)
         refreshSearchButton = findViewById(R.id.refreshSearchButton)
         nothingFoundPH = findViewById(R.id.nothingFoundPlaceHolder)
         badConnectionPH = findViewById(R.id.badConnectionPlaceHolder)
@@ -86,6 +86,8 @@ class SearchActivity : AppCompatActivity() {
         }
         clearButton.setOnClickListener {
             queryInput.setText("")
+            trackList.clear()
+            adapter.updateItems(trackList)
             inputMethodManager?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         }
 
@@ -119,7 +121,6 @@ class SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
             }
         }
-        recyclerSearch.adapter = adapter
         queryInput.addTextChangedListener(editTextWatcher)
     }
 
