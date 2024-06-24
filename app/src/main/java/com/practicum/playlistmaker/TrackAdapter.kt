@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 class TrackAdapter(
-    private var trackList: MutableList<CurrentTrack>
+    private var trackList: ArrayList<CurrentTrack>
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -22,10 +22,10 @@ class TrackAdapter(
         holder.bind(trackList[position])
     }
 
-    fun updateItems(items: List<TrackItem>) {
+    fun updateItems(items: List<CurrentTrack>) {
 
         val oldItems = this.trackList
-        val newItems = trackList.toMutableList()
+        val newItems = items.toMutableList()
         val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {
                 return oldItems.size
@@ -43,7 +43,7 @@ class TrackAdapter(
                 return oldItems[oldItemPosition] == newItems[newItemPosition]
             }
         })
-        this.trackList = newItems
+        this.trackList = newItems as ArrayList<CurrentTrack>
         diffResult.dispatchUpdatesTo(this)
     }
 

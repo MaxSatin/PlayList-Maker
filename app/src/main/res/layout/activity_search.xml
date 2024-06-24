@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/InnerActivityLayoutStyle">
+    style="@style/InnerActivityLayoutStyle"
+    android:id="@+id/searchActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -24,11 +25,6 @@
             app:icon="@drawable/vector_arrow_back"
             app:iconGravity="textStart" />
     </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -70,8 +66,6 @@
 
         </FrameLayout>
 
-    </FrameLayout>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -84,6 +78,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <LinearLayout
+            android:id="@+id/nothingFoundPlaceHolder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -92,7 +87,6 @@
             android:visibility="gone">
 
             <ImageView
-                android:id="@+id/nothingFoundPlaceHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -109,6 +103,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/badConnectionPlaceHolder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -116,10 +111,9 @@
             android:layout_marginTop="104dp"
             android:layout_marginEnd="24dp"
             android:orientation="vertical"
-            android:visibility="">
+            android:visibility="gone">
 
             <ImageView
-                android:id="@+id/connectionErrorPlaceHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -153,6 +147,7 @@
             </LinearLayout>
 
             <Button xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/refreshSearchButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
