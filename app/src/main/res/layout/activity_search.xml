@@ -87,11 +87,17 @@
             android:visibility="gone">
 
             <ImageView
-                style="@style/SearchActivityNothingFoundImagePH" />
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/vector_nothing_found_light_mode"/>
 
             <TextView
+                style="@style/SearchActivityNothingFoundTextPH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding"
-                style="@style/SearchActivityNothingFoundTextPH" />
+                android:text="@string/NothingFound"/>
 
         </LinearLayout>
 
@@ -107,7 +113,10 @@
             android:visibility="gone">
 
             <ImageView
-                style="@style/SearchActivityBadConnectionImagePH"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/vector_connection_error_light_mode"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -117,22 +126,29 @@
 
                 <TextView
                     style="@style/SearchActivityNothingFoundTextPH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Проблемы со связью."/>
+                    android:text="@string/BadConnection"/>
 
                 <TextView
                     style="@style/SearchActivityNothingFoundTextPH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/medium_padding"
                     android:gravity="center"
-                    android:text="Загрузка не удалась. Проверьте подключение к интернету." />
-
+                    android:layout_marginTop="@dimen/medium_padding"
+                    android:text="@string/LoadFailed"/>
             </LinearLayout>
 
             <Button xmlns:app="http://schemas.android.com/apk/res-auto"
                 style="@style/RefreshButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp"
                 android:id="@+id/refreshSearchButton"
-                android:text="Обновить" />
+                android:text="@string/Refresh" />
 
         </LinearLayout>
 

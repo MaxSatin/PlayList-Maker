@@ -27,9 +27,17 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/trackName"
             style="@style/SearchActivityTrackSongText"
-            tools:text="item_text_text" />
+            android:id="@+id/trackName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            tools:text="item_text_text"
+
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,9 +45,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/trackArtistName"
                 style="@style/SearchActivityTrackArtistText"
-                tools:text="item_text_text" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/trackArtistName"
+                tools:text="item_text_text"
+                android:layout_gravity="bottom"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -49,9 +60,13 @@
                 app:iconTint="@color/grey" />
 
             <TextView
-                android:id="@+id/trackLength"
                 style="@style/SearchActivityTrackArtistText"
-                tools:text="item_text_text" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/trackLength"
+                tools:text="item_text_text"
+                android:layout_gravity="bottom"/>
+
         </LinearLayout>
     </LinearLayout>
 

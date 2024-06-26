@@ -75,6 +75,7 @@ class SearchActivity : AppCompatActivity() {
         nothingFoundPH = findViewById(R.id.nothingFoundPlaceHolder)
         badConnectionPH = findViewById(R.id.badConnectionPlaceHolder)
 
+
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
@@ -159,7 +160,6 @@ class SearchActivity : AppCompatActivity() {
             }
         })
     }
-
 
     private fun showErrorBadConnection() {
             trackList.clear()

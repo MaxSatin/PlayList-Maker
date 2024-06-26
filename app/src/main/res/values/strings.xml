@@ -15,6 +15,11 @@
     <string name="SupportTextBody">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="Offer">https://yandex.ru/legal/practicum_offer/</string>
     <string name="practicum_support_mail">praktikum@support.yandex.ru</string>
+    <string name="NothingFound">Ничего не нашлось</string>
+    <string name="BadConnection">Проблема со связью</string>
+    <string name="LoadFailed">Загрузка не удалась. Проверьте подключерние к интернету</string>
+    <string name="Refresh">Обновить</string>
+
 
     <string name="search_hint">Поиск</string>
 
