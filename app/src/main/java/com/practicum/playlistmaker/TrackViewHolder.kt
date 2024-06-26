@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val binding = TrackItemBinding.bind(itemView)
+    private val binding = TrackItemBinding.bind(itemView)
 
     fun bind(item: CurrentTrack) {
         binding.trackName.text = item.trackName
