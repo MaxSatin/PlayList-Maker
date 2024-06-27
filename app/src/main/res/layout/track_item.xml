@@ -34,10 +34,8 @@
             android:layout_gravity="bottom"
             tools:text="item_text_text"
 
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"/>
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,7 +48,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/trackArtistName"
                 tools:text="item_text_text"
-                android:layout_gravity="bottom"/>
+                android:layout_gravity="bottom"
+
+                android:maxLines="1"
+                android:maxLength="35"
+                android:ellipsize="end"/>
 
             <ImageView
                 android:layout_width="wrap_content"
