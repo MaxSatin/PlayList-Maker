@@ -30,7 +30,10 @@ class SettingsActivity : AppCompatActivity() {
             val mailIntent = Intent()
             mailIntent.action = Intent.ACTION_SENDTO
             mailIntent.setData(Uri.parse("mailto:"))
-            mailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.practicum_support_mail)))
+            mailIntent.putExtra(
+                Intent.EXTRA_EMAIL,
+                arrayOf(getString(R.string.practicum_support_mail))
+            )
             mailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.SupportTextHeader))
             mailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.SupportTextBody))
             startActivity(Intent(mailIntent))
@@ -38,7 +41,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val buttonUserAgreement = findViewById<Button>(R.id.buttonSettingsUserAgreement)
         buttonUserAgreement.setOnClickListener {
-            val browserIntent = Intent ()
+            val browserIntent = Intent()
             browserIntent.action = Intent.ACTION_VIEW
             browserIntent.setData(Uri.parse(getString(R.string.Offer)))
             startActivity(Intent(browserIntent))

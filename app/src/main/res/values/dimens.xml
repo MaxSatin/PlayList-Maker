@@ -7,5 +7,6 @@
     <dimen name="button_width">328dp</dimen>
     <dimen name="button_high">220dp</dimen>
     <dimen name="corner_radius">16dp</dimen>
+    <dimen name="small_corner_radius">2dp</dimen>
 
 </resources>
