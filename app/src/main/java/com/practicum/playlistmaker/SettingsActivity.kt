@@ -5,6 +5,10 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.Switch
+import com.google.android.material.behavior.SwipeDismissBehavior
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +20,13 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        val buttonShare = findViewById<Button>(R.id.buttonSettingsShare)
+        val themeSwither = findViewById<SwitchMaterial>(R.id.themeSwither)
+
+        themeSwither.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+
+        val buttonShare = findViewById<FrameLayout>(R.id.buttonSettingsShare)
         buttonShare.setOnClickListener {
             val messengerIntent = Intent()
             messengerIntent.action = Intent.ACTION_SEND
