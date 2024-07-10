@@ -20,9 +20,9 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        val themeSwither = findViewById<SwitchMaterial>(R.id.themeSwither)
+        val themeSwitсher = findViewById<SwitchMaterial>(R.id.themeSwither)
 
-        themeSwither.setOnCheckedChangeListener { _, checked ->
+        themeSwitсher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
         }
 
