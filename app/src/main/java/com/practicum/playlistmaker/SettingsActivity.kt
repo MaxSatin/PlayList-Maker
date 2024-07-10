@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,11 @@ import com.google.android.material.behavior.SwipeDismissBehavior
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
+    private val sharedPrefs by lazy {
+        getSharedPreferences(App.APP_THEME, Context.MODE_PRIVATE)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -20,7 +26,9 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
+
         val themeSwitсher = findViewById<SwitchMaterial>(R.id.themeSwither)
+        themeSwitсher.isChecked = sharedPrefs.getBoolean(App.IS_DARK_MODE_ON_KEY, false)
 
         themeSwitсher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)

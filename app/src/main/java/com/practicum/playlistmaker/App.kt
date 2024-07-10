@@ -12,7 +12,7 @@ class App : Application() {
         const val IS_DARK_MODE_ON_KEY = "is_dark_mode_on"
     }
 
-    var darkTheme = false
+    private var darkTheme = false
     private val sharedPrefs by lazy {
         getSharedPreferences(APP_THEME, Context.MODE_PRIVATE)
     }
