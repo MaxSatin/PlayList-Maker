@@ -157,11 +157,12 @@
 
 
     <LinearLayout
+        android:id="@+id/trachHistory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/padding"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             style="@style/SearchHistoryHeader"
@@ -174,7 +175,7 @@
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerSearchHistory"
+            android:id="@+id/trackHistoryRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
