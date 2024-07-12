@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -42,21 +44,14 @@ class SearchActivity : AppCompatActivity() {
     lateinit var binding: ActivitySearchBinding
 
 
-    private lateinit var refreshSearchButton: Button
-    private lateinit var recyclerSearch: RecyclerView
-    private lateinit var buttonBack: Button
-    private lateinit var queryInput: EditText
-    private lateinit var clearButton: ImageView
-    private lateinit var nothingFoundPH: LinearLayout
-    private lateinit var badConnectionPH: LinearLayout
     private var textInput = ""
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_search)
+        binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.searchActivity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -81,7 +76,7 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
         binding.clearIcon.setOnClickListener {
-            queryInput.setText("")
+            binding.editTextwather.setText("")
             trackList.clear()
             adapter.updateItems(trackList)
             inputMethodManager?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
@@ -95,6 +90,7 @@ class SearchActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchSongs()
                 true
+
             }
             false
         }
@@ -106,12 +102,12 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
-                    queryInput.setBackgroundColor(getColor(R.color.grey_pale))
+                    binding.editTextwather.setBackgroundColor(getColor(R.color.grey_pale))
                 } else {
                     textInput = s.toString()
 
                 }
-                clearButton.visibility = clearButtonVisibility(s)
+                binding.clearIcon.visibility = clearButtonVisibility(s)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -131,7 +127,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchSongs() {
-        itunesApiService.getSongsList(queryInput.text.toString()).enqueue(object :
+        itunesApiService.getSongsList(binding.editTextwather.toString()).enqueue(object :
             Callback<TrackListResponse> {
             override fun onResponse(
                 call: Call<TrackListResponse>,
@@ -146,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
                             trackList.addAll(response.body()?.results!!)
                             adapter.updateItems(trackList)
                         } else {
-                            showErrorNothingFound(queryInput.text.toString())
+                            showErrorNothingFound(binding.editTextwather.text.toString())
                         }
                     }
                 }
