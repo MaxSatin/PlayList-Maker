@@ -33,7 +33,7 @@ class SearchHistory : AppCompatActivity() {
         if (index >= 0) {
             val newHistoryTrackList = historyTracks.toMutableList()
             newHistoryTrackList.removeAt(index)
-            newHistoryTrackList.add(0, newHistoryTrackList[index])
+            newHistoryTrackList.add(0, track)
             updateTracks(newHistoryTrackList)
         } else if (index < 0 && historyTracks.size > 9) {
             val newHistoryTrackList = historyTracks.toMutableList()
@@ -64,7 +64,7 @@ class SearchHistory : AppCompatActivity() {
 
     fun getTrackFromLocalStorage(): List<CurrentTrack>? {
         val tracksFromGson: String? = sharedPrefs.getString(HISTORY_TRACK_LIST, null)
-        return tracksFromGson.let {
+        return tracksFromGson?.let{
             val itemType = object : TypeToken<List<CurrentTrack>>() {}.type
             gson.fromJson(tracksFromGson, itemType)
         }
@@ -105,7 +105,7 @@ class HistoryRVAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
     fun updateItems(items: List<CurrentTrack>) {
         val oldItems = this.historyTrackList
-        val newItems = historyTrackList.toMutableList()
+        val newItems = items.toMutableList()
         val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {
                 return oldItems.size
