@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
     private var trackList: List<CurrentTrack> = emptyList()
+    var onTrackClickListener: OnTrackClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
@@ -20,6 +21,8 @@ class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(trackList[position])
+
+        holder.itemView.setOnClickListener { onTrackClickListener?.onTrackClick(trackList[holder.adapterPosition])}
     }
 
     fun updateItems(items: List<CurrentTrack>) {
@@ -45,6 +48,10 @@ class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
         })
         this.trackList = newItems
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun interface OnTrackClickListener {
+        fun onTrackClick(item: CurrentTrack)
     }
 
 }

@@ -19,6 +19,7 @@ import android.widget.LinearLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,6 +31,11 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val KEY = "KEY"
+        const val SEARCH_HISTORY = "search_history"
+        const val HISTORY_TRACK_LIST = "history_track_list"
+    }
+    private val sharedPrefs by lazy {
+        getSharedPreferences(SearchHistory.SEARCH_HISTORY, Context.MODE_PRIVATE)
     }
 
     private val iTunesBaseUrl = "https://itunes.apple.com"
@@ -41,11 +47,12 @@ class SearchActivity : AppCompatActivity() {
     private val itunesApiService = retrofit.create(ItunesAPI::class.java)
     private val trackList = mutableListOf<CurrentTrack>()
     private val adapter = TrackAdapter()
+
+    val trackHistoryAdapter = HistoryRVAdapter()
+
     lateinit var binding: ActivitySearchBinding
 
-
     private var textInput = ""
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +72,18 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
-
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
         binding.recyclerSearch.adapter = adapter
+        binding.trackHistoryRV?.adapter = trackHistoryAdapter
+        val searchHistory = SearchHistory(sharedPrefs, trackHistoryAdapter)
+        trackHistoryAdapter.updateItems(searchHistory.getTracks())
+
+        adapter.onTrackClickListener =
+            TrackAdapter.OnTrackClickListener { item -> Log.d("SPRINT_12", "onMinusClick $item")
+            searchHistory.addTracksToHistory(item)
+            }
 
 
         binding.buttonSearchBack.setOnClickListener {
@@ -88,7 +102,8 @@ class SearchActivity : AppCompatActivity() {
 
         binding.editTextwather.setOnFocusChangeListener { view, hasFocus ->
             binding.searchResults?.visibility = View.GONE
-            binding.trackHistory?.visibility = if (hasFocus && binding.editTextwather.text.isEmpty()) View.VISIBLE else View.GONE
+            binding.trackHistory?.visibility =
+                if (hasFocus && binding.editTextwather.text.isEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.editTextwather.setOnEditorActionListener { v, actionId, event ->
@@ -113,11 +128,12 @@ class SearchActivity : AppCompatActivity() {
                     textInput = s.toString()
 
                 }
-                binding.trackHistory?.visibility = if (binding.editTextwather.hasFocus() && s?.isEmpty() == true) {
-                    View.VISIBLE
-                } else {
-                    View.GONE
-                }
+                binding.trackHistory?.visibility =
+                    if (binding.editTextwather.hasFocus() && s?.isEmpty() == true) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
 
                 binding.clearIcon.visibility = clearButtonVisibility(s)
             }
@@ -129,8 +145,8 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun showErrorNothingFound(text: String){
-        if(text.isNotEmpty()){
+    private fun showErrorNothingFound(text: String) {
+        if (text.isNotEmpty()) {
             trackList.clear()
             adapter.updateItems(trackList)
             binding.badConnectionPlaceHolder.visibility = View.GONE
@@ -161,6 +177,7 @@ class SearchActivity : AppCompatActivity() {
                     }
                 }
             }
+
             override fun onFailure(call: Call<TrackListResponse>, t: Throwable) {
                 showErrorBadConnection()
             }
@@ -168,10 +185,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showErrorBadConnection() {
-            trackList.clear()
-            adapter.updateItems(trackList)
-            binding.nothingFoundPlaceHolder.visibility = View.GONE
-            binding.badConnectionPlaceHolder.visibility = View.VISIBLE
+        trackList.clear()
+        adapter.updateItems(trackList)
+        binding.nothingFoundPlaceHolder.visibility = View.GONE
+        binding.badConnectionPlaceHolder.visibility = View.VISIBLE
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -191,4 +208,5 @@ class SearchActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         textInput = savedInstanceState.getString(KEY, textInput)
     }
+
 }

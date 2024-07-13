@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -11,29 +12,26 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 
-class SearchHistory : AppCompatActivity() {
+class SearchHistory (
+    val sharedPrefs: SharedPreferences,
+    val historyTracksAdapter: HistoryRVAdapter
+) {
 
     companion object {
         const val SEARCH_HISTORY = "search_history"
         const val HISTORY_TRACK_LIST = "history_track_list"
     }
 
-    val sharedPrefs by lazy {
-        getSharedPreferences(SEARCH_HISTORY, Context.MODE_PRIVATE)
-    }
-
-    private val binding = ActivitySearchBinding.inflate(layoutInflater)
     private val gson: Gson = Gson()
     private var historyTracks: List<CurrentTrack> = emptyList<CurrentTrack>()
-    private val historyTracksAdapter = HistoryRVAdapter()
 
 
     fun addTracksToHistory(track: CurrentTrack) {
-        val index = historyTracks.indexOfFirst { it.id == track.id }
+        val index = historyTracks.indexOfFirst { it.trackId == track.trackId }
         if (index >= 0) {
             val newHistoryTrackList = historyTracks.toMutableList()
-            newHistoryTrackList.removeAt(index)
             newHistoryTrackList.add(0, track)
+            newHistoryTrackList.removeAt(index)
             updateTracks(newHistoryTrackList)
         } else if (index < 0 && historyTracks.size > 9) {
             val newHistoryTrackList = historyTracks.toMutableList()
@@ -57,7 +55,7 @@ class SearchHistory : AppCompatActivity() {
 
     fun saveTrackToLocalStorage(tracks: List<CurrentTrack>) {
         val trackToGson: String = gson.toJson(tracks)
-        sharedPrefs.edit()
+            sharedPrefs.edit()
             .putString(HISTORY_TRACK_LIST, trackToGson)
             .apply()
     }
@@ -70,7 +68,7 @@ class SearchHistory : AppCompatActivity() {
         }
     }
 
-    private fun getTracks(): List<CurrentTrack> {
+    fun getTracks(): List<CurrentTrack> {
         val tracksFromStorage = getTrackFromLocalStorage()
         return if (!tracksFromStorage.isNullOrEmpty()) {
             tracksFromStorage
@@ -84,7 +82,6 @@ class SearchHistory : AppCompatActivity() {
 class HistoryRVAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
     private var historyTrackList: List<CurrentTrack> = emptyList()
-    var onTrackClickListener: TrackViewHolder.OnTrackClickListener? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -100,7 +97,6 @@ class HistoryRVAdapter : RecyclerView.Adapter<TrackViewHolder>() {
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(historyTrackList[position])
 
-        holder.onTrackClickListener = onTrackClickListener
     }
 
     fun updateItems(items: List<CurrentTrack>) {
@@ -130,4 +126,5 @@ class HistoryRVAdapter : RecyclerView.Adapter<TrackViewHolder>() {
         this.historyTrackList = newItems
         diffResult.dispatchUpdatesTo(this)
     }
+
 }

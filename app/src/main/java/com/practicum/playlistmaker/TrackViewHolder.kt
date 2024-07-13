@@ -12,7 +12,6 @@ import java.util.Locale
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val binding = TrackItemBinding.bind(itemView)
-    var onTrackClickListener: OnTrackClickListener? = null
 
     fun bind(item: CurrentTrack) {
         binding.trackName.text = item.trackName
@@ -24,13 +23,5 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .fitCenter()
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.small_corner_radius)))
             .into(binding.trackCoverImage)
-
-        binding.root.setOnClickListener{
-            onTrackClickListener?.onTrackClick(item)
-        }
-    }
-
-    fun interface OnTrackClickListener {
-        fun onTrackClick(item: CurrentTrack)
     }
 }
