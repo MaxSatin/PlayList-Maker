@@ -113,6 +113,12 @@ class SearchActivity : AppCompatActivity() {
                     textInput = s.toString()
 
                 }
+                binding.trackHistory?.visibility = if (binding.editTextwather.hasFocus() && s?.isEmpty() == true) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+
                 binding.clearIcon.visibility = clearButtonVisibility(s)
             }
 
@@ -133,7 +139,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchSongs() {
-        itunesApiService.getSongsList(binding.editTextwather.toString()).enqueue(object :
+        itunesApiService.getSongsList(binding.editTextwather.text.toString()).enqueue(object :
             Callback<TrackListResponse> {
             override fun onResponse(
                 call: Call<TrackListResponse>,
@@ -142,6 +148,8 @@ class SearchActivity : AppCompatActivity() {
                 when (response.code()) {
                     200 -> {
                         if (response.body()?.results?.isNotEmpty() == true) {
+                            binding.searchResults?.visibility = View.VISIBLE
+                            binding.trackHistory?.visibility = View.GONE
                             binding.nothingFoundPlaceHolder.visibility = View.GONE
                             binding.badConnectionPlaceHolder.visibility = View.GONE
                             trackList.clear()
