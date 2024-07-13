@@ -30,8 +30,8 @@ class SearchHistory (
         val index = historyTracks.indexOfFirst { it.trackId == track.trackId }
         if (index >= 0) {
             val newHistoryTrackList = historyTracks.toMutableList()
-            newHistoryTrackList.add(0, track)
             newHistoryTrackList.removeAt(index)
+
             updateTracks(newHistoryTrackList)
         } else if (index < 0 && historyTracks.size > 9) {
             val newHistoryTrackList = historyTracks.toMutableList()
