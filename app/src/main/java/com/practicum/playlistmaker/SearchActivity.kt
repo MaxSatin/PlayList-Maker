@@ -86,6 +86,11 @@ class SearchActivity : AppCompatActivity() {
             searchSongs()
         }
 
+        binding.editTextwather.setOnFocusChangeListener { view, hasFocus ->
+            binding.searchResults?.visibility = View.GONE
+            binding.trackHistory?.visibility = if (hasFocus && binding.editTextwather.text.isEmpty()) View.VISIBLE else View.GONE
+        }
+
         binding.editTextwather.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchSongs()
