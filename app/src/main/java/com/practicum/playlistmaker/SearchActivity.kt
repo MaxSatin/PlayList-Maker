@@ -97,7 +97,10 @@ class SearchActivity : AppCompatActivity() {
         binding.clearIcon.setOnClickListener {
             binding.editTextwather.setText("")
             binding.searchResults.visibility = View.GONE
-            binding.trackHistory?.visibility = View.VISIBLE
+
+            if(searchHistory.isTrackHistoryEmpty()) {
+                binding.trackHistory?.visibility = View.GONE
+            }
             trackList.clear()
             adapter.updateItems(trackList)
             inputMethodManager?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
@@ -108,7 +111,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.editTextwather.setOnFocusChangeListener { view, hasFocus ->
-            binding.searchResults?.visibility = View.GONE
+
             binding.trackHistory?.visibility =
                 if (hasFocus && binding.editTextwather.text.isEmpty() && !searchHistory.isTrackHistoryEmpty()) View.VISIBLE else View.GONE
         }
@@ -156,6 +159,8 @@ class SearchActivity : AppCompatActivity() {
         if (text.isNotEmpty()) {
             trackList.clear()
             adapter.updateItems(trackList)
+            binding.searchResults.visibility = View.VISIBLE
+            binding.trackHistory?.visibility = View.GONE
             binding.badConnectionPlaceHolder.visibility = View.GONE
             binding.nothingFoundPlaceHolder.visibility = View.VISIBLE
         }
