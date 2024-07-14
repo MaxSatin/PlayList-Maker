@@ -156,7 +156,9 @@
 
     </FrameLayout>
 
-
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/trackHistory"
         android:layout_width="match_parent"
@@ -180,6 +182,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <Button xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -188,9 +191,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
             app:cornerRadius="54dp"
             android:text="@string/clear_history"
             android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

@@ -47,8 +47,7 @@ class SearchActivity : AppCompatActivity() {
     private val itunesApiService = retrofit.create(ItunesAPI::class.java)
     private val trackList = mutableListOf<CurrentTrack>()
     private val adapter = TrackAdapter()
-
-    val trackHistoryAdapter = HistoryRVAdapter()
+    private val trackHistoryAdapter = HistoryRVAdapter()
 
     lateinit var binding: ActivitySearchBinding
 
@@ -76,8 +75,9 @@ class SearchActivity : AppCompatActivity() {
             getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
         binding.recyclerSearch.adapter = adapter
-        binding.trackHistoryRV?.adapter = trackHistoryAdapter
+
         val searchHistory = SearchHistory(sharedPrefs, trackHistoryAdapter)
+        binding.trackHistoryRV?.adapter = trackHistoryAdapter
         trackHistoryAdapter.updateItems(searchHistory.getTracks())
 
         adapter.onTrackClickListener =
@@ -85,12 +85,18 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.addTracksToHistory(item)
             }
 
+        binding.clearHistorySearchButton?.setOnClickListener{
+            trackHistoryAdapter.updateItems(emptyList())
+        }
+
 
         binding.buttonSearchBack.setOnClickListener {
             finish()
         }
         binding.clearIcon.setOnClickListener {
             binding.editTextwather.setText("")
+            binding.searchResults.visibility = View.GONE
+            binding.trackHistory?.visibility = View.VISIBLE
             trackList.clear()
             adapter.updateItems(trackList)
             inputMethodManager?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)

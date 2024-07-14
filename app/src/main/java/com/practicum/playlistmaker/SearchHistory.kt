@@ -12,7 +12,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 
-class SearchHistory (
+class SearchHistory(
     val sharedPrefs: SharedPreferences,
     val historyTracksAdapter: HistoryRVAdapter
 ) {
@@ -23,7 +23,7 @@ class SearchHistory (
     }
 
     private val gson: Gson = Gson()
-    private var historyTracks: List<CurrentTrack> = emptyList<CurrentTrack>()
+    private var historyTracks: List<CurrentTrack> = getTracks()
 
 
     fun addTracksToHistory(track: CurrentTrack) {
@@ -31,9 +31,9 @@ class SearchHistory (
         if (index >= 0) {
             val newHistoryTrackList = historyTracks.toMutableList()
             newHistoryTrackList.removeAt(index)
-            newHistoryTrackList.add(0,track)
+            newHistoryTrackList.add(0, track)
             updateTracks(newHistoryTrackList)
-        } else if (index < 0 && historyTracks.size > 9) {
+        } else if (historyTracks.size > 9) {
             val newHistoryTrackList = historyTracks.toMutableList()
             newHistoryTrackList.removeAt(9)
             newHistoryTrackList.add(0, track)
@@ -55,14 +55,14 @@ class SearchHistory (
 
     fun saveTrackToLocalStorage(tracks: List<CurrentTrack>) {
         val trackToGson: String = gson.toJson(tracks)
-            sharedPrefs.edit()
+        sharedPrefs.edit()
             .putString(HISTORY_TRACK_LIST, trackToGson)
             .apply()
     }
 
     fun getTrackFromLocalStorage(): List<CurrentTrack>? {
         val tracksFromGson: String? = sharedPrefs.getString(HISTORY_TRACK_LIST, null)
-        return tracksFromGson?.let{
+        return tracksFromGson?.let {
             val itemType = object : TypeToken<List<CurrentTrack>>() {}.type
             gson.fromJson(tracksFromGson, itemType)
         }
@@ -77,6 +77,8 @@ class SearchHistory (
             emptyTrackList
         }
     }
+
+
 }
 
 class HistoryRVAdapter : RecyclerView.Adapter<TrackViewHolder>() {
