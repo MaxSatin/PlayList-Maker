@@ -86,7 +86,8 @@ class SearchActivity : AppCompatActivity() {
             }
 
         binding.clearHistorySearchButton?.setOnClickListener{
-            trackHistoryAdapter.updateItems(emptyList())
+            searchHistory.updateTracks(emptyList())
+            binding.trackHistory.visibility = View.GONE
         }
 
 
@@ -109,7 +110,7 @@ class SearchActivity : AppCompatActivity() {
         binding.editTextwather.setOnFocusChangeListener { view, hasFocus ->
             binding.searchResults?.visibility = View.GONE
             binding.trackHistory?.visibility =
-                if (hasFocus && binding.editTextwather.text.isEmpty()) View.VISIBLE else View.GONE
+                if (hasFocus && binding.editTextwather.text.isEmpty() && !searchHistory.isTrackHistoryEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.editTextwather.setOnEditorActionListener { v, actionId, event ->
