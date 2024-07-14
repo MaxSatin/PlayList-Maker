@@ -34,6 +34,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_HISTORY = "search_history"
         const val HISTORY_TRACK_LIST = "history_track_list"
     }
+
     private val sharedPrefs by lazy {
         getSharedPreferences(SearchHistory.SEARCH_HISTORY, Context.MODE_PRIVATE)
     }
@@ -81,11 +82,12 @@ class SearchActivity : AppCompatActivity() {
         trackHistoryAdapter.updateItems(searchHistory.getTracks())
 
         adapter.onTrackClickListener =
-            TrackAdapter.OnTrackClickListener { item -> Log.d("SPRINT_12", "onMinusClick $item")
-            searchHistory.addTracksToHistory(item)
+            TrackAdapter.OnTrackClickListener { item ->
+                Log.d("SPRINT_12", "onMinusClick $item")
+                searchHistory.addTracksToHistory(item)
             }
 
-        binding.clearHistorySearchButton?.setOnClickListener{
+        binding.clearHistorySearchButton?.setOnClickListener {
             searchHistory.updateTracks(emptyList())
             binding.trackHistory.visibility = View.GONE
         }
@@ -98,7 +100,7 @@ class SearchActivity : AppCompatActivity() {
             binding.editTextwather.setText("")
             binding.searchResults.visibility = View.GONE
 
-            if(searchHistory.isTrackHistoryEmpty()) {
+            if (searchHistory.isTrackHistoryEmpty()) {
                 binding.trackHistory?.visibility = View.GONE
             }
             trackList.clear()
@@ -131,7 +133,7 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, ncout: Int) {
                 if (s.isNullOrEmpty()) {
                     binding.editTextwather.setBackgroundColor(getColor(R.color.grey_pale))
                 } else {
@@ -199,6 +201,8 @@ class SearchActivity : AppCompatActivity() {
     private fun showErrorBadConnection() {
         trackList.clear()
         adapter.updateItems(trackList)
+        binding.searchResults.visibility = View.VISIBLE
+        binding.trackHistory?.visibility = View.GONE
         binding.nothingFoundPlaceHolder.visibility = View.GONE
         binding.badConnectionPlaceHolder.visibility = View.VISIBLE
     }

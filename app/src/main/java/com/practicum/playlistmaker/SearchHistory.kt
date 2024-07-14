@@ -79,11 +79,7 @@ class SearchHistory(
     }
 
     fun isTrackHistoryEmpty(): Boolean {
-        return if (historyTracks.isNullOrEmpty()) {
-            true
-        } else {
-            false
-        }
+        return historyTracks.isNullOrEmpty()
     }
 }
 
