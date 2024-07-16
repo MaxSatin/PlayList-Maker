@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -31,12 +32,11 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val KEY = "KEY"
-        const val SEARCH_HISTORY = "search_history"
-        const val HISTORY_TRACK_LIST = "history_track_list"
+        const val SEARCH_HISTORY_PREFERENCES = "search_history"
     }
 
     private val sharedPrefs by lazy {
-        getSharedPreferences(SearchHistory.SEARCH_HISTORY, Context.MODE_PRIVATE)
+        getSharedPreferences(SEARCH_HISTORY_PREFERENCES, Context.MODE_PRIVATE)
     }
 
     private val iTunesBaseUrl = "https://itunes.apple.com"
@@ -47,8 +47,14 @@ class SearchActivity : AppCompatActivity() {
 
     private val itunesApiService = retrofit.create(ItunesAPI::class.java)
     private val trackList = mutableListOf<CurrentTrack>()
-    private val adapter = TrackAdapter()
+    private val onTrackClickListener = TrackAdapter.OnTrackClickListener { item ->
+        searchHistory.addTracksToHistory(item)
+    }
+    private val adapter = TrackAdapter(onTrackClickListener)
+
     private val trackHistoryAdapter = HistoryRVAdapter()
+    private val searchHistory by lazy { SearchHistory(sharedPrefs, trackHistoryAdapter) }
+
 
     lateinit var binding: ActivitySearchBinding
 
@@ -59,6 +65,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+        enableEdgeToEdge()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.searchActivity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -77,21 +84,13 @@ class SearchActivity : AppCompatActivity() {
 
         binding.recyclerSearch.adapter = adapter
 
-        val searchHistory = SearchHistory(sharedPrefs, trackHistoryAdapter)
         binding.trackHistoryRV?.adapter = trackHistoryAdapter
         trackHistoryAdapter.updateItems(searchHistory.getTracks())
-
-        adapter.onTrackClickListener =
-            TrackAdapter.OnTrackClickListener { item ->
-                Log.d("SPRINT_12", "onMinusClick $item")
-                searchHistory.addTracksToHistory(item)
-            }
 
         binding.clearHistorySearchButton?.setOnClickListener {
             searchHistory.updateTracks(emptyList())
             binding.trackHistory.visibility = View.GONE
         }
-
 
         binding.buttonSearchBack.setOnClickListener {
             finish()
@@ -122,7 +121,6 @@ class SearchActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchSongs()
                 true
-
             }
             false
         }
@@ -140,12 +138,13 @@ class SearchActivity : AppCompatActivity() {
                     textInput = s.toString()
 
                 }
-                binding.trackHistory?.visibility =
+                val isFocusedAndEmpty =
                     if (binding.editTextwather.hasFocus() && s?.isEmpty() == true) {
                         View.VISIBLE
                     } else {
                         View.GONE
                     }
+                binding.trackHistory?.visibility = isFocusedAndEmpty
 
                 binding.clearIcon.visibility = clearButtonVisibility(s)
             }
