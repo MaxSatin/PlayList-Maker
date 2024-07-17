@@ -67,9 +67,11 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/searchResults"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/padding">
+        android:layout_marginTop="@dimen/padding"
+        android:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerSearch"
@@ -82,14 +84,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="104dp"
             android:orientation="vertical"
             android:visibility="gone">
 
-            <ImageView style="@style/SearchActivityNothingFoundImagePH" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/vector_nothing_found_light_mode" />
 
             <TextView
                 style="@style/SearchActivityNothingFoundTextPH"
-                android:text="Ничего не нашлось" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding"
+                android:text="@string/nothing_found" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -98,11 +109,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="104dp"
             android:layout_marginEnd="24dp"
             android:orientation="vertical"
             android:visibility="gone">
 
-            <ImageView style="@style/SearchActivityBadConnectionImagePH" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/vector_connection_error_light_mode" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -112,23 +128,74 @@
 
                 <TextView
                     style="@style/SearchActivityNothingFoundTextPH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Проблемы со связью." />
+                    android:text="@string/bad_connection" />
 
                 <TextView
                     style="@style/SearchActivityNothingFoundTextPH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/medium_padding"
                     android:gravity="center"
-                    android:text="Загрузка не удалась. Проверьте подключение к интернету." />
+                    android:text="@string/load_failed" />
             </LinearLayout>
 
             <Button xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/refreshSearchButton"
                 style="@style/RefreshButtonStyle"
-                android:text="Обновить" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp"
+                android:text="@string/refresh" />
 
         </LinearLayout>
 
     </FrameLayout>
+
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/trackHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/padding"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/SearchHistoryHeader"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:fontFamily="@font/ys_display_medium"
+                android:gravity="center"
+                android:text="@string/you_searched"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/trackHistoryRV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            <Button xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/clearHistorySearchButton"
+                style="@style/RefreshButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                app:cornerRadius="54dp"
+                android:text="@string/clear_history"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

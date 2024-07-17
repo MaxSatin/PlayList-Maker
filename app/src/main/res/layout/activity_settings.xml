@@ -34,7 +34,8 @@
             <TextView style="@style/SettingsActivityButtonText"
                 android:text="@string/Dark_Mode"/>
 
-            <androidx.appcompat.widget.SwitchCompat
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/themeSwither"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -42,16 +43,18 @@
 
         </FrameLayout>
 
-        <FrameLayout style="@style/SettingsActivityButtonFrame">
+        <FrameLayout style="@style/SettingsActivityButtonFrame"
+            android:id="@+id/buttonSettingsShare">
+
 
             <TextView style="@style/SettingsActivityButtonText"
                 android:text="@string/Share"/>
 
             <Button style="@style/SettingsActivityButton"
-                android:id="@+id/buttonSettingsShare"
                 android:layout_gravity="end"
                 app:icon="@drawable/share_light_mode"
-                app:iconGravity="textStart" />
+                app:iconGravity="textStart"
+                android:clickable="true"/>
 
         </FrameLayout>
 

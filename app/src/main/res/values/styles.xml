@@ -138,4 +138,10 @@
         <item name="iconTint">@color/black</item>
     </style>
 
+    <style name="SearchHistoryHeader">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
 </resources>
