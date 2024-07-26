@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playerActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlayerActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftBorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_begin="@dimen/padding_24"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightBorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_end="@dimen/padding_24"
+        android:orientation="vertical" />
+
+    <ImageButton
+        android:id="@+id/playerButtonBack"
+        app:layout_constraintTag="playerButtonBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/padding_4"
+        android:layout_marginStart="@dimen/padding_4"
+        app:srcCompat="@drawable/vector_arrow_back"
+        android:backgroundTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/buttonBackBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_tags="playerButtonBack" />
+
+    <ImageView
+        android:id="@+id/poster"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintDimensionRatio="h,1:1"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@id/buttonBackBarrier"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintEnd_toStartOf="@id/rightBorder"
+        app:srcCompat="@drawable/vector_empty_album_placeholder" />
+
+    <TextView
+        style="@style/PlayerTrackText"
+        android:id="@+id/songName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_24"
+        app:layout_constraintTop_toBottomOf="@id/poster"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        android:textSize="@dimen/text_size_22sp"
+        tools:text="Yesterday (Remastered 2009)" />
+
+    <TextView
+        style="@style/PlayerTrackText"
+        android:id="@+id/bandName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_12"
+        app:layout_constraintTop_toBottomOf="@id/songName"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        tools:text="The Beatles"
+        android:textSize="@dimen/text_size_14sp"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/addToTrackList"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintEnd_toStartOf="@+id/stopPlayerButton"
+        app:layout_constraintTop_toBottomOf="@+id/stopPlayerButton"
+        app:layout_constraintBottom_toTopOf="@+id/stopPlayerButton"
+        app:srcCompat="@drawable/vector_add_to_track_list"
+        android:backgroundTint="@color/white"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/stopPlayerButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="@dimen/padding_30"
+        app:layout_constraintTop_toBottomOf="@id/bandName"
+        app:layout_constraintStart_toEndOf="@id/addToTrackList"
+        app:layout_constraintEnd_toStartOf="@+id/addToFavorites"
+        app:srcCompat="@drawable/vector_stopplayer_button"
+        android:backgroundTint="@color/white"/>
+    
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/addToFavorites"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        app:layout_constraintStart_toEndOf="@id/stopPlayerButton"
+        app:layout_constraintEnd_toStartOf="@id/rightBorder"
+        app:layout_constraintBottom_toBottomOf="@id/stopPlayerButton"
+        app:srcCompat="@drawable/vector_add_to_favorites"
+        android:backgroundTint="@color/white"/>
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
