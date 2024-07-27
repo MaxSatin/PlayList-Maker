@@ -128,4 +128,40 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="PlayerTrackBackGround">
+        <item name="backgroundTint">@color/black</item>
+    </style>
+
+    <style name="PlayerTrackButtonBack">
+        <item name="android:src">@drawable/vector_player_button_back_black_mode</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="iconTint">@color/white</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="PlayerTrackButtonPlay">
+        <item name="android:src">@drawable/vectoir_stop_button</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="iconTint">@color/white</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="PlayerTrackButtonaAddToTrackList">
+        <item name="android:src">@drawable/vector_add_to_tracklist_black_mode</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="iconTint">@color/white</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="PlayerTrackButtonaAddToFav">
+        <item name="android:src">@drawable/vector_add_to_favorites</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="iconTint">@color/white</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="PlayerTrackText">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>
