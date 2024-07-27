@@ -68,19 +68,19 @@
         tools:text="Yesterday (Remastered 2009)" />
 
     <TextView
-        style="@style/PlayerTrackText"
         android:id="@+id/bandName"
-        app:layout_constraintTag="bandName"
+        style="@style/PlayerTrackText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_12"
-        app:layout_constraintTop_toBottomOf="@id/songName"
-        app:layout_constraintStart_toStartOf="@id/leftBorder"
-        android:textSize="@dimen/text_size_14sp"
-        android:maxLines="1"
-        android:maxLength="35"
         android:ellipsize="end"
-        tools:text="The Beatles"/>
+        android:maxLength="35"
+        android:maxLines="1"
+        android:textSize="@dimen/text_size_14sp"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintTag="bandName"
+        app:layout_constraintTop_toBottomOf="@id/songName"
+        tools:text="The Beatles" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/bandNameBarrier"
@@ -192,6 +192,7 @@
         android:id="@+id/albumTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintWidth_max="250dp"
         android:layout_gravity="end"
         app:layout_constraintTop_toTopOf="@id/album"
         app:layout_constraintBottom_toBottomOf="@id/album"
@@ -202,7 +203,7 @@
         android:textColor="@color/custom_black"
         android:textStyle="bold"
         android:maxLines="1"
-        android:maxLength="35"
+        android:maxLength="50"
         android:ellipsize="end"
         tools:text="Yesterday (Remastered 2009)"/>
 

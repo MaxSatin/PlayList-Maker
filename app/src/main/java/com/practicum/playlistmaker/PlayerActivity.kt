@@ -13,6 +13,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -30,6 +36,10 @@ class PlayerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        binding.playerButtonBack.setOnClickListener{
+            finish()
+        }
         val intent = intent
         val trackItemGson = intent.getStringExtra("trackItem")
         val trackItem = gson.fromJson<CurrentTrack>(trackItemGson, CurrentTrack::class.java)
@@ -41,8 +51,13 @@ class PlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(binding.root.resources.getDimensionPixelSize(R.dimen.small_corner_radius)))
             .into(binding.poster)
         binding.songName.text = trackItem.trackName
-
-
+        binding.bandName.text = trackItem.artistName
+        binding.timePlayed.text = "0:30"
+        binding.tracklengthTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackItem.trackTimeMillis)
+        binding.albumTitle.text = trackItem.collectionName
+        binding.albumYear.text = SimpleDateFormat("yyyy", Locale.getDefault()).format(trackItem.trackTimeMillis)
+        binding.trackGenre.text = trackItem.primaryGenreName
+        binding.trackCountry.text = trackItem.country
     }
 
 

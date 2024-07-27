@@ -51,32 +51,31 @@ class SearchActivity : AppCompatActivity() {
     private val gson = Gson()
     private val itunesApiService = retrofit.create(ItunesAPI::class.java)
     private val trackList = mutableListOf<CurrentTrack>()
+
+
     private val onTrackClickListener = TrackAdapter.OnTrackClickListener { item ->
         searchHistory.addTracksToHistory(item)
         val track = gson.toJson(item)
-        /*val bundle = Bundle()
-        bundle.putString("trackName",item.trackName)
-        bundle.putString("artistName", item.artistName)
-        bundle.putString("posterUrl",item.getCoverArtWork())
-        bundle.putString("trackTime", SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis))
-        bundle.putString("album",item.collectionName)
-        bundle.putString("releaseDate",item.releaseDate)
-        bundle.putString("primaryGenreName",item.primaryGenreName)
-        bundle.putString("country",item.country)*/
-
-        val intent = Intent(this,PlayerActivity::class.java)
+        val intent = Intent(this, PlayerActivity::class.java)
         intent.putExtra("trackItem", track)
         startActivity(intent)
 
     }
     private val adapter = TrackAdapter(onTrackClickListener)
 
-    private val trackHistoryAdapter = HistoryRVAdapter()
+
+    private val onTrackClickListenerHistory = HistoryRVAdapter.OnTrackClickListenerHistory { item ->
+        val track = gson.toJson(item)
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra("trackItem", track)
+        startActivity(intent)
+    }
+    private val trackHistoryAdapter = HistoryRVAdapter(onTrackClickListenerHistory)
+
     private val searchHistory by lazy { SearchHistory(sharedPrefs, trackHistoryAdapter) }
 
 
     lateinit var binding: ActivitySearchBinding
-
     private var textInput = ""
 
 
