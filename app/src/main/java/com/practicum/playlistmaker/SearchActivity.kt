@@ -2,6 +2,7 @@ package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -17,6 +18,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +29,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class SearchActivity : AppCompatActivity() {
 
@@ -44,20 +48,34 @@ class SearchActivity : AppCompatActivity() {
         .baseUrl(iTunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
+    private val gson = Gson()
     private val itunesApiService = retrofit.create(ItunesAPI::class.java)
     private val trackList = mutableListOf<CurrentTrack>()
+
+
     private val onTrackClickListener = TrackAdapter.OnTrackClickListener { item ->
         searchHistory.addTracksToHistory(item)
+        val track = gson.toJson(item)
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra("trackItem", track)
+        startActivity(intent)
+
     }
     private val adapter = TrackAdapter(onTrackClickListener)
 
-    private val trackHistoryAdapter = HistoryRVAdapter()
+
+    private val onTrackClickListenerHistory = HistoryRVAdapter.OnTrackClickListenerHistory { item ->
+        val track = gson.toJson(item)
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra("trackItem", track)
+        startActivity(intent)
+    }
+    private val trackHistoryAdapter = HistoryRVAdapter(onTrackClickListenerHistory)
+
     private val searchHistory by lazy { SearchHistory(sharedPrefs, trackHistoryAdapter) }
 
 
     lateinit var binding: ActivitySearchBinding
-
     private var textInput = ""
 
 

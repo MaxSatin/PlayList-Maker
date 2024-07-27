@@ -1,9 +1,15 @@
 package com.practicum.playlistmaker
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TrackAdapter(private val onTrackClickListener: OnTrackClickListener)
     : RecyclerView.Adapter<TrackViewHolder>() {
@@ -22,7 +28,9 @@ class TrackAdapter(private val onTrackClickListener: OnTrackClickListener)
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(trackList[position])
 
-        holder.itemView.setOnClickListener { onTrackClickListener?.onTrackClick(trackList[holder.adapterPosition])}
+        holder.itemView.setOnClickListener {
+            onTrackClickListener?.onTrackClick(trackList[holder.adapterPosition])
+        }
     }
 
     fun updateItems(items: List<CurrentTrack>) {
