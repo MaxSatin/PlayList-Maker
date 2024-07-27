@@ -7,7 +7,6 @@ data class CurrentTrack(
     val trackTimeMillis: Long,
     val artworkUrl60: String,
     val artworkUrl100: String,
-    val artworkUrl500: String,
     val collectionName: String,
     val releaseDate: String,
     val primaryGenreName: String,
