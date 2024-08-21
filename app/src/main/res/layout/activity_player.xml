@@ -101,15 +101,16 @@
         app:layout_constraintBottom_toTopOf="@+id/stopPlayerButton"/>
 
     <androidx.appcompat.widget.AppCompatImageButton
-        style="@style/PlayerTrackButtonPlay"
         android:id="@+id/stopPlayerButton"
-        app:layout_constraintTag="stopPlayerButton"
+        style="@style/PlayerTrackButtonPlay"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="@dimen/padding_30"
-        app:layout_constraintTop_toBottomOf="@id/bandNameBarrier"
+        android:layout_marginTop="28dp"
+        app:layout_constraintEnd_toStartOf="@+id/addToFavorites"
         app:layout_constraintStart_toEndOf="@id/addToTrackList"
-        app:layout_constraintEnd_toStartOf="@+id/addToFavorites" />
+        app:layout_constraintTag="stopPlayerButton"
+        app:layout_constraintTop_toBottomOf="@id/bandNameBarrier" />
+
     <TextView
         android:id="@+id/timePlayed"
         app:layout_constraintTag="timePlayed"

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,7 @@ class PlayerActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityPlayerBinding
     private val gson = Gson()
+    private val mediaPlayer = MediaPlayerComponent()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +60,13 @@ class PlayerActivity : AppCompatActivity() {
         binding.albumYear.text = SimpleDateFormat("yyyy", Locale.getDefault()).format(trackItem.trackTimeMillis)
         binding.trackGenre.text = trackItem.primaryGenreName
         binding.trackCountry.text = trackItem.country
+
+        var url = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/ac/c7/d1/acc7d13f-6634-495f-caf6-491eccb505e8/mzaf_4002676889906514534.plus.aac.p.m4a"
+        mediaPlayer.createMediaPlayer()
+        mediaPlayer.preparePlayer(url, binding.stopPlayerButton)
+        binding.stopPlayerButton.setOnClickListener{
+            mediaPlayer.playBackControl()
+        }
     }
 
 
