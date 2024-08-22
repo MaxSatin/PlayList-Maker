@@ -52,6 +52,7 @@ class PlayerActivity : AppCompatActivity() {
             .fitCenter()
             .transform(RoundedCorners(binding.root.resources.getDimensionPixelSize(R.dimen.small_corner_radius)))
             .into(binding.poster)
+
         binding.songName.text = trackItem.trackName
         binding.bandName.text = trackItem.artistName
         binding.timePlayed.text = "0:30"
@@ -61,9 +62,9 @@ class PlayerActivity : AppCompatActivity() {
         binding.trackGenre.text = trackItem.primaryGenreName
         binding.trackCountry.text = trackItem.country
 
-        var url = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/ac/c7/d1/acc7d13f-6634-495f-caf6-491eccb505e8/mzaf_4002676889906514534.plus.aac.p.m4a"
+
         mediaPlayer.createMediaPlayer()
-        mediaPlayer.preparePlayer(url, binding.stopPlayerButton)
+        mediaPlayer.preparePlayer(trackItem.previewUrl, binding.stopPlayerButton)
         binding.stopPlayerButton.setOnClickListener{
             mediaPlayer.playBackControl()
         }

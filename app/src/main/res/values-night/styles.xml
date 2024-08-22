@@ -140,8 +140,7 @@
     </style>
 
     <style name="PlayerTrackButtonPlay">
-        <item name="android:src">@drawable/vectoir_stop_button</item>
-        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="android:background">@drawable/play_button_selector_nightmode</item>
         <item name="iconTint">@color/white</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>

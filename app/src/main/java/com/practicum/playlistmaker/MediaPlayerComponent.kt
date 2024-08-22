@@ -14,13 +14,13 @@ class MediaPlayerComponent {
     }
 
     private var playerState = STATE_DEFAULT
-    lateinit var playButton: AppCompatImageButton
+    lateinit var playButton: ToggleButton
     lateinit var mediaPlayer: MediaPlayer
 
     fun createMediaPlayer(){
         mediaPlayer = MediaPlayer()
     }
-    fun preparePlayer(url: String, button: AppCompatImageButton) {
+    fun preparePlayer(url: String, button: ToggleButton) {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {

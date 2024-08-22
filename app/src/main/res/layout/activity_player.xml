@@ -100,12 +100,14 @@
         app:layout_constraintTop_toBottomOf="@+id/stopPlayerButton"
         app:layout_constraintBottom_toTopOf="@+id/stopPlayerButton"/>
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <ToggleButton
         android:id="@+id/stopPlayerButton"
         style="@style/PlayerTrackButtonPlay"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="28dp"
+        android:textOff=""
+        android:textOn=""
         app:layout_constraintEnd_toStartOf="@+id/addToFavorites"
         app:layout_constraintStart_toEndOf="@id/addToTrackList"
         app:layout_constraintTag="stopPlayerButton"
