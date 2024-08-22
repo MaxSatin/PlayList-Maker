@@ -1,6 +1,8 @@
 package com.practicum.playlistmaker
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
@@ -24,8 +26,9 @@ import java.util.Locale
 class PlayerActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityPlayerBinding
+    private val handler = Handler(Looper.getMainLooper())
     private val gson = Gson()
-    private val mediaPlayer = MediaPlayerComponent()
+    private val mediaPlayer = MediaPlayerController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +70,13 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer.preparePlayer(trackItem.previewUrl, binding.stopPlayerButton)
         binding.stopPlayerButton.setOnClickListener{
             mediaPlayer.playBackControl()
+            mediaPlayer.playTimeCountDown(binding.timePlayed, handler)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.releaseMediaPlayer()
     }
 
 
