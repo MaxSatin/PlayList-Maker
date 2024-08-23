@@ -2,10 +2,8 @@ package com.practicum.playlistmaker
 
 import android.media.MediaPlayer
 import android.os.Handler
-import android.widget.Button
 import android.widget.TextView
 import android.widget.ToggleButton
-import androidx.appcompat.widget.AppCompatImageButton
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -21,6 +19,8 @@ class MediaPlayerController {
     private var playerState = STATE_DEFAULT
     lateinit var playButton: ToggleButton
     lateinit var mediaPlayer: MediaPlayer
+    lateinit var runnable: Runnable
+    lateinit var handler: Handler
 
     fun releaseMediaPlayer() {
         mediaPlayer.release()
@@ -47,6 +47,7 @@ class MediaPlayerController {
 
     fun pausePlayer() {
         mediaPlayer.pause()
+        handler.removeCallbacks(runnable)
         playerState = STATE_PAUSE
     }
 
@@ -62,22 +63,28 @@ class MediaPlayerController {
         val runnable = object : Runnable {
             override fun run() {
                 textView.text =
-                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+                    SimpleDateFormat(
+                        "mm:ss",
+                        Locale.getDefault()
+                    ).format(mediaPlayer.currentPosition)
                 handler.postDelayed(this, TIMER_DELAY)
-                mediaPlayer.setOnCompletionListener {
-                    playerState = STATE_PREPARED
-                    handler.removeCallbacks(this)
-                    textView.text = "00:00"
-                }
+
             }
         }
-        when (playerState) {
-            STATE_PLAYING -> {
-                handler.postDelayed(runnable, TIMER_DELAY)
-            }
-            STATE_PAUSE -> {
-                handler.removeCallbacks(runnable)
-            }
+        this.runnable = runnable
+        this.handler = handler
+
+        handler.postDelayed(runnable, TIMER_DELAY)
+
+        mediaPlayer.setOnCompletionListener {
+            playerState = STATE_PREPARED
+            handler.removeCallbacks(runnable)
+            textView.text = "00:00"
+            playButton.isChecked = false
         }
+    }
+
+    fun removeRunnableCallBacks(handler: Handler) {
+        handler.removeCallbacks(runnable)
     }
 }

@@ -77,6 +77,7 @@ class PlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.releaseMediaPlayer()
+        mediaPlayer.removeRunnableCallBacks(handler)
     }
 
 
