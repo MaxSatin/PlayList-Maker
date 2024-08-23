@@ -21,12 +21,13 @@ class MediaPlayerController {
 
     private var isRunnableCreated = false
 
-    lateinit var runnable: Runnable
+    lateinit var runnable : Runnable
     lateinit var playButton: ToggleButton
     lateinit var handler: Handler
 
 
-    fun preparePlayer(url: String, button: ToggleButton) {
+    fun preparePlayer(url: String, button: ToggleButton, handler : Handler) {
+        this.handler = handler
         player.setDataSource(url)
         player.prepareAsync()
         player.setOnPreparedListener {
@@ -43,12 +44,12 @@ class MediaPlayerController {
 
     fun pausePlayer() {
         player.pause()
-        handler.removeCallbacks(runnable)
+        removeRunnableCallBacks(handler)
         playerState = STATE_PAUSE
         playButton.isChecked = false
     }
 
-    fun playBackControl(textView: TextView, handler: Handler) {
+    fun playBackControl(textView: TextView) {
         when (playerState) {
             STATE_PLAYING -> pausePlayer()
             STATE_PREPARED, STATE_PAUSE -> {
@@ -72,7 +73,6 @@ class MediaPlayerController {
             }
         }
         this.runnable = runnable
-        this.handler = handler
         isRunnableCreated = true
 
         handler.postDelayed(runnable, TIMER_DELAY)

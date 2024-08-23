@@ -70,10 +70,10 @@ class PlayerActivity : AppCompatActivity() {
         binding.trackCountry.text = trackItem.country
 
 
-        mediaPlayer.preparePlayer(trackItem.previewUrl, binding.stopPlayerButton)
+        mediaPlayer.preparePlayer(trackItem.previewUrl, binding.stopPlayerButton, handler)
 
         binding.stopPlayerButton.setOnClickListener {
-            mediaPlayer.playBackControl(binding.timePlayed, handler)
+            mediaPlayer.playBackControl(binding.timePlayed)
         }
     }
 
@@ -85,8 +85,9 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+
         mediaPlayer.pausePlayer()
-        mediaPlayer.removeRunnableCallBacks(handler)
+
     }
 
 }
