@@ -90,4 +90,5 @@ class MediaPlayerController {
             handler.removeCallbacks(runnable)
         }
     }
+
 }
