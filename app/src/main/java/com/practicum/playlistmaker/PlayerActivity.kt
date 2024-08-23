@@ -25,10 +25,12 @@ import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityPlayerBinding
+
     private val handler = Handler(Looper.getMainLooper())
     private val gson = Gson()
     private val mediaPlayer = MediaPlayerController()
+    lateinit var trackItem: CurrentTrack
+    lateinit var binding: ActivityPlayerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,12 +44,12 @@ class PlayerActivity : AppCompatActivity() {
             insets
         }
 
-        binding.playerButtonBack.setOnClickListener{
+        binding.playerButtonBack.setOnClickListener {
             finish()
         }
         val intent = intent
         val trackItemGson = intent.getStringExtra("trackItem")
-        val trackItem = gson.fromJson<CurrentTrack>(trackItemGson, CurrentTrack::class.java)
+        trackItem = gson.fromJson<CurrentTrack>(trackItemGson, CurrentTrack::class.java)
 
         Glide.with(binding.root.context)
             .load(trackItem.getCoverArtWork())
@@ -59,26 +61,32 @@ class PlayerActivity : AppCompatActivity() {
         binding.songName.text = trackItem.trackName
         binding.bandName.text = trackItem.artistName
         binding.timePlayed.text = "0:30"
-        binding.tracklengthTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackItem.trackTimeMillis)
+        binding.tracklengthTime.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackItem.trackTimeMillis)
         binding.albumTitle.text = trackItem.collectionName
-        binding.albumYear.text = SimpleDateFormat("yyyy", Locale.getDefault()).format(trackItem.trackTimeMillis)
+        binding.albumYear.text =
+            SimpleDateFormat("yyyy", Locale.getDefault()).format(trackItem.trackTimeMillis)
         binding.trackGenre.text = trackItem.primaryGenreName
         binding.trackCountry.text = trackItem.country
 
 
-        mediaPlayer.createMediaPlayer()
         mediaPlayer.preparePlayer(trackItem.previewUrl, binding.stopPlayerButton)
-        binding.stopPlayerButton.setOnClickListener{
-            mediaPlayer.playBackControl()
-            mediaPlayer.playTimeCountDown(binding.timePlayed, handler)
+
+        binding.stopPlayerButton.setOnClickListener {
+            mediaPlayer.playBackControl(binding.timePlayed, handler)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.releaseMediaPlayer()
+        mediaPlayer.player.release()
         mediaPlayer.removeRunnableCallBacks(handler)
     }
 
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer.pausePlayer()
+        mediaPlayer.removeRunnableCallBacks(handler)
+    }
 
 }
