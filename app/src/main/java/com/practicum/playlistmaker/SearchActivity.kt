@@ -2,8 +2,11 @@ package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
+import android.os.Handler
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,6 +20,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -27,12 +31,17 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
+
 
 class SearchActivity : AppCompatActivity() {
 
     companion object {
-        const val KEY = "KEY"
-        const val SEARCH_HISTORY_PREFERENCES = "search_history"
+        private const val KEY = "KEY"
+        private val SEARCH_HISTORY_PREFERENCES = "search_history"
+        private const val CLICK_DEBOUNCE_DELAY = 1_000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }
 
     private val sharedPrefs by lazy {
@@ -44,20 +53,42 @@ class SearchActivity : AppCompatActivity() {
         .baseUrl(iTunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
+    private val gson = Gson()
     private val itunesApiService = retrofit.create(ItunesAPI::class.java)
     private val trackList = mutableListOf<CurrentTrack>()
+
+
     private val onTrackClickListener = TrackAdapter.OnTrackClickListener { item ->
-        searchHistory.addTracksToHistory(item)
+        if(clickDebounce()) {
+            searchHistory.addTracksToHistory(item)
+            val track = gson.toJson(item)
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra("trackItem", track)
+            startActivity(intent)
+        }
+
     }
     private val adapter = TrackAdapter(onTrackClickListener)
 
-    private val trackHistoryAdapter = HistoryRVAdapter()
+
+    private val onTrackClickListenerHistory = HistoryRVAdapter.OnTrackClickListenerHistory { item ->
+        if (clickDebounce()) {
+            val track = gson.toJson(item)
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra("trackItem", track)
+            startActivity(intent)
+        }
+    }
+    private val trackHistoryAdapter = HistoryRVAdapter(onTrackClickListenerHistory)
+
     private val searchHistory by lazy { SearchHistory(sharedPrefs, trackHistoryAdapter) }
 
+    val searchRunnable = Runnable { searchSongs() }
+    private val handler = Handler(Looper.getMainLooper())
+
+    private var isClickAllowed = true
 
     lateinit var binding: ActivitySearchBinding
-
     private var textInput = ""
 
 
@@ -136,6 +167,7 @@ class SearchActivity : AppCompatActivity() {
                     binding.editTextwather.setBackgroundColor(getColor(R.color.grey_pale))
                 } else {
                     textInput = s.toString()
+                    searchDebounce()
 
                 }
                 val isFocusedAndEmpty =
@@ -156,6 +188,20 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     private fun showErrorNothingFound(text: String) {
         if (text.isNotEmpty()) {
             trackList.clear()
@@ -168,16 +214,22 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchSongs() {
+        binding.searchResults.visibility = View.VISIBLE
+        binding.progressBar?.visibility = View.VISIBLE
+        binding.nothingFoundPlaceHolder.visibility = View.GONE
+        binding.badConnectionPlaceHolder.visibility = View.GONE
+
         itunesApiService.getSongsList(binding.editTextwather.text.toString()).enqueue(object :
             Callback<TrackListResponse> {
             override fun onResponse(
                 call: Call<TrackListResponse>,
                 response: Response<TrackListResponse>
             ) {
+                binding.progressBar?.visibility = View.GONE
                 when (response.code()) {
                     200 -> {
                         if (response.body()?.results?.isNotEmpty() == true) {
-                            binding.searchResults?.visibility = View.VISIBLE
+                            binding.recyclerSearch?.visibility = View.VISIBLE
                             binding.trackHistory?.visibility = View.GONE
                             binding.nothingFoundPlaceHolder.visibility = View.GONE
                             binding.badConnectionPlaceHolder.visibility = View.GONE

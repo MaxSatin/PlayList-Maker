@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="medium_padding">8dp</dimen>
+
+    <dimen name="padding_4">4dp</dimen>
     <dimen name="padding_8">8dp</dimen>
-    <dimen name="padding">16dp</dimen>
+    <dimen name="padding_12">12dp</dimen>
     <dimen name="padding_16">16dp</dimen>
     <dimen name="padding_24">24dp</dimen>
+    <dimen name="padding_30">30dp</dimen>
     <dimen name="padding_104">104dp</dimen>
-    <dimen name="primary_text_size">22sp</dimen>
-    <dimen name="element_text_size">16sp</dimen>
     <dimen name="button_width">328dp</dimen>
     <dimen name="button_high">220dp</dimen>
     <dimen name="corner_radius">16dp</dimen>
     <dimen name="small_corner_radius">2dp</dimen>
+
+
+    <dimen name="text_size_13sp">13sp</dimen>
+    <dimen name="text_size_14sp">14sp</dimen>
+    <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="text_size_22sp">22sp</dimen>
+
 
 </resources>
