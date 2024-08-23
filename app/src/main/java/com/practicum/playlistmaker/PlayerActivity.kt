@@ -85,7 +85,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-
+        mediaPlayer.removeRunnableCallBacks(handler)
         mediaPlayer.pausePlayer()
 
     }
