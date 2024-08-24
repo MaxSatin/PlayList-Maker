@@ -4,11 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.TrackAdapter.OnTrackClickListener
 
-class HistoryRVAdapter(
-    private val onTrackClickListenerHistory: OnTrackClickListenerHistory
-) : RecyclerView.Adapter<TrackViewHolder>() {
+class HistoryRVAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
     private var historyTrackList: List<CurrentTrack> = emptyList()
 
@@ -25,10 +22,6 @@ class HistoryRVAdapter(
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(historyTrackList[position])
-
-        holder.itemView.setOnClickListener{
-            onTrackClickListenerHistory?.onTrackClick(historyTrackList[position])
-        }
 
     }
 
@@ -58,9 +51,6 @@ class HistoryRVAdapter(
         })
         this.historyTrackList = newItems
         diffResult.dispatchUpdatesTo(this)
-    }
-    fun interface OnTrackClickListenerHistory {
-        fun onTrackClick(trackItem: CurrentTrack)
     }
 
 }
