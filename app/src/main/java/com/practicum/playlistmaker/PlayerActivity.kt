@@ -25,7 +25,6 @@ import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
-
     private val handler = Handler(Looper.getMainLooper())
     private val gson = Gson()
     private val mediaPlayer = MediaPlayerController()
