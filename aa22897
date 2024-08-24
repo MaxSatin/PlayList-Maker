@@ -1,0 +1,96 @@
+[33mc0a05c1[m[33m ([m[1;36mHEAD[m[33m)[m HEAD@{0}: checkout: moving from aa22897b9c74eaa0d0dbe9df26bbcb27b9796044 to c0a05c1dfaf1f025a61da4ba8398c866cd3b0027
+[33maa22897[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m HEAD@{1}: checkout: moving from 3a06b676585502e9f23403eb03717f85654d58dc to aa22897b9c74eaa0d0dbe9df26bbcb27b9796044
+[33m3a06b67[m HEAD@{2}: checkout: moving from c0a05c1dfaf1f025a61da4ba8398c866cd3b0027 to 3a06b676585502e9f23403eb03717f85654d58dc
+[33mc0a05c1[m[33m ([m[1;36mHEAD[m[33m)[m HEAD@{3}: checkout: moving from branch_for_HW_Sprint_14 to c0a05c1dfaf1f025a61da4ba8398c866cd3b0027
+[33maa22897[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m HEAD@{4}: reset: moving to aa22897b9c74eaa0d0dbe9df26bbcb27b9796044
+[33ma487170[m HEAD@{5}: checkout: moving from new_branch_for_PR_14 to branch_for_HW_Sprint_14
+[33ma487170[m HEAD@{6}: checkout: moving from a487170c9f00d5eeb4557429244d2596216a721a to new_branch_for_PR_14
+[33ma487170[m HEAD@{7}: checkout: moving from dev to a487170c9f00d5eeb4557429244d2596216a721a
+[33maa22897[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m HEAD@{8}: commit: Runnable bug fixed update
+[33mc0a05c1[m[33m ([m[1;36mHEAD[m[33m)[m HEAD@{9}: commit: Homework_sprint_14 runnable bug fixed
+[33m3a06b67[m HEAD@{10}: commit: Homework_Sprint_14
+[33m37ef98d[m HEAD@{11}: commit: HomeWork_sprint_14 ready
+[33mf0d98c9[m HEAD@{12}: commit: Player done. refactoring players methods
+[33mf21aad7[m HEAD@{13}: commit: working on MediaPlayer timer
+[33mc6a2bc2[m HEAD@{14}: commit: Debounce added, progressBar added
+[33m08d6e5f[m HEAD@{15}: commit: Pre-working player activity
+[33m4562f86[m HEAD@{16}: commit: ЬуÐMedia Player Added
+[33m6a9e152[m HEAD@{17}: commit: Before Media Player added
+[33ma487170[m HEAD@{18}: commit: Sprint_13 HomeWork ready for review
+[33m81a9c5d[m HEAD@{19}: commit: Navigation to player added. BackButton active
+[33m0f15e61[m HEAD@{20}: commit: Settings refactor. Intent syntax changed
+[33md0af4c4[m HEAD@{21}: commit: padding&textSize refactor, working on OnTrackClickListener
+[33mbc2a7ee[m HEAD@{22}: commit: Player layout ready
+[33mac27da2[m HEAD@{23}: commit: Mediaplayer screen: add poster, stop, favorites, like buttons ready
+[33m0b66671[m HEAD@{24}: commit: Sprint_12_HomeWork_Changes_After_Review_Appllied
+[33mbe6fe17[m HEAD@{25}: commit: BadConnection PlaceHolder & NothingFound refactor
+[33m941a352[m HEAD@{26}: commit: HW_Sprint_12_PH_fixed
+[33m834cdc5[m HEAD@{27}: commit: HomeWork_Sprint_12_ready
+[33m24de97d[m HEAD@{28}: commit: History screen ready
+[33m935f7d4[m HEAD@{29}: commit: HW_12
+[33md983727[m HEAD@{30}: commit: Save state for HW_12
+[33m6516d54[m HEAD@{31}: commit: History appeared. Working with logic
+[33m0a3448e[m HEAD@{32}: checkout: moving from 0a3448eba08ab1db819aa5128b2d40a60079052c to dev
+[33m0a3448e[m HEAD@{33}: checkout: moving from dev to 0a3448eba08ab1db819aa5128b2d40a60079052c
+[33m0a3448e[m HEAD@{34}: commit: History window added
+[33m98dca11[m HEAD@{35}: commit: History Test
+[33meaf532e[m HEAD@{36}: checkout: moving from eaf532eb2d2dcfb7ff344923834441a807c36e71 to dev
+[33meaf532e[m HEAD@{37}: checkout: moving from dev to eaf532eb2d2dcfb7ff344923834441a807c36e71
+[33meaf532e[m HEAD@{38}: checkout: moving from 0ae88d4cc1be65ce3a7d09ba0e4afbb55cb17ea1 to dev
+[33m0ae88d4[m HEAD@{39}: commit: History working version added
+[33m9817ef0[m HEAD@{40}: revert: Revert "OnTextChanged history window added"
+[33meaf532e[m HEAD@{41}: checkout: moving from f1871435499c49922225c3a0932e629ceb21447f to eaf532eb2d2dcfb7ff344923834441a807c36e71
+[33mf187143[m HEAD@{42}: checkout: moving from 8c2d281877c0ecee38abcd8675533dc81ee03330 to f1871435499c49922225c3a0932e629ceb21447f
+[33m8c2d281[m HEAD@{43}: checkout: moving from eaf532eb2d2dcfb7ff344923834441a807c36e71 to 8c2d281877c0ecee38abcd8675533dc81ee03330
+[33meaf532e[m HEAD@{44}: checkout: moving from dev to eaf532eb2d2dcfb7ff344923834441a807c36e71
+[33meaf532e[m HEAD@{45}: checkout: moving from eaf532eb2d2dcfb7ff344923834441a807c36e71 to dev
+[33meaf532e[m HEAD@{46}: checkout: moving from dev to eaf532eb2d2dcfb7ff344923834441a807c36e71
+[33meaf532e[m HEAD@{47}: commit: OnTextChanged history window added
+[33m8c2d281[m HEAD@{48}: checkout: moving from 0f91365634f9ddea364287f389675573e9065db9 to dev
+[33m0f91365[m HEAD@{49}: commit: History invoke Done
+[33m8c2d281[m HEAD@{50}: checkout: moving from f1871435499c49922225c3a0932e629ceb21447f to 8c2d281877c0ecee38abcd8675533dc81ee03330
+[33mf187143[m HEAD@{51}: checkout: moving from 8c2d281877c0ecee38abcd8675533dc81ee03330 to f1871435499c49922225c3a0932e629ceb21447f
+[33m8c2d281[m HEAD@{52}: checkout: moving from dev to 8c2d281877c0ecee38abcd8675533dc81ee03330
+[33m8c2d281[m HEAD@{53}: checkout: moving from ae240dbf3bef503264cdcaf2b2addb9634c27526 to dev
+[33mae240db[m HEAD@{54}: checkout: moving from dev to ae240dbf3bef503264cdcaf2b2addb9634c27526
+[33m8c2d281[m HEAD@{55}: checkout: moving from ae240dbf3bef503264cdcaf2b2addb9634c27526 to dev
+[33mae240db[m HEAD@{56}: checkout: moving from 8c2d281877c0ecee38abcd8675533dc81ee03330 to ae240dbf3bef503264cdcaf2b2addb9634c27526
+[33m8c2d281[m HEAD@{57}: checkout: moving from ae240dbf3bef503264cdcaf2b2addb9634c27526 to 8c2d281877c0ecee38abcd8675533dc81ee03330
+[33mae240db[m HEAD@{58}: checkout: moving from dev to ae240dbf3bef503264cdcaf2b2addb9634c27526
+[33m8c2d281[m HEAD@{59}: commit: Search doesnot work
+[33mf187143[m HEAD@{60}: commit: Search Activity Binding refactor
+[33m2df1dfd[m HEAD@{61}: commit: History class added with inner functions
+[33m0b9bdfb[m HEAD@{62}: commit: History design added. Switch saved state added
+[33mae240db[m HEAD@{63}: commit: DarkMode switch fixed
+[33m4aa3185[m HEAD@{64}: commit: Dark mode swither added
+[33me1b1d1b[m HEAD@{65}: commit: Homework Sprint 11 after 2-nd review
+[33ma4aecf4[m HEAD@{66}: commit: Sprint 11 Homework after 1-st review гзupdateÐ
+[33m64d8098[m HEAD@{67}: commit: Spring 11 HomeWork after 1-st review
+[33m3b2196d[m HEAD@{68}: commit: HomeWork Sprint 11
+[33mc7daab1[m HEAD@{69}: commit: зÐPre-final version
+[33m7977a21[m HEAD@{70}: commit: PlaceHolder design ready
+[33m569152a[m HEAD@{71}: commit: HomeWork_Sprint_10. Review comments applied. Second attempt
+[33m720a077[m HEAD@{72}: commit: Homework Sprint_10
+[33m4dc06f7[m HEAD@{73}: commit: Homework Sprint_10_pre-final
+[33m8a7c277[m HEAD@{74}: commit: Homework Sprint_10_pre-final
+[33m747c9d2[m HEAD@{75}: commit: RecyclerView Pre-Finished. Visual changes required
+[33m57f38d5[m HEAD@{76}: commit: Pre-save HW_Sprint_10
+[33m6006528[m HEAD@{77}: commit: Save commit before sprint 10 HomeWork. Glide Added
+[33mec4bf35[m HEAD@{78}: commit: HomeWork for Sprint 9
+[33m4e91f90[m HEAD@{79}: reset: moving to 4e91f9071f1b58445f97128a6082fd5dc53e07e4
+[33m400308e[m HEAD@{80}: revert: Reapply "onRestoreState done"
+[33m18fe0aa[m HEAD@{81}: revert: Revert "onRestoreState done"
+[33m4e91f90[m HEAD@{82}: commit: onRestoreState done
+[33md99f3e7[m HEAD@{83}: checkout: moving from main to dev
+[33m30ff820[m[33m ([m[1;32mmain[m[33m)[m HEAD@{84}: merge 30ff82085b154ff7511a19b85c1d5c490229921b: Fast-forward
+[33m100434f[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{85}: checkout: moving from dev to main
+[33md99f3e7[m HEAD@{86}: reset: moving to d99f3e7de18cbdb28d271a80203f6da05e644963
+[33md99f3e7[m HEAD@{87}: commit: Created inputManager for keyboard
+[33m9920a01[m HEAD@{88}: commit: TextWather halfway done. ToDo: remake button clear and close keybord function
+[33m35c473a[m HEAD@{89}: commit: Half done text editor
+[33m4ded17c[m HEAD@{90}: commit: Intent HomeWork. Created Intent for MessangerShare and Mail, Browser opener
+[33mf7cfb8e[m HEAD@{91}: commit: Styles collected. Night mode added.
+[33m30ff820[m[33m ([m[1;32mmain[m[33m)[m HEAD@{92}: commit: Review changes applied. Heading towards next HW
+[33mde441be[m HEAD@{93}: commit: All colors and Strings to dimens and strings
+[33m004f8a7[m HEAD@{94}: commit: Navigation added, added Strings and Dimens
+[33macedf40
