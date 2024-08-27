@@ -25,6 +25,10 @@ import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TRACK_ITEM_KEY = "trackItem"
+    }
+
     private val handler = Handler(Looper.getMainLooper())
     private val gson = Gson()
     private val mediaPlayer = MediaPlayerController()
@@ -47,7 +51,7 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
         val intent = intent
-        val trackItemGson = intent.getStringExtra("trackItem")
+        val trackItemGson = intent.getStringExtra(TRACK_ITEM_KEY)
         trackItem = gson.fromJson<CurrentTrack>(trackItemGson, CurrentTrack::class.java)
 
         Glide.with(binding.root.context)
