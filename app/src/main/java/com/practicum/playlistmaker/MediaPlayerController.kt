@@ -16,17 +16,22 @@ class MediaPlayerController {
         private const val STATE_STOP = 4
         private const val TIMER_DELAY = 50L
     }
-    val player = MediaPlayer()
+
+    private val player = MediaPlayer()
+    private val simpleDateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private var playerState = STATE_DEFAULT
 
     private var isRunnableCreated = false
 
-    lateinit var runnable : Runnable
+    lateinit var runnable: Runnable
     lateinit var playButton: ToggleButton
     lateinit var handler: Handler
 
+    fun releaseMediaPlayer() {
+        player.release()
+    }
 
-    fun preparePlayer(url: String, button: ToggleButton, handler : Handler) {
+    fun preparePlayer(url: String, button: ToggleButton, handler: Handler) {
         this.handler = handler
         player.setDataSource(url)
         player.prepareAsync()
@@ -64,12 +69,8 @@ class MediaPlayerController {
         val runnable = object : Runnable {
             override fun run() {
                 textView.text =
-                    SimpleDateFormat(
-                        "mm:ss",
-                        Locale.getDefault()
-                    ).format(player.currentPosition)
+                    simpleDateFormat.format(player.currentPosition)
                 handler.postDelayed(this, TIMER_DELAY)
-
             }
         }
         this.runnable = runnable
@@ -80,7 +81,7 @@ class MediaPlayerController {
         player.setOnCompletionListener {
             playerState = STATE_PREPARED
             handler.removeCallbacks(runnable)
-            textView.text = "00:00"
+            textView.text = simpleDateFormat.format(0)
             playButton.isChecked = false
         }
     }

@@ -39,7 +39,8 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY = "KEY"
-        private val SEARCH_HISTORY_PREFERENCES = "search_history"
+        private const val SEARCH_HISTORY_PREFERENCES = "search_history"
+        private const val TRACK_ITEM_KEY = "trackItem"
         private const val CLICK_DEBOUNCE_DELAY = 1_000L
         private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }
@@ -63,7 +64,7 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.addTracksToHistory(item)
             val track = gson.toJson(item)
             val intent = Intent(this, PlayerActivity::class.java)
-            intent.putExtra("trackItem", track)
+            intent.putExtra(TRACK_ITEM_KEY, track)
             startActivity(intent)
         }
 
@@ -75,7 +76,7 @@ class SearchActivity : AppCompatActivity() {
         if (clickDebounce()) {
             val track = gson.toJson(item)
             val intent = Intent(this, PlayerActivity::class.java)
-            intent.putExtra("trackItem", track)
+            intent.putExtra(TRACK_ITEM_KEY, track)
             startActivity(intent)
         }
     }
@@ -216,6 +217,7 @@ class SearchActivity : AppCompatActivity() {
     private fun searchSongs() {
         binding.searchResults.visibility = View.VISIBLE
         binding.progressBar?.visibility = View.VISIBLE
+        binding.recyclerSearch.visibility = View.GONE
         binding.nothingFoundPlaceHolder.visibility = View.GONE
         binding.badConnectionPlaceHolder.visibility = View.GONE
 
@@ -256,6 +258,7 @@ class SearchActivity : AppCompatActivity() {
         binding.trackHistory?.visibility = View.GONE
         binding.nothingFoundPlaceHolder.visibility = View.GONE
         binding.badConnectionPlaceHolder.visibility = View.VISIBLE
+        binding.progressBar?.visibility = View.GONE
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
