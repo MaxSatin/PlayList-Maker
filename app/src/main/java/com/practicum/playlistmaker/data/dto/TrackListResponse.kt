@@ -4,5 +4,5 @@ import com.practicum.playlistmaker.CurrentTrack
 
 class TrackListResponse(
     val resultCount: Int,
-    val results: ArrayList<CurrentTrack>
+    val results: ArrayList<TrackDto>
 ): NetworkResponse()
