@@ -3,9 +3,9 @@ package com.practicum.playlistmaker.data.storage
 import com.practicum.playlistmaker.CurrentTrack
 import com.practicum.playlistmaker.domain.model.Track
 
-interface TracksHistoryStorageManager {
+interface TracksHistoryStorageManager<T> {
 
-    fun saveTracksHistoryToLocalStorage(tracks: List<Track>)
+    fun saveTracksHistoryToLocalStorage(data: List<T>)
 
-    fun getTracksHistoryFromLocalStorage(): List<CurrentTrack>?
+    fun getTracksHistoryFromLocalStorage(): List<T>?
 }
