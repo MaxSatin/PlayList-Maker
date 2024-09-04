@@ -1,21 +1,17 @@
 package com.practicum.playlistmaker.data.repository
 
-import com.practicum.playlistmaker.data.dto.NetworkResponse
+
 import com.practicum.playlistmaker.data.dto.TrackDto
 import com.practicum.playlistmaker.data.dto.TrackListRequest
 import com.practicum.playlistmaker.data.dto.TrackListResponse
 import com.practicum.playlistmaker.data.mapper.TrackDtoToTrackMapper
-import com.practicum.playlistmaker.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.domain.model.Resourse
 import com.practicum.playlistmaker.domain.model.Track
-import com.practicum.playlistmaker.domain.repository.TracklistRepository
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.practicum.playlistmaker.domain.repository.TrackListRepository
 
 class TracklistRepositoryImpl(
     private val tracklistNetworkClient: TracklistNetworkClient,
-) : TracklistRepository {
+) : TrackListRepository {
 
     override fun getTrackList(expression: String): Resourse<List<Track>> {
 
