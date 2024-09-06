@@ -4,11 +4,11 @@ import com.practicum.playlistmaker.domain.consumer.Consumer
 import com.practicum.playlistmaker.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.domain.model.Resourse
 import com.practicum.playlistmaker.domain.model.Track
-import com.practicum.playlistmaker.domain.repository.SearchTrackListInteractor
+import com.practicum.playlistmaker.domain.interactors.SearchTrackListInteractor
 import com.practicum.playlistmaker.domain.repository.TrackListRepository
 import java.util.concurrent.Executors
 
-class GetTrackListUseCase(
+class GetTrackListFromServerUseCase(
     private val tracklistRepository: TrackListRepository
 ) : SearchTrackListInteractor {
 
