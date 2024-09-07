@@ -21,6 +21,10 @@ class MediaPlayer() : MediaPlayerController {
     private val player: MediaPlayer by lazy { MediaPlayer() }
     private var playerState = STATE_DEFAULT
 
+    fun getPlayerState() : Int {
+        return playerState
+    }
+
     override fun prepare(url: String) {
         player.apply {
             setDataSource(url)

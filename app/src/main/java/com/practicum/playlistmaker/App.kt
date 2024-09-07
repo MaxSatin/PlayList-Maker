@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker
 
 import android.app.Application
-import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.Creator.Creator
 
@@ -15,7 +14,7 @@ class App : Application() {
 
     private var isDarkTheme = false
     private val sharedPrefs by lazy {
-        Creator.provideSharedPrefs(this, APP_THEME).getSharedPrefs()
+        Creator.provideSharedPrefsClient(this, APP_THEME).getSharedPrefs()
     }
 //    private val sharedPrefs by lazy {
 //        getSharedPreferences(APP_THEME, Context.MODE_PRIVATE)
