@@ -3,6 +3,7 @@ package com.practicum.playlistmaker
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import com.practicum.playlistmaker.Creator.Creator
 
 class App : Application() {
 
@@ -11,10 +12,14 @@ class App : Application() {
         const val IS_DARK_MODE_ON_KEY = "is_dark_mode_on"
     }
 
+
     private var isDarkTheme = false
     private val sharedPrefs by lazy {
-        getSharedPreferences(APP_THEME, Context.MODE_PRIVATE)
+        Creator.provideSharedPrefs(this, APP_THEME).getSharedPrefs()
     }
+//    private val sharedPrefs by lazy {
+//        getSharedPreferences(APP_THEME, Context.MODE_PRIVATE)
+//    }
 
     override fun onCreate() {
         super.onCreate()

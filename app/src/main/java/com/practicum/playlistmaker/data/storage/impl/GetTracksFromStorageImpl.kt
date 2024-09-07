@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.data.storage.impl
 
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.Creator.Creator
-import com.practicum.playlistmaker.CurrentTrack
 import com.practicum.playlistmaker.data.Constants
 import com.practicum.playlistmaker.data.storage.SharedPrefsClient
 import com.practicum.playlistmaker.data.storage.manipulator.GetTracksHistoryFromStorageManip
@@ -12,8 +11,8 @@ class GetTracksFromStorageImpl(
     private val sharedPrefs: SharedPrefsClient
 ) : GetTracksHistoryFromStorageManip {
 
-    private val gson = Creator.getGson()
-    private val sharedPrefsHistory = sharedPrefs.getSharedPrefsHistoryTrackList()
+    private val gson = Creator.provideGson()
+    private val sharedPrefsHistory = sharedPrefs.getSharedPrefs()
 
     override fun getTracks(): List<Track> {
         val tracksFromStorage = getTrackFromLocalStorage()

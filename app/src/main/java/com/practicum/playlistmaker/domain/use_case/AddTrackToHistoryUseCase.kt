@@ -16,16 +16,24 @@ class AddTrackToHistoryUseCase(
     override fun addTracksToHistory(track: Track) {
         val currentHistoryList = getTracksHistory.getTracks()
         val index = currentHistoryList.indexOfFirst { it.trackId == track.trackId }
-        if(index >= 0) {
+        if (index >= 0) {
             val newCurrentHistoryList = currentHistoryList.toMutableList()
             newCurrentHistoryList.removeAt(index)
             newCurrentHistoryList.add(0, track)
-
+            updateTracks(newCurrentHistoryList)
+        } else if (currentHistoryList.size > 9) {
+            val newCurrentHistoryList = currentHistoryList.toMutableList()
+            newCurrentHistoryList.removeAt(9)
+            newCurrentHistoryList.add(0, track)
+            updateTracks(newCurrentHistoryList)
+        } else {
+            val newCurrentHistoryList = currentHistoryList.toMutableList()
+            newCurrentHistoryList.add(0, track)
+            updateTracks(newCurrentHistoryList)
         }
-
     }
 
-    fun updateTracks(newTracks: List<Track>) {
+    private fun updateTracks(newTracks: List<Track>) {
         saveTrackHistory.saveTracksHistoryToLocalStorage(newTracks)
     }
 }

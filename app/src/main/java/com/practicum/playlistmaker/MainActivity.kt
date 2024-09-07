@@ -39,9 +39,9 @@ class MainActivity : AppCompatActivity() {
                 ).show()
             }
         } */
-        searchButton.setOnClickListener {
-            startActivity(Intent(this, SearchActivity::class.java))
-        }
+//        searchButton.setOnClickListener {
+//            startActivity(Intent(this, SearchActivity::class.java))
+//        }
 
 
         mediaLibraryButton.setOnClickListener {

@@ -10,8 +10,8 @@ class SaveTracksHistoryToStorageImpl(
     private val sharedPrefs: SharedPrefsClient
 ) : SaveTrackHistoryToStorageManip{
 
-    private val gson = Creator.getGson()
-    private val sharedPrefsHistory = sharedPrefs.getSharedPrefsHistoryTrackList()
+    private val gson = Creator.provideGson()
+    private val sharedPrefsHistory = sharedPrefs.getSharedPrefs()
 
     override fun saveTracksHistoryToLocalStorage(data: List<Track>) {
         val trackToGson: String = gson.toJson(data)
