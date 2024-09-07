@@ -4,12 +4,12 @@ import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.data.Constants
 import com.practicum.playlistmaker.data.storage.SharedPrefsClient
-import com.practicum.playlistmaker.data.storage.manipulator.GetTracksHistoryFromStorageManip
+import com.practicum.playlistmaker.data.storage.manipulator.GetTracksHistoryFromStorage
 import com.practicum.playlistmaker.domain.model.Track
 
 class GetTracksFromStorageImpl(
     private val sharedPrefs: SharedPrefsClient
-) : GetTracksHistoryFromStorageManip {
+) : GetTracksHistoryFromStorage {
 
     private val gson = Creator.provideGson()
     private val sharedPrefsHistory = sharedPrefs.getSharedPrefs()

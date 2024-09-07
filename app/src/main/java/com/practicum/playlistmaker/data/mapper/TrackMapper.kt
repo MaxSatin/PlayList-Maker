@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.data.mapper
 import com.practicum.playlistmaker.data.dto.TrackDto
 import com.practicum.playlistmaker.domain.model.Track
 
-object TrackDtoToTrackMapper {
+object TrackMapper {
     fun map (trackDto: TrackDto): Track{
         return Track(
             trackId = trackDto.trackId,

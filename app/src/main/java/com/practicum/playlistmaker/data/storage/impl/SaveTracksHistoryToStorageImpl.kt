@@ -3,12 +3,12 @@ package com.practicum.playlistmaker.data.storage.impl
 import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.data.Constants
 import com.practicum.playlistmaker.data.storage.SharedPrefsClient
-import com.practicum.playlistmaker.data.storage.manipulator.SaveTrackHistoryToStorageManip
+import com.practicum.playlistmaker.data.storage.manipulator.SaveTrackHistoryToStorage
 import com.practicum.playlistmaker.domain.model.Track
 
 class SaveTracksHistoryToStorageImpl(
     private val sharedPrefs: SharedPrefsClient
-) : SaveTrackHistoryToStorageManip{
+) : SaveTrackHistoryToStorage{
 
     private val gson = Creator.provideGson()
     private val sharedPrefsHistory = sharedPrefs.getSharedPrefs()

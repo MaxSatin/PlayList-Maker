@@ -1,17 +1,14 @@
-package com.practicum.playlistmaker.domain.use_case
+package com.practicum.playlistmaker.domain.use_case.tracks_intr
 
-import com.practicum.playlistmaker.CurrentTrack
-import com.practicum.playlistmaker.data.storage.manipulator.GetTracksHistoryFromStorageManip
-import com.practicum.playlistmaker.data.storage.manipulator.SaveTrackHistoryToStorageManip
-import com.practicum.playlistmaker.domain.consumer.Consumer
-import com.practicum.playlistmaker.domain.consumer.ConsumerData
-import com.practicum.playlistmaker.domain.interactors.AddTrackToHistoryInteractor
+import com.practicum.playlistmaker.data.storage.manipulator.GetTracksHistoryFromStorage
+import com.practicum.playlistmaker.data.storage.manipulator.SaveTrackHistoryToStorage
+import com.practicum.playlistmaker.domain.interactors.AddTrackToHistoryIntr
 import com.practicum.playlistmaker.domain.model.Track
 
 class AddTrackToHistoryUseCase(
-    private val saveTrackHistory: SaveTrackHistoryToStorageManip,
-    private val getTracksHistory: GetTracksHistoryFromStorageManip
-) : AddTrackToHistoryInteractor {
+    private val saveTrackHistory: SaveTrackHistoryToStorage,
+    private val getTracksHistory: GetTracksHistoryFromStorage
+) : AddTrackToHistoryIntr {
 
     override fun addTracksToHistory(track: Track) {
         val currentHistoryList = getTracksHistory.getTracks()

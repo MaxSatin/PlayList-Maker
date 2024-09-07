@@ -1,16 +1,16 @@
-package com.practicum.playlistmaker.domain.use_case
+package com.practicum.playlistmaker.domain.use_case.tracks_intr
 
 import com.practicum.playlistmaker.domain.consumer.Consumer
 import com.practicum.playlistmaker.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.domain.model.Resourse
 import com.practicum.playlistmaker.domain.model.Track
-import com.practicum.playlistmaker.domain.interactors.SearchTrackListInteractor
+import com.practicum.playlistmaker.domain.interactors.SearchTrackListIntr
 import com.practicum.playlistmaker.domain.repository.TrackListRepository
 import java.util.concurrent.Executors
 
 class GetTrackListFromServerUseCase(
     private val tracklistRepository: TrackListRepository
-) : SearchTrackListInteractor {
+) : SearchTrackListIntr {
 
     private val executor = Executors.newCachedThreadPool()
 
