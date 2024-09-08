@@ -5,11 +5,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    private const val iTunesBaseUrl = "https://itunes.apple.com"
+    private const val ITUNES_BASE_URL = "https://itunes.apple.com"
 
     private val client: Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl(iTunesBaseUrl)
+            .baseUrl(ITUNES_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

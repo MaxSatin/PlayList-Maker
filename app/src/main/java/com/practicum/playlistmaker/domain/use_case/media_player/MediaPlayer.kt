@@ -1,11 +1,7 @@
 package com.practicum.playlistmaker.domain.use_case.media_player
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.widget.TextView
-import com.practicum.playlistmaker.MediaPlayerController.Companion
 import com.practicum.playlistmaker.domain.interactors.MediaPlayerController
-import retrofit2.Callback
 
 class MediaPlayer() : MediaPlayerController {
 
