@@ -30,10 +30,6 @@ class AddTrackToHistoryUseCase(
         }
     }
 
-    override fun isHistoryEmpty(): Boolean {
-        return tracksHistoryRepository.getTracks().isNullOrEmpty()
-    }
-
     private fun updateTracks(newTracks: List<Track>) {
         saveTrackHistory.saveTracksHistoryToLocalStorage(newTracks)
     }

@@ -6,9 +6,10 @@ import com.practicum.playlistmaker.data.Constants
 import com.practicum.playlistmaker.data.network.TracklistRetrofitNetworkClient
 import com.practicum.playlistmaker.data.repository.TracklistRepositoryImpl
 import com.practicum.playlistmaker.data.storage.SharedPrefsClient
-import com.practicum.playlistmaker.data.storage.impl.GetTracksFromStorageImpl
+import com.practicum.playlistmaker.data.storage.impl.ClearStorageImpl
+import com.practicum.playlistmaker.data.storage.impl.TracksHistoryRepositoryImpl
 import com.practicum.playlistmaker.data.storage.impl.SaveTracksHistoryToStorageImpl
-import com.practicum.playlistmaker.data.storage.manipulator.GetTracksHistoryFromStorage
+import com.practicum.playlistmaker.data.storage.manipulator.ClearLocalStorage
 import com.practicum.playlistmaker.data.storage.manipulator.SaveTrackHistoryToStorage
 import com.practicum.playlistmaker.domain.interactors.AddTrackToHistoryIntr
 import com.practicum.playlistmaker.domain.interactors.SearchTrackListIntr
@@ -19,9 +20,9 @@ import com.practicum.playlistmaker.domain.use_case.tracks_intr.GetTrackListFromS
 
 object Creator {
 
-    fun provideGson(): Gson {
-        return Gson()
-    }
+//    fun provideGson(): Gson {
+//        return Gson()
+//    }
 
     fun provideSharedPrefsClient(context: Context, key: String): SharedPrefsClient {
         return SharedPrefsClient(context, key)
@@ -35,7 +36,7 @@ object Creator {
     }
 
     fun provideTracksHistoryRepository(context: Context): TracksHistoryRepository {
-        return GetTracksFromStorageImpl(provideSharedPrefsClient(
+        return TracksHistoryRepositoryImpl(provideSharedPrefsClient(
             context,
             Constants.SHAREDPREFS_TRACKS_HISTORY)
         )
@@ -54,6 +55,12 @@ object Creator {
         return AddTrackToHistoryUseCase(
             provideSaveTrackHistoryToStorage(context),
             provideTracksHistoryRepository(context)
+        )
+    }
+
+    fun provideClearLocalStorage(context: Context): ClearLocalStorage{
+        return ClearStorageImpl(provideSharedPrefsClient(context,
+            Constants.SHAREDPREFS_TRACKS_HISTORY)
         )
     }
 }

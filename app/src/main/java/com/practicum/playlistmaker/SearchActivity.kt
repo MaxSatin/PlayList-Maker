@@ -12,15 +12,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.practicum.playlistmaker.Creator.Creator
+import com.practicum.playlistmaker.Creator.GsonProvider
 import com.practicum.playlistmaker.data.dto.TrackListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.domain.consumer.Consumer
+import com.practicum.playlistmaker.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.domain.model.Track
 import com.practicum.playlistmaker.presentation.mapper.TrackInfoMapper
 
@@ -48,8 +52,10 @@ class SearchActivity : AppCompatActivity() {
 //    private val itunesApiService = retrofit.create(ItunesAPI::class.java)
 
     private val searchTrackList = Creator.provideSearchTrackListIntr()
-    private val addTrackToHistory = Creator.provideAddTrackToHistoryIntr(this)
-    private val gson = Creator.provideGson()
+    private val addTrackToHistory by lazy {  Creator.provideAddTrackToHistoryIntr(this) }
+    private val clearHistory by lazy { Creator.provideClearLocalStorage(this) }
+    private val tracksHistoryRepository by lazy { Creator.provideTracksHistoryRepository(this) }
+    private val gson = GsonProvider.gson
 
     private val trackList = mutableListOf<Track>()
 
@@ -121,10 +127,12 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerSearch.adapter = adapter
 
         binding.trackHistoryRV?.adapter = trackHistoryAdapter
-        trackHistoryAdapter.updateItems(searchHistory.getTracks())
+        trackHistoryAdapter.updateItems(tracksHistoryRepository.getTracks())
 
         binding.clearHistorySearchButton?.setOnClickListener {
-            searchHistory.updateTracks(emptyList())
+            clearHistory.clearStorage()
+            trackHistoryAdapter.updateItems(tracksHistoryRepository.getTracks())
+//            searchHistory.updateTracks(emptyList())
             binding.trackHistory.visibility = View.GONE
         }
 
@@ -135,7 +143,7 @@ class SearchActivity : AppCompatActivity() {
             binding.editTextwather.setText("")
             binding.searchResults.visibility = View.GONE
 
-            if (searchHistory.isTrackHistoryEmpty()) {
+            if (tracksHistoryRepository.isHistoryEmpty()) {
                 binding.trackHistory?.visibility = View.GONE
             }
             trackList.clear()
@@ -150,7 +158,7 @@ class SearchActivity : AppCompatActivity() {
         binding.editTextwather.setOnFocusChangeListener { view, hasFocus ->
 
             binding.trackHistory?.visibility =
-                if (hasFocus && binding.editTextwather.text.isEmpty() && !searchHistory.isTrackHistoryEmpty()) View.VISIBLE else View.GONE
+                if (hasFocus && binding.editTextwather.text.isEmpty() && !tracksHistoryRepository.isHistoryEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.editTextwather.setOnEditorActionListener { v, actionId, event ->
@@ -232,34 +240,58 @@ class SearchActivity : AppCompatActivity() {
         binding.nothingFoundPlaceHolder.visibility = View.GONE
         binding.badConnectionPlaceHolder.visibility = View.GONE
 
-        itunesApiService.getSongsList(binding.editTextwather.text.toString()).enqueue(object :
-            Callback<TrackListResponse> {
-            override fun onResponse(
-                call: Call<TrackListResponse>,
-                response: Response<TrackListResponse>
-            ) {
-                binding.progressBar?.visibility = View.GONE
-                when (response.code()) {
-                    200 -> {
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            binding.recyclerSearch?.visibility = View.VISIBLE
-                            binding.trackHistory?.visibility = View.GONE
-                            binding.nothingFoundPlaceHolder.visibility = View.GONE
-                            binding.badConnectionPlaceHolder.visibility = View.GONE
-                            trackList.clear()
-                            trackList.addAll(response.body()?.results!!)
-                            adapter.updateItems(trackList)
-                        } else {
-                            showErrorNothingFound(binding.editTextwather.text.toString())
+        searchTrackList.searchTracks(
+            expression = binding.editTextwather.text.toString(),
+            consumer = object : Consumer<List<Track>> {
+                override fun consume(data: ConsumerData<List<Track>>) {
+                    when(data){
+                        is ConsumerData.Error -> showErrorBadConnection()
+                        is ConsumerData.Data -> {
+                            if (data.value.isNullOrEmpty()) {
+                                showErrorNothingFound(binding.editTextwather.text.toString())
+                            } else {
+                                trackList.clear()
+                                trackList.addAll(data.value!!)
+                                adapter.updateItems(trackList)
+                            }
                         }
                     }
                 }
             }
+        )
+//        itunesApiService.getSongsList(binding.editTextwather.text.toString()).enqueue(object :
+//            Callback<TrackListResponse> {
+//            override fun onResponse(
+//                call: Call<TrackListResponse>,
+//                response: Response<TrackListResponse>
+//            ) {
+//                binding.progressBar?.visibility = View.GONE
+//                when (response.code()) {
+//                    200 -> {
+//                        if (response.body()?.results?.isNotEmpty() == true) {
+//                            binding.recyclerSearch?.visibility = View.VISIBLE
+//                            binding.trackHistory?.visibility = View.GONE
+//                            binding.nothingFoundPlaceHolder.visibility = View.GONE
+//                            binding.badConnectionPlaceHolder.visibility = View.GONE
+//                            trackList.clear()
+//                            trackList.addAll(response.body()?.results!!)
+//                            adapter.updateItems(trackList)
+//                        } else {
+//                            showErrorNothingFound(binding.editTextwather.text.toString())
+//                        }
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<TrackListResponse>, t: Throwable) {
+//                showErrorBadConnection()
+//            }
+//        })
+    }
 
-            override fun onFailure(call: Call<TrackListResponse>, t: Throwable) {
-                showErrorBadConnection()
-            }
-        })
+    private fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        onBackPressedDispatcher.onBackPressed()
     }
 
     private fun showErrorBadConnection() {

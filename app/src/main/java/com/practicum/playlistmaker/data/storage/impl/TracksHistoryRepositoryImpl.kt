@@ -2,17 +2,18 @@ package com.practicum.playlistmaker.data.storage.impl
 
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.Creator.Creator
+import com.practicum.playlistmaker.Creator.GsonProvider
 import com.practicum.playlistmaker.data.Constants
 import com.practicum.playlistmaker.data.storage.SharedPrefsClient
-import com.practicum.playlistmaker.data.storage.manipulator.GetTracksHistoryFromStorage
+
 import com.practicum.playlistmaker.domain.model.Track
 import com.practicum.playlistmaker.domain.repository.TracksHistoryRepository
 
-class GetTracksFromStorageImpl(
+class TracksHistoryRepositoryImpl(
     private val sharedPrefs: SharedPrefsClient
 ) : TracksHistoryRepository {
 
-    private val gson = Creator.provideGson()
+    private val gson = GsonProvider.gson
     private val sharedPrefsHistory = sharedPrefs.getSharedPrefs()
 
     override fun getTracks(): List<Track> {
@@ -24,6 +25,11 @@ class GetTracksFromStorageImpl(
             emptyTrackList
         }
     }
+
+    override fun isHistoryEmpty(): Boolean {
+        return getTracks().isNullOrEmpty()
+    }
+
     private fun getTrackFromLocalStorage(): List<Track>? {
         val tracksFromGson: String? = sharedPrefsHistory.getString(Constants.KEY_HISTORY_TRACK_LIST, null)
         return tracksFromGson?.let {

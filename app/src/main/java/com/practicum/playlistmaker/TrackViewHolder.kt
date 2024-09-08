@@ -7,6 +7,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.databinding.TrackItemBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
+import com.practicum.playlistmaker.domain.model.Track
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val binding = TrackItemBinding.bind(itemView)

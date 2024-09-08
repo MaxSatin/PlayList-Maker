@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
+import com.practicum.playlistmaker.domain.model.Track
 
 class PlayerActivity : AppCompatActivity() {
 
