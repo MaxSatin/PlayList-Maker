@@ -16,6 +16,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.gson.Gson
+import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.data.dto.TrackListResponse
 import com.practicum.playlistmaker.data.network.ItunesAPI
 import retrofit2.Call
@@ -36,17 +37,22 @@ class SearchActivity : AppCompatActivity() {
         private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }
 
-    private val sharedPrefs by lazy {
-        getSharedPreferences(SEARCH_HISTORY_PREFERENCES, Context.MODE_PRIVATE)
-    }
+//    private val sharedPrefs by lazy {
+//        getSharedPreferences(SEARCH_HISTORY_PREFERENCES, Context.MODE_PRIVATE)
+//    }
 
-    private val iTunesBaseUrl = "https://itunes.apple.com"
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val gson = Gson()
-    private val itunesApiService = retrofit.create(ItunesAPI::class.java)
+//    private val iTunesBaseUrl = "https://itunes.apple.com"
+//    private val retrofit = Retrofit.Builder()
+//        .baseUrl(iTunesBaseUrl)
+//        .addConverterFactory(GsonConverterFactory.create())
+//        .build()
+//    private val gson = Gson()
+//    private val itunesApiService = retrofit.create(ItunesAPI::class.java)
+
+    val searchTrackList = Creator.provideSearchTrackListIntr()
+    val addTrackToHistory = Creator.provideAddTrackToHistoryIntr(this)
+    private val gson = Creator.provideGson()
+
     private val trackList = mutableListOf<CurrentTrack>()
 
 
