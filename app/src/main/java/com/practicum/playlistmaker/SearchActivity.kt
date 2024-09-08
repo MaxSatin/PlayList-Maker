@@ -52,7 +52,7 @@ class SearchActivity : AppCompatActivity() {
 //    private val itunesApiService = retrofit.create(ItunesAPI::class.java)
 
     private val searchTrackList = Creator.provideSearchTrackListIntr()
-    private val addTrackToHistory by lazy {  Creator.provideAddTrackToHistoryIntr(this) }
+    private val addTrackToHistory by lazy { Creator.provideAddTrackToHistoryIntr(this) }
     private val clearHistory by lazy { Creator.provideClearLocalStorage(this) }
     private val tracksHistoryRepository by lazy { Creator.provideTracksHistoryRepository(this) }
     private val gson = GsonProvider.gson
@@ -201,7 +201,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun showPlayer(item: Track){
+    private fun showPlayer(item: Track) {
         val track = gson.toJson(item)
         val intent = Intent(this, PlayerActivity::class.java)
         intent.putExtra(TRACK_ITEM_KEY, track)
@@ -244,18 +244,30 @@ class SearchActivity : AppCompatActivity() {
             expression = binding.editTextwather.text.toString(),
             consumer = object : Consumer<List<Track>> {
                 override fun consume(data: ConsumerData<List<Track>>) {
-                    when(data){
-                        is ConsumerData.Error -> showErrorBadConnection()
-                        is ConsumerData.Data -> {
-                            if (data.value.isNullOrEmpty()) {
-                                showErrorNothingFound(binding.editTextwather.text.toString())
-                            } else {
-                                trackList.clear()
-                                trackList.addAll(data.value!!)
-                                adapter.updateItems(trackList)
+                    val currentRunnable = searchRunnable
+                    if (currentRunnable != null) {
+                        handler.removeCallbacks(currentRunnable)
+                    }
+                    val newSearchRunnable = Runnable {
+                        binding.progressBar?.visibility = View.GONE
+                        when (data) {
+                            is ConsumerData.Error -> showErrorBadConnection()
+                            is ConsumerData.Data -> {
+                                if (data.value.isNullOrEmpty()) {
+                                    showErrorNothingFound(binding.editTextwather.text.toString())
+                                } else {
+                                    binding.recyclerSearch?.visibility = View.VISIBLE
+                                    binding.trackHistory?.visibility = View.GONE
+                                    binding.nothingFoundPlaceHolder.visibility = View.GONE
+                                    binding.badConnectionPlaceHolder.visibility = View.GONE
+                                    trackList.clear()
+                                    trackList.addAll(data.value!!)
+                                    adapter.updateItems(trackList)
+                                }
                             }
                         }
                     }
+                    handler.post(newSearchRunnable)
                 }
             }
         )
