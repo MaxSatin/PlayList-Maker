@@ -8,8 +8,8 @@ class GetTrackHistoryFromStorageUseCase(
     private val tracksHistoryStorage: GetTracksHistoryFromStorage
 ) : TracksHistoryRepository {
     override fun getTrackHistoryList(): List<Track> {
-        val tracksFromStorage = tracksHistoryStorage.getTracks()
-        return tracksFromStorage
+        return tracksHistoryStorage.getTracks()
+
     }
 }
 

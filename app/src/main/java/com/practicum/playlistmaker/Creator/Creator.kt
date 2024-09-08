@@ -13,6 +13,7 @@ import com.practicum.playlistmaker.data.storage.manipulator.SaveTrackHistoryToSt
 import com.practicum.playlistmaker.domain.interactors.AddTrackToHistoryIntr
 import com.practicum.playlistmaker.domain.interactors.SearchTrackListIntr
 import com.practicum.playlistmaker.domain.repository.TrackListRepository
+import com.practicum.playlistmaker.domain.repository.TracksHistoryRepository
 import com.practicum.playlistmaker.domain.use_case.tracks_intr.AddTrackToHistoryUseCase
 import com.practicum.playlistmaker.domain.use_case.tracks_intr.GetTrackListFromServerUseCase
 
@@ -33,7 +34,7 @@ object Creator {
         )
     }
 
-    fun provideGetTracksHistoryFromStorage(context: Context): GetTracksHistoryFromStorage {
+    fun provideTracksHistoryRepository(context: Context): TracksHistoryRepository {
         return GetTracksFromStorageImpl(provideSharedPrefsClient(
             context,
             Constants.SHAREDPREFS_TRACKS_HISTORY)
@@ -52,7 +53,7 @@ object Creator {
     fun provideAddTrackToHistoryIntr(context: Context): AddTrackToHistoryIntr{
         return AddTrackToHistoryUseCase(
             provideSaveTrackHistoryToStorage(context),
-            provideGetTracksHistoryFromStorage(context)
+            provideTracksHistoryRepository(context)
         )
     }
 }

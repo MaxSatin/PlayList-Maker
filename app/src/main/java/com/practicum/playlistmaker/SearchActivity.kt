@@ -15,16 +15,14 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.gson.Gson
 import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.data.dto.TrackListResponse
-import com.practicum.playlistmaker.data.network.ItunesAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.domain.model.Track
+import com.practicum.playlistmaker.presentation.mapper.TrackInfoMapper
 
 
 class SearchActivity : AppCompatActivity() {
@@ -49,37 +47,46 @@ class SearchActivity : AppCompatActivity() {
 //    private val gson = Gson()
 //    private val itunesApiService = retrofit.create(ItunesAPI::class.java)
 
-    val searchTrackList = Creator.provideSearchTrackListIntr()
-    val addTrackToHistory = Creator.provideAddTrackToHistoryIntr(this)
+    private val searchTrackList = Creator.provideSearchTrackListIntr()
+    private val addTrackToHistory = Creator.provideAddTrackToHistoryIntr(this)
     private val gson = Creator.provideGson()
 
-    private val trackList = mutableListOf<CurrentTrack>()
+    private val trackList = mutableListOf<Track>()
 
 
-    private val onTrackClickListener = TrackAdapter.OnTrackClickListener { item ->
-        if(clickDebounce()) {
-            searchHistory.addTracksToHistory(item)
-            val track = gson.toJson(item)
-            val intent = Intent(this, PlayerActivity::class.java)
-            intent.putExtra(TRACK_ITEM_KEY, track)
-            startActivity(intent)
-        }
+//    private val onTrackClickListener = TrackAdapter.OnTrackClickListener { item ->
+//        if(clickDebounce()) {
+//            searchHistory.addTracksToHistory(item)
+//            showPlayer(item)
+////            val track = gson.toJson(item)
+////            val intent = Intent(this, PlayerActivity::class.java)
+////            intent.putExtra(TRACK_ITEM_KEY, track)
+////            startActivity(intent)
+//        }
+//    }
 
-    }
-    private val adapter = TrackAdapter(onTrackClickListener)
-
-
-    private val onTrackClickListenerHistory = HistoryRVAdapter.OnTrackClickListenerHistory { item ->
+    private val adapter = TrackAdapter { item ->
         if (clickDebounce()) {
-            val track = gson.toJson(item)
-            val intent = Intent(this, PlayerActivity::class.java)
-            intent.putExtra(TRACK_ITEM_KEY, track)
-            startActivity(intent)
+            addTrackToHistory.addTracksToHistory(item)
+            showPlayer(item)
         }
     }
-    private val trackHistoryAdapter = HistoryRVAdapter(onTrackClickListenerHistory)
+    private val trackHistoryAdapter = HistoryRVAdapter { item ->
+        showPlayer(item)
+    }
 
-    private val searchHistory by lazy { SearchHistory(sharedPrefs, trackHistoryAdapter) }
+
+//    private val onTrackClickListenerHistory = HistoryRVAdapter.OnTrackClickListenerHistory { item ->
+//        if (clickDebounce()) {
+//            val track = gson.toJson(item)
+//            val intent = Intent(this, PlayerActivity::class.java)
+//            intent.putExtra(TRACK_ITEM_KEY, track)
+//            startActivity(intent)
+//        }
+//    }
+//    private val trackHistoryAdapter = HistoryRVAdapter(onTrackClickListenerHistory)
+
+//    private val searchHistory by lazy { SearchHistory(sharedPrefs, trackHistoryAdapter) }
 
     val searchRunnable = Runnable { searchSongs() }
     private val handler = Handler(Looper.getMainLooper())
@@ -184,6 +191,13 @@ class SearchActivity : AppCompatActivity() {
         }
         binding.editTextwather.addTextChangedListener(editTextWatcher)
 
+    }
+
+    private fun showPlayer(item: Track){
+        val track = gson.toJson(item)
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra(TRACK_ITEM_KEY, track)
+        startActivity(intent)
     }
 
     private fun clickDebounce(): Boolean {

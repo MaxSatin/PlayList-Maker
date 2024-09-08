@@ -4,4 +4,5 @@ import com.practicum.playlistmaker.domain.model.Track
 
 interface AddTrackToHistoryIntr {
     fun addTracksToHistory(track: Track)
+    fun isHistoryEmpty(): Boolean
 }

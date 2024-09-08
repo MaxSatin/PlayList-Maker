@@ -1,16 +1,8 @@
 package com.practicum.playlistmaker
 
-import android.content.Context
 import android.content.SharedPreferences
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 
 class SearchHistory(
     private val sharedPrefs: SharedPreferences,
@@ -22,10 +14,10 @@ class SearchHistory(
     }
 
     private val gson: Gson = Gson()
-    private var historyTracks: List<CurrentTrack> = getTracks()
+    private var historyTracks: List<Track> = getTracks()
 
 
-    fun addTracksToHistory(track: CurrentTrack) {
+    fun addTracksToHistory(track: Track) {
         val index = historyTracks.indexOfFirst { it.trackId == track.trackId }
         if (index >= 0) {
             val newHistoryTrackList = historyTracks.toMutableList()
@@ -46,33 +38,33 @@ class SearchHistory(
         saveTrackToLocalStorage(historyTracks)
     }
 
-    fun updateTracks(newTracks: List<CurrentTrack>) {
+    fun updateTracks(newTracks: List<Track>) {
         historyTracks = newTracks
         historyTracksAdapter.updateItems(historyTracks)
         saveTrackToLocalStorage(historyTracks)
     }
 
-    fun saveTrackToLocalStorage(tracks: List<CurrentTrack>) {
+    fun saveTrackToLocalStorage(tracks: List<Track>) {
         val trackToGson: String = gson.toJson(tracks)
         sharedPrefs.edit()
             .putString(KEY_HISTORY_TRACK_LIST, trackToGson)
             .apply()
     }
 
-    fun getTrackFromLocalStorage(): List<CurrentTrack>? {
+    fun getTrackFromLocalStorage(): List<Track>? {
         val tracksFromGson: String? = sharedPrefs.getString(KEY_HISTORY_TRACK_LIST, null)
         return tracksFromGson?.let {
-            val itemType = object : TypeToken<List<CurrentTrack>>() {}.type
+            val itemType = object : TypeToken<List<Track>>() {}.type
             gson.fromJson(tracksFromGson, itemType)
         }
     }
 
-    fun getTracks(): List<CurrentTrack> {
+    fun getTracks(): List<Track> {
         val tracksFromStorage = getTrackFromLocalStorage()
         return if (!tracksFromStorage.isNullOrEmpty()) {
             tracksFromStorage
         } else {
-            val emptyTrackList = emptyList<CurrentTrack>()
+            val emptyTrackList = emptyList<Track>()
             emptyTrackList
         }
     }

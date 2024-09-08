@@ -1,17 +1,17 @@
 package com.practicum.playlistmaker.domain.use_case.tracks_intr
 
-import com.practicum.playlistmaker.data.storage.manipulator.GetTracksHistoryFromStorage
 import com.practicum.playlistmaker.data.storage.manipulator.SaveTrackHistoryToStorage
 import com.practicum.playlistmaker.domain.interactors.AddTrackToHistoryIntr
 import com.practicum.playlistmaker.domain.model.Track
+import com.practicum.playlistmaker.domain.repository.TracksHistoryRepository
 
 class AddTrackToHistoryUseCase(
     private val saveTrackHistory: SaveTrackHistoryToStorage,
-    private val getTracksHistory: GetTracksHistoryFromStorage
+    private val tracksHistoryRepository: TracksHistoryRepository
 ) : AddTrackToHistoryIntr {
 
     override fun addTracksToHistory(track: Track) {
-        val currentHistoryList = getTracksHistory.getTracks()
+        val currentHistoryList = tracksHistoryRepository.getTracks()
         val index = currentHistoryList.indexOfFirst { it.trackId == track.trackId }
         if (index >= 0) {
             val newCurrentHistoryList = currentHistoryList.toMutableList()
@@ -28,6 +28,10 @@ class AddTrackToHistoryUseCase(
             newCurrentHistoryList.add(0, track)
             updateTracks(newCurrentHistoryList)
         }
+    }
+
+    override fun isHistoryEmpty(): Boolean {
+        return tracksHistoryRepository.getTracks().isNullOrEmpty()
     }
 
     private fun updateTracks(newTracks: List<Track>) {

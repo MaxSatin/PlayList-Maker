@@ -4,10 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
-import android.view.TextureView
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,11 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Date
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
@@ -32,7 +24,7 @@ class PlayerActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private val gson = Gson()
     private val mediaPlayer = MediaPlayerController()
-    lateinit var trackItem: CurrentTrack
+    lateinit var trackItem: Track
     lateinit var binding: ActivityPlayerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +44,7 @@ class PlayerActivity : AppCompatActivity() {
         }
         val intent = intent
         val trackItemGson = intent.getStringExtra(TRACK_ITEM_KEY)
-        trackItem = gson.fromJson<CurrentTrack>(trackItemGson, CurrentTrack::class.java)
+        trackItem = gson.fromJson<Track>(trackItemGson, Track::class.java)
 
         Glide.with(binding.root.context)
             .load(trackItem.getCoverArtWork())

@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.presentation.mapper
 import com.practicum.playlistmaker.domain.model.Track
 import com.practicum.playlistmaker.presentation.model.TrackInfoModel
 
-class TrackInfoMapper {
+object TrackInfoMapper {
     fun map (track: Track): TrackInfoModel {
         return TrackInfoModel(
             trackId = track.trackId,

@@ -6,10 +6,11 @@ import com.practicum.playlistmaker.data.Constants
 import com.practicum.playlistmaker.data.storage.SharedPrefsClient
 import com.practicum.playlistmaker.data.storage.manipulator.GetTracksHistoryFromStorage
 import com.practicum.playlistmaker.domain.model.Track
+import com.practicum.playlistmaker.domain.repository.TracksHistoryRepository
 
 class GetTracksFromStorageImpl(
     private val sharedPrefs: SharedPrefsClient
-) : GetTracksHistoryFromStorage {
+) : TracksHistoryRepository {
 
     private val gson = Creator.provideGson()
     private val sharedPrefsHistory = sharedPrefs.getSharedPrefs()
