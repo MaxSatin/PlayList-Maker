@@ -52,8 +52,9 @@ class SearchActivity : AppCompatActivity() {
     private val searchTrackList = Creator.provideSearchTrackListIntr()
     private val addTrackToHistory by lazy { Creator.provideAddTrackToHistoryIntr(this) }
     private val clearHistory by lazy { Creator.provideClearLocalStorage(this) }
-    private val tracksHistoryRepository by lazy { Creator.provideTracksHistoryRepository(this) }
+    private val getTracksHistory by lazy { Creator.provideGetTrackHistoryIntr(this) }
     private val gson = GsonProvider.gson
+
 
     private val trackList = mutableListOf<Track>()
 
@@ -125,11 +126,11 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerSearch.adapter = adapter
 
         binding.trackHistoryRV?.adapter = trackHistoryAdapter
-        trackHistoryAdapter.updateItems(tracksHistoryRepository.getTracks())
+        trackHistoryAdapter.updateItems(getTracksHistory.getTracks())
 
         binding.clearHistorySearchButton?.setOnClickListener {
             clearHistory.clearStorage()
-            trackHistoryAdapter.updateItems(tracksHistoryRepository.getTracks())
+            trackHistoryAdapter.updateItems(getTracksHistory.getTracks())
 //            searchHistory.updateTracks(emptyList())
             binding.trackHistory.visibility = View.GONE
         }
@@ -141,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
             binding.editTextwather.setText("")
             binding.searchResults.visibility = View.GONE
 
-            if (tracksHistoryRepository.isHistoryEmpty()) {
+            if (getTracksHistory.isHistoryEmpty()) {
                 binding.trackHistory?.visibility = View.GONE
             }
             trackList.clear()
@@ -156,7 +157,7 @@ class SearchActivity : AppCompatActivity() {
         binding.editTextwather.setOnFocusChangeListener { view, hasFocus ->
 
             binding.trackHistory?.visibility =
-                if (hasFocus && binding.editTextwather.text.isEmpty() && !tracksHistoryRepository.isHistoryEmpty()) View.VISIBLE else View.GONE
+                if (hasFocus && binding.editTextwather.text.isEmpty() && !getTracksHistory.isHistoryEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.editTextwather.setOnEditorActionListener { v, actionId, event ->

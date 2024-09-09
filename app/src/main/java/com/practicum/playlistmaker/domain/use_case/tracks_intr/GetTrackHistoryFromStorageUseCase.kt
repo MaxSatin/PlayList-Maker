@@ -10,6 +10,9 @@ class GetTrackHistoryFromStorageUseCase(
     override fun getTracks(): List<Track> {
         return tracksHistoryRepository.getTracks()
     }
+    override fun isHistoryEmpty(): Boolean{
+        return tracksHistoryRepository.isHistoryEmpty()
+    }
 }
 
 
