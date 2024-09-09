@@ -14,12 +14,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.behavior.SwipeDismissBehavior
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
 
     private val sharedPrefs by lazy {
-        getSharedPreferences(App.APP_THEME, Context.MODE_PRIVATE)
+        Creator.provideSharedPrefsClient(this, App.APP_THEME).getSharedPrefs()
+//        getSharedPreferences(App.APP_THEME, Context.MODE_PRIVATE)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,21 +36,17 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val buttonBack = findViewById<Button>(R.id.buttonSettingsBack)
-        buttonBack.setOnClickListener {
+        binding.buttonSettingsBack.setOnClickListener {
             finish()
         }
 
+        binding.themeSwither.isChecked = sharedPrefs.getBoolean(App.IS_DARK_MODE_ON_KEY, false)
 
-        val themeSwitсher = findViewById<SwitchMaterial>(R.id.themeSwither)
-        themeSwitсher.isChecked = sharedPrefs.getBoolean(App.IS_DARK_MODE_ON_KEY, false)
-
-        themeSwitсher.setOnCheckedChangeListener { _, checked ->
+        binding.themeSwither.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
         }
 
-        val buttonShare = findViewById<FrameLayout>(R.id.buttonSettingsShare)
-        buttonShare.setOnClickListener {
+        binding.buttonSettingsShare.setOnClickListener {
             val messengerIntent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, getString(R.string.ShareAppText))
@@ -57,8 +55,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(messengerIntent)
         }
 
-        val buttonSupport = findViewById<Button>(R.id.buttonSettingsSupport)
-        buttonSupport.setOnClickListener {
+        binding.buttonSettingsSupport.setOnClickListener {
             val mailIntent = Intent().apply {
                 action = Intent.ACTION_SENDTO
                 setData(Uri.parse("mailto:"))
@@ -72,8 +69,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(mailIntent)
         }
 
-        val buttonUserAgreement = findViewById<Button>(R.id.buttonSettingsUserAgreement)
-        buttonUserAgreement.setOnClickListener {
+        binding.buttonSettingsUserAgreement.setOnClickListener {
             val browserIntent = Intent().apply {
                 action = Intent.ACTION_VIEW
                 setData(Uri.parse(getString(R.string.Offer)))
