@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui.search_history//package com.practicum.playlistmaker
+package com.practicum.old_classes_not_for_use//package com.practicum.playlistmaker
 //
 //import android.content.SharedPreferences
 //import com.google.gson.Gson

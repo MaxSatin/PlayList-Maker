@@ -19,8 +19,6 @@ import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.domain.model.Track
 import com.practicum.playlistmaker.presentation.mapper.DateFormatter
 
-//import com.practicum.playlistmaker.ui.player.MediaPlayerController.Companion.STATE_PREPARED
-//import com.practicum.playlistmaker.ui.player.MediaPlayerController.Companion.TIMER_DELAY
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -32,11 +30,8 @@ class PlayerActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private val gson = GsonProvider.gson
 
-    //    private val gson = Gson()
-    private val mediaPlayerRepository = Creator.provideMediaPlayerRepository()
     private val mediaPlayer = Creator.provideMediaPlayerInteractor()
 
-    //    private val mediaPlayer = MediaPlayerController()
     lateinit var trackItem: Track
 
     private var runnable: Runnable? = null
@@ -57,35 +52,14 @@ class PlayerActivity : AppCompatActivity() {
         binding.playerButtonBack.setOnClickListener {
             finish()
         }
-//        val intent = intent
-//        val trackItemGson = intent.getStringExtra(TRACK_ITEM_KEY)
-//        trackItem = gson.fromJson<Track>(trackItemGson, Track::class.java)
+
         trackItem = obtainTrackInstance()
         showTrackDetails(trackItem)
         loadPoster(trackItem)
-//        Glide.with(binding.root.context)
-//            .load(trackItem.getCoverArtWork())
-//            .placeholder(R.drawable.vector_empty_album_placeholder)
-//            .fitCenter()
-//            .transform(RoundedCorners(binding.root.resources.getDimensionPixelSize(R.dimen.small_corner_radius)))
-//            .into(binding.poster)
-//
-//        binding.songName.text = trackItem.trackName
-//        binding.bandName.text = trackItem.artistName
-//        binding.timePlayed.text = "0:30"
-//        binding.tracklengthTime.text =
-//            DateFormatter.timeFormatter.format(trackItem.trackTimeMillis)
-//        binding.albumTitle.text = trackItem.collectionName
-//        binding.albumYear.text =
-//            DateFormatter.yearFormatter.format(trackItem.trackTimeMillis)
-//        binding.trackGenre.text = trackItem.primaryGenreName
-//        binding.trackCountry.text = trackItem.country
 
 
-//        mediaPlayer.preparePlayer(trackItem.previewUrl, binding.stopPlayerButton, handler)
         mediaPlayer.preparePlayer(trackItem.previewUrl)
         binding.stopPlayerButton.setOnClickListener {
-//            mediaPlayer.playBackControl(binding.timePlayed)
             if (!mediaPlayer.isPlaying()) {
                 startPlayer()
             } else {
@@ -143,16 +117,11 @@ class PlayerActivity : AppCompatActivity() {
 
         handler.postDelayed(newTimerRunnable, TIMER_DELAY)
 
-        mediaPlayer.setOnCompleteListener(
-            object : MediaPlayer.OnCompletionListener {
-                override fun onCompletion(mp: MediaPlayer?) {
-                    handler.removeCallbacks(newTimerRunnable)
-                    binding.timePlayed.text = DateFormatter.timeFormatter.format(0)
-                    binding.stopPlayerButton.isChecked = false
-                }
-
-            }
-        )
+        mediaPlayer.setOnCompleteListener {
+            handler.removeCallbacks(newTimerRunnable)
+            binding.timePlayed.text = DateFormatter.timeFormatter.format(0)
+            binding.stopPlayerButton.isChecked = false
+        }
     }
 
     private fun showTrackDetails(trackItem: Track) {

@@ -19,6 +19,7 @@ class GetTrackListFromServerUseCase(
                 when (val trackListResponse = tracklistRepository.getTrackList(expression)) {
                     is Resourse.Success -> consumer.consume(ConsumerData.Data(trackListResponse.data))
                     is Resourse.Error -> consumer.consume(ConsumerData.Error(trackListResponse.message))
+                    is Resourse.NoConnection -> consumer.consume(ConsumerData.NoConnection(trackListResponse.message))
                 }
             }
         }

@@ -34,24 +34,3 @@ class AddTrackToHistoryUseCase(
         saveTrackHistory.saveTracksHistoryToLocalStorage(newTracks)
     }
 }
-
-//fun addTracksToHistory(track: CurrentTrack) {
-//    val index = historyTracks.indexOfFirst { it.trackId == track.trackId }
-//    if (index >= 0) {
-//        val newHistoryTrackList = historyTracks.toMutableList()
-//        newHistoryTrackList.removeAt(index)
-//        newHistoryTrackList.add(0, track)
-//        updateTracks(newHistoryTrackList)
-//    } else if (historyTracks.size > 9) {
-//        val newHistoryTrackList = historyTracks.toMutableList()
-//        newHistoryTrackList.removeAt(9)
-//        newHistoryTrackList.add(0, track)
-//        updateTracks(newHistoryTrackList)
-//    } else {
-//        val newHistoryTrackList = historyTracks.toMutableList()
-//        newHistoryTrackList.add(0, track)
-//        updateTracks(newHistoryTrackList)
-//    }
-//
-//    saveTrackToLocalStorage(historyTracks)
-//}

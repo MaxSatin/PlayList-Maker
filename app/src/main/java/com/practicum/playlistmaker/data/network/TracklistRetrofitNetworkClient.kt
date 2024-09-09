@@ -9,19 +9,20 @@ import retrofit2.Callback
 
 class TracklistRetrofitNetworkClient : TracklistNetworkClient {
     override fun doTrackRequest(dto: Any?): NetworkResponse {
-        if (dto is TrackListRequest) {
-            val response = RetrofitClient.iTunesApi.getSongsList(dto.expression).execute()
-            val body = response.body() ?: NetworkResponse()
-            return body.apply {
-                resultCode = response.code()
+        return if (dto is TrackListRequest) {
+            try {
+                val response = RetrofitClient.iTunesApi.getSongsList(dto.expression).execute()
+                val body = response.body() ?: NetworkResponse()
+                return body.apply {
+                    resultCode = response.code()
+                }
+            } catch (ex: Exception) {
+                NetworkResponse().apply { resultCode = 503 }
             }
         } else
             return NetworkResponse().apply { resultCode = 400 }
     }
 }
-
-
-
 
 
 

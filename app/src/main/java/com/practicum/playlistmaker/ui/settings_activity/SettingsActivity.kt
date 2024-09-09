@@ -17,7 +17,6 @@ class SettingsActivity : AppCompatActivity() {
 
     private val sharedPrefs by lazy {
         Creator.provideSharedPrefsClient(this, App.APP_THEME).getSharedPrefs()
-//        getSharedPreferences(App.APP_THEME, Context.MODE_PRIVATE)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -3,6 +3,8 @@ package com.practicum.playlistmaker.presentation.mapper
 import com.practicum.playlistmaker.domain.model.Track
 import com.practicum.playlistmaker.presentation.model.TrackInfoModel
 
+// Аналогично, Маппер для непригодившихся сейчас моделей. Оставил на будущее.
+
 object TrackInfoMapper {
     fun map (track: Track): TrackInfoModel {
         return TrackInfoModel(

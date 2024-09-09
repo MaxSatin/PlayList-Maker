@@ -1,4 +1,4 @@
-//package com.practicum.playlistmaker.ui.player
+package com.practicum.old_classes_not_for_use//package com.practicum.playlistmaker.ui.player
 //
 //import android.media.MediaPlayer
 //import android.os.Handler

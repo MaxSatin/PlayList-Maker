@@ -55,13 +55,4 @@ class MediaPlayerRepositoryImpl() : MediaPlayerRepository {
     override fun releasePlayer() {
         player.release()
     }
-
-//    private fun playBackControl(textView: TextView) {
-//        when (playerState) {
-//            STATE_PLAYING -> pausePlayer()
-//            STATE_PREPARED, STATE_PAUSE -> {
-//                startPlayer()
-//            }
-//        }
-//    }
 }
