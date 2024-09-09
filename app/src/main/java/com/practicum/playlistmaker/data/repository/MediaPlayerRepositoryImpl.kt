@@ -26,7 +26,7 @@ class MediaPlayerRepositoryImpl() : MediaPlayerRepository {
     }
 
     override fun setOnCompleteListener(listener: MediaPlayer.OnCompletionListener) {
-//        player.setOnCompletionListener(listener)
+        player.setOnCompletionListener(listener)
     }
 
     override fun isPlaying(): Boolean {

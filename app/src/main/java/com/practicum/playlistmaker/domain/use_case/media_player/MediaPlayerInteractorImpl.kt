@@ -1,15 +1,13 @@
 package com.practicum.playlistmaker.domain.use_case.media_player
 
 import android.media.MediaPlayer
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+
 import com.practicum.playlistmaker.domain.repository.MediaPlayerRepository
 
 class MediaPlayerInteractorImpl(
     private val mediaPlayerRepository: MediaPlayerRepository
 ) : MediaPlayerInteractor {
 
-    private val _isPlayingListeners = mutableListOf<(Boolean) -> Unit>()
     override fun preparePlayer(url: String) {
         mediaPlayerRepository.preparePlayer(url)
     }

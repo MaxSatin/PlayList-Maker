@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.ui.player
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -126,7 +127,11 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun showTimeCountDown() {
-        val runnable = object : Runnable {
+        val currentRunnable = runnable
+        if (currentRunnable != null) {
+            handler.removeCallbacks(currentRunnable)
+        }
+        val newTimerRunnable = object : Runnable {
             override fun run() {
                 binding.timePlayed.text =
                     DateFormatter.timeFormatter.format(mediaPlayer.getCurrentPosition())
@@ -134,16 +139,20 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        this.runnable = runnable
+        this.runnable = newTimerRunnable
 
-        handler.postDelayed(runnable, TIMER_DELAY)
+        handler.postDelayed(newTimerRunnable, TIMER_DELAY)
 
-        mediaPlayer.setOnCompleteListener {
-            handler.removeCallbacks(runnable)
-            binding.stopPlayerButton.text = DateFormatter.timeFormatter.format(0)
-            binding.stopPlayerButton.isChecked = false
-        }
+        mediaPlayer.setOnCompleteListener(
+            object : MediaPlayer.OnCompletionListener {
+                override fun onCompletion(mp: MediaPlayer?) {
+                    handler.removeCallbacks(newTimerRunnable)
+                    binding.timePlayed.text = DateFormatter.timeFormatter.format(0)
+                    binding.stopPlayerButton.isChecked = false
+                }
 
+            }
+        )
     }
 
     private fun showTrackDetails(trackItem: Track) {
