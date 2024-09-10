@@ -15,11 +15,7 @@ import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
 
-//    private val sharedPrefs by lazy {
-//        Creator.provideSharedPrefsClient(this, App.APP_THEME).getSharedPrefs()
-//    }
-
-    val appThemeInteractor by lazy { Creator.provideAppThemeInteractor(this) }
+    private val appThemeInteractor by lazy { Creator.provideAppThemeInteractor(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -5,7 +5,9 @@ import android.widget.TextView
 import com.practicum.playlistmaker.domain.repository.MediaPlayerRepository
 
 
-class MediaPlayerRepositoryImpl() : MediaPlayerRepository {
+class MediaPlayerRepositoryImpl(
+    private val player: MediaPlayer
+) : MediaPlayerRepository {
 
     companion object {
         private const val STATE_DEFAULT = 0
@@ -14,7 +16,7 @@ class MediaPlayerRepositoryImpl() : MediaPlayerRepository {
         private const val STATE_PAUSE = 3
     }
 
-    private val player = MediaPlayer()
+
     private var playerState = STATE_DEFAULT
 
     fun getPlayerState(): Int {

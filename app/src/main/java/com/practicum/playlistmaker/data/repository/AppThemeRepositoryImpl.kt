@@ -11,7 +11,7 @@ class AppThemeRepositoryImpl(
     private val sharedPrefsAppTheme = sharedPrefs.getSharedPrefs()
 
     override fun setDarkTheme(isDarkTheme: Boolean) {
-        sharedPrefsAppTheme.edit().putBoolean(App.IS_DARK_MODE_ON_KEY, isDarkTheme).apply()
+        sharedPrefsAppTheme.edit().putBoolean(IS_DARK_MODE_ON_KEY, isDarkTheme).apply()
     }
 
     override fun checkIsDarkThemeOn(): Boolean {

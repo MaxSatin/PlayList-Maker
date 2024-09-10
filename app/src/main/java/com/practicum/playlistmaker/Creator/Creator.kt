@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.Creator
 
 import android.content.Context
+import android.media.MediaPlayer
 import com.practicum.playlistmaker.data.network.TracklistRetrofitNetworkClient
 import com.practicum.playlistmaker.data.repository.AppThemeRepositoryImpl
 import com.practicum.playlistmaker.data.repository.TracklistRepositoryImpl
@@ -23,13 +24,8 @@ import com.practicum.playlistmaker.domain.use_case.tracks_intr.GetTrackListFromS
 
 object Creator {
 
-//    fun provideGson(): Gson {
-//        return Gson()
-//    }
-
     private const val APP_THEME = "app_theme"
     private const val SHAREDPREFS_TRACKS_HISTORY = "history_track_list_shared_prefs"
-
 
     fun provideSharedPrefsClient(context: Context, key: String): SharedPrefsClient {
         return SharedPrefsClient(context, key)
@@ -84,29 +80,8 @@ object Creator {
         return TracklistRepositoryImpl(TracklistRetrofitNetworkClient())
     }
 
-//    fun provideSearchTrackListIntr(): SearchTrackListIntr{
-//        return GetTrackListFromServerUseCase(provideTrackListRepository())
-//
-//    }
-
-//    fun provideAddTrackToHistoryIntr(context: Context): AddTrackToHistoryIntr{
-//        return AddTrackToHistoryUseCase(
-//            provideSaveTrackHistoryToStorage(context),
-//            provideTracksHistoryRepository(context)
-//        )
-//    }
-//    fun provideGetTrackHistoryIntr(context: Context): GetTrackHistoryIntr{
-//        return GetTrackHistoryFromStorageUseCase(provideTracksHistoryRepository(context))
-//    }
-
-//    fun provideClearLocalStorage(context: Context): ClearLocalStorage{
-//        return ClearStorageImpl(provideSharedPrefsClient(context,
-//            Constants.SHAREDPREFS_TRACKS_HISTORY)
-//        )
-//    }
-
     private fun provideMediaPlayerRepository(): MediaPlayerRepository {
-        return MediaPlayerRepositoryImpl()
+        return MediaPlayerRepositoryImpl(MediaPlayer())
     }
 
     fun provideMediaPlayerInteractor(): MediaPlayerInteractor {

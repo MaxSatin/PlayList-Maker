@@ -22,11 +22,6 @@ import com.practicum.playlistmaker.presentation.mapper.DateFormatter
 
 class PlayerActivity : AppCompatActivity() {
 
-    companion object {
-        private const val TRACK_ITEM_KEY = "trackItem"
-        private const val TIMER_DELAY = 50L
-    }
-
     private val handler = Handler(Looper.getMainLooper())
     private val gson = GsonProvider.gson
 
@@ -155,6 +150,10 @@ class PlayerActivity : AppCompatActivity() {
         }
         mediaPlayer.playerPause()
 
+    }
+    companion object {
+        private const val TRACK_ITEM_KEY = "trackItem"
+        private const val TIMER_DELAY = 50L
     }
 
 }
