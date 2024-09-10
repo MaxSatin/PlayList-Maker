@@ -17,13 +17,16 @@ class TracklistRepositoryImpl(
     override fun getTrackList(expression: String): Resourse<List<Track>> {
 
         val trackListResponse = tracklistNetworkClient.doTrackRequest(TrackListRequest(expression))
-        if (trackListResponse is TrackListResponse) {
-            val trackListDto = trackListResponse.results ?: emptyList<TrackDto>()
-            val tracks = trackListDto.map { trackDto -> TrackMapper.map(trackDto) }
-            return Resourse.Success(tracks)
-        } else if (trackListResponse.resultCode == 503) {
-            return Resourse.NoConnection("Нет сети")
-        } else
-            return Resourse.Error("Произошла сетевая ошибка")
+        when {
+            trackListResponse is TrackListResponse -> {
+                val trackListDto = trackListResponse.results ?: emptyList<TrackDto>()
+                val tracks = trackListDto.map { trackDto -> TrackMapper.map(trackDto) }
+                return Resourse.Success(tracks)
+            }
+            trackListResponse.resultCode == 503 -> {
+                return Resourse.NoConnection("Нет сети")
+            }
+            else -> return Resourse.Error("Произошла сетевая ошибка")
+        }
     }
 }
