@@ -15,9 +15,11 @@ import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
 
-    private val sharedPrefs by lazy {
-        Creator.provideSharedPrefsClient(this, App.APP_THEME).getSharedPrefs()
-    }
+//    private val sharedPrefs by lazy {
+//        Creator.provideSharedPrefsClient(this, App.APP_THEME).getSharedPrefs()
+//    }
+
+    val appThemeInteractor by lazy { Creator.provideAppThemeInteractor(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +37,7 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.themeSwither.isChecked = sharedPrefs.getBoolean(App.IS_DARK_MODE_ON_KEY, false)
+        binding.themeSwither.isChecked = appThemeInteractor.isDarkThemeOn()
 
         binding.themeSwither.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)

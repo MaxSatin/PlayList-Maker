@@ -1,19 +1,18 @@
 package com.practicum.playlistmaker.Creator
 
 import android.content.Context
-import com.practicum.playlistmaker.data.Constants
 import com.practicum.playlistmaker.data.network.TracklistRetrofitNetworkClient
+import com.practicum.playlistmaker.data.repository.AppThemeRepositoryImpl
 import com.practicum.playlistmaker.data.repository.TracklistRepositoryImpl
 import com.practicum.playlistmaker.data.storage.SharedPrefsClient
-import com.practicum.playlistmaker.data.storage.impl.ClearStorageImpl
 import com.practicum.playlistmaker.data.storage.impl.TracksHistoryRepositoryImpl
-import com.practicum.playlistmaker.data.storage.impl.SaveTracksHistoryToStorageImpl
-import com.practicum.playlistmaker.data.storage.manipulator.ClearLocalStorage
-import com.practicum.playlistmaker.data.storage.manipulator.SaveTrackHistoryToStorage
 import com.practicum.playlistmaker.domain.repository.MediaPlayerRepository
 import com.practicum.playlistmaker.domain.repository.TrackListRepository
 import com.practicum.playlistmaker.domain.repository.TracksHistoryRepository
 import com.practicum.playlistmaker.data.repository.MediaPlayerRepositoryImpl
+import com.practicum.playlistmaker.domain.repository.AppThemeRepository
+import com.practicum.playlistmaker.domain.use_case.app_theme.AppThemeInteractorImpl
+import com.practicum.playlistmaker.domain.use_case.interactor.AppThemeInteractor
 import com.practicum.playlistmaker.domain.use_case.media_player.MediaPlayerInteractor
 import com.practicum.playlistmaker.domain.use_case.media_player.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.domain.use_case.tracks_intr.AddTrackToHistoryUseCase
@@ -27,6 +26,10 @@ object Creator {
 //    fun provideGson(): Gson {
 //        return Gson()
 //    }
+
+    private const val APP_THEME = "app_theme"
+    private const val SHAREDPREFS_TRACKS_HISTORY = "history_track_list_shared_prefs"
+
 
     fun provideSharedPrefsClient(context: Context, key: String): SharedPrefsClient {
         return SharedPrefsClient(context, key)
@@ -62,10 +65,18 @@ object Creator {
         )
     }
 
+    fun provideAppThemeInteractor(context: Context): AppThemeInteractor{
+        return AppThemeInteractorImpl(provideAppThemeRepository(context))
+    }
+
+    private fun provideAppThemeRepository(context: Context) : AppThemeRepository{
+        return AppThemeRepositoryImpl(provideSharedPrefsClient(context, APP_THEME))
+    }
+
     private fun provideTracksHistoryRepository(context: Context): TracksHistoryRepository {
         return TracksHistoryRepositoryImpl(provideSharedPrefsClient(
             context,
-            Constants.SHAREDPREFS_TRACKS_HISTORY)
+            SHAREDPREFS_TRACKS_HISTORY)
         )
     }
 
@@ -101,4 +112,5 @@ object Creator {
     fun provideMediaPlayerInteractor(): MediaPlayerInteractor {
         return MediaPlayerInteractorImpl(provideMediaPlayerRepository())
     }
+
 }

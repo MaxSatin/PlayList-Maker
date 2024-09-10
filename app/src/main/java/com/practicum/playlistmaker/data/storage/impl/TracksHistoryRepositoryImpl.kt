@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.data.storage.impl
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.Creator.GsonProvider
-import com.practicum.playlistmaker.data.Constants
 import com.practicum.playlistmaker.data.storage.SharedPrefsClient
 
 import com.practicum.playlistmaker.domain.model.Track
@@ -19,13 +18,13 @@ class TracksHistoryRepositoryImpl(
     override fun saveTracksHistoryToLocalStorage(data: List<Track>) {
         val trackToGson: String = gson.toJson(data)
         sharedPrefsHistory.edit()
-            .putString(Constants.KEY_HISTORY_TRACK_LIST, trackToGson)
+            .putString(KEY_HISTORY_TRACK_LIST, trackToGson)
             .apply()
     }
 
     override fun clearStorage() {
         sharedPrefsHistory.edit()
-            .putString(Constants.KEY_HISTORY_TRACK_LIST, "")
+            .putString(KEY_HISTORY_TRACK_LIST, "")
             .apply()
     }
 
@@ -44,10 +43,14 @@ class TracksHistoryRepositoryImpl(
     }
 
     private fun getTrackFromLocalStorage(): List<Track>? {
-        val tracksFromGson: String? = sharedPrefsHistory.getString(Constants.KEY_HISTORY_TRACK_LIST, null)
+        val tracksFromGson: String? = sharedPrefsHistory.getString(KEY_HISTORY_TRACK_LIST, null)
         return tracksFromGson?.let {
             val itemType = object : TypeToken<List<Track>>() {}.type
             gson.fromJson(tracksFromGson, itemType)
         }
+    }
+
+    companion object {
+        private const val KEY_HISTORY_TRACK_LIST = "history_track_list"
     }
 }
