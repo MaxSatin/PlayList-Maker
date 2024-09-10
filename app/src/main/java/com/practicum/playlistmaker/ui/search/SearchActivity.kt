@@ -37,10 +37,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
-    private val searchTrackList = Creator.provideSearchTrackListIntr()
-    private val addTrackToHistory by lazy { Creator.provideAddTrackToHistoryIntr(this) }
-    private val clearHistory by lazy { Creator.provideClearLocalStorage(this) }
-    private val getTracksHistory by lazy { Creator.provideGetTrackHistoryIntr(this) }
+    private val getTrackList = Creator.provideGetTrackListFromServerUseCase()
+    private val addTrackToHistory by lazy { Creator.provideAddTrackToHistoryUseCase(this) }
+    private val clearHistory by lazy { Creator.provideClearHistoryUseCase(this) }
+    private val getTracksHistory by lazy { Creator.provideGetTrackHistoryFromStorageUseCase(this) }
+    private val checkIsHistoryEmpty by lazy { Creator.provideCheckIsHistoryEmptyUseCase(this)}
     private val gson = GsonProvider.gson
 
 
@@ -49,7 +50,8 @@ class SearchActivity : AppCompatActivity() {
 
     private val adapter = TrackAdapter { item ->
         if (clickDebounce()) {
-            addTrackToHistory.addTracksToHistory(item)
+            addTrackToHistory(item)
+            trackHistoryAdapter.updateItems(getTracksHistory())
             showPlayer(item)
         }
     }
@@ -91,11 +93,11 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerSearch.adapter = adapter
 
         binding.trackHistoryRV?.adapter = trackHistoryAdapter
-        trackHistoryAdapter.updateItems(getTracksHistory.getTracks())
+        trackHistoryAdapter.updateItems(getTracksHistory())
 
         binding.clearHistorySearchButton?.setOnClickListener {
-            clearHistory.clearStorage()
-            trackHistoryAdapter.updateItems(getTracksHistory.getTracks())
+            clearHistory()
+            trackHistoryAdapter.updateItems(getTracksHistory())
             binding.trackHistory.visibility = View.GONE
         }
 
@@ -106,7 +108,7 @@ class SearchActivity : AppCompatActivity() {
             binding.editTextwather.setText("")
             binding.searchResults.visibility = View.GONE
 
-            if (getTracksHistory.isHistoryEmpty()) {
+            if (checkIsHistoryEmpty()) {
                 binding.trackHistory?.visibility = View.GONE
             }
             trackList.clear()
@@ -121,7 +123,7 @@ class SearchActivity : AppCompatActivity() {
         binding.editTextwather.setOnFocusChangeListener { view, hasFocus ->
 
             binding.trackHistory?.visibility =
-                if (hasFocus && binding.editTextwather.text.isEmpty() && !getTracksHistory.isHistoryEmpty()) View.VISIBLE else View.GONE
+                if (hasFocus && binding.editTextwather.text.isEmpty() && !checkIsHistoryEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.editTextwather.setOnEditorActionListener { v, actionId, event ->
@@ -203,7 +205,7 @@ class SearchActivity : AppCompatActivity() {
         binding.nothingFoundPlaceHolder.visibility = View.GONE
         binding.badConnectionPlaceHolder.visibility = View.GONE
 
-        searchTrackList.searchTracks(
+        getTrackList(
             expression = binding.editTextwather.text.toString(),
             consumer = object : Consumer<List<Track>> {
                 override fun consume(data: ConsumerData<List<Track>>) {

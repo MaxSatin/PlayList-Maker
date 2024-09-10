@@ -148,6 +148,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        binding.stopPlayerButton.isChecked = false
         val currentRunnable = runnable
         if (currentRunnable != null) {
             handler.removeCallbacks(currentRunnable)

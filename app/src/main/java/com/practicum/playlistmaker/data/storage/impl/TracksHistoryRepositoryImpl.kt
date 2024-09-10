@@ -16,6 +16,19 @@ class TracksHistoryRepositoryImpl(
     private val gson = GsonProvider.gson
     private val sharedPrefsHistory = sharedPrefs.getSharedPrefs()
 
+    override fun saveTracksHistoryToLocalStorage(data: List<Track>) {
+        val trackToGson: String = gson.toJson(data)
+        sharedPrefsHistory.edit()
+            .putString(Constants.KEY_HISTORY_TRACK_LIST, trackToGson)
+            .apply()
+    }
+
+    override fun clearStorage() {
+        sharedPrefsHistory.edit()
+            .putString(Constants.KEY_HISTORY_TRACK_LIST, "")
+            .apply()
+    }
+
     override fun getTracks(): List<Track> {
         val tracksFromStorage = getTrackFromLocalStorage()
         return if (!tracksFromStorage.isNullOrEmpty()) {

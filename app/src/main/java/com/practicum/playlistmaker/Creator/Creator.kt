@@ -10,16 +10,15 @@ import com.practicum.playlistmaker.data.storage.impl.TracksHistoryRepositoryImpl
 import com.practicum.playlistmaker.data.storage.impl.SaveTracksHistoryToStorageImpl
 import com.practicum.playlistmaker.data.storage.manipulator.ClearLocalStorage
 import com.practicum.playlistmaker.data.storage.manipulator.SaveTrackHistoryToStorage
-import com.practicum.playlistmaker.domain.interactors.AddTrackToHistoryIntr
-import com.practicum.playlistmaker.domain.interactors.GetTrackHistoryIntr
 import com.practicum.playlistmaker.domain.repository.MediaPlayerRepository
-import com.practicum.playlistmaker.domain.interactors.SearchTrackListIntr
 import com.practicum.playlistmaker.domain.repository.TrackListRepository
 import com.practicum.playlistmaker.domain.repository.TracksHistoryRepository
 import com.practicum.playlistmaker.data.repository.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.domain.use_case.media_player.MediaPlayerInteractor
 import com.practicum.playlistmaker.domain.use_case.media_player.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.domain.use_case.tracks_intr.AddTrackToHistoryUseCase
+import com.practicum.playlistmaker.domain.use_case.tracks_intr.CheckIsHistoryEmptyUseCase
+import com.practicum.playlistmaker.domain.use_case.tracks_intr.ClearHistoryUseCase
 import com.practicum.playlistmaker.domain.use_case.tracks_intr.GetTrackHistoryFromStorageUseCase
 import com.practicum.playlistmaker.domain.use_case.tracks_intr.GetTrackListFromServerUseCase
 
@@ -33,46 +32,69 @@ object Creator {
         return SharedPrefsClient(context, key)
     }
 
-    fun provideSaveTrackHistoryToStorage(context: Context): SaveTrackHistoryToStorage{
-        return SaveTracksHistoryToStorageImpl(provideSharedPrefsClient(
-            context,
-            Constants.SHAREDPREFS_TRACKS_HISTORY)
+    fun provideAddTrackToHistoryUseCase(context: Context): AddTrackToHistoryUseCase{
+        return AddTrackToHistoryUseCase(
+            provideTracksHistoryRepository(
+            context)
+        )
+    }
+    fun provideCheckIsHistoryEmptyUseCase(context: Context): CheckIsHistoryEmptyUseCase{
+        return CheckIsHistoryEmptyUseCase(
+            provideTracksHistoryRepository(
+                context)
+        )
+    }
+    fun provideClearHistoryUseCase(context: Context): ClearHistoryUseCase{
+        return ClearHistoryUseCase(
+            provideTracksHistoryRepository(
+                context)
+        )
+    }
+    fun provideGetTrackHistoryFromStorageUseCase(context: Context): GetTrackHistoryFromStorageUseCase{
+        return GetTrackHistoryFromStorageUseCase(
+            provideTracksHistoryRepository(
+                context)
+        )
+    }
+    fun provideGetTrackListFromServerUseCase(): GetTrackListFromServerUseCase{
+        return GetTrackListFromServerUseCase(
+            provideTrackListRepository()
         )
     }
 
-    fun provideTracksHistoryRepository(context: Context): TracksHistoryRepository {
+    private fun provideTracksHistoryRepository(context: Context): TracksHistoryRepository {
         return TracksHistoryRepositoryImpl(provideSharedPrefsClient(
             context,
             Constants.SHAREDPREFS_TRACKS_HISTORY)
         )
     }
 
-    fun provideTrackListRepository(): TrackListRepository{
+    private fun provideTrackListRepository(): TrackListRepository{
         return TracklistRepositoryImpl(TracklistRetrofitNetworkClient())
     }
 
-    fun provideSearchTrackListIntr(): SearchTrackListIntr{
-        return GetTrackListFromServerUseCase(provideTrackListRepository())
+//    fun provideSearchTrackListIntr(): SearchTrackListIntr{
+//        return GetTrackListFromServerUseCase(provideTrackListRepository())
+//
+//    }
 
-    }
+//    fun provideAddTrackToHistoryIntr(context: Context): AddTrackToHistoryIntr{
+//        return AddTrackToHistoryUseCase(
+//            provideSaveTrackHistoryToStorage(context),
+//            provideTracksHistoryRepository(context)
+//        )
+//    }
+//    fun provideGetTrackHistoryIntr(context: Context): GetTrackHistoryIntr{
+//        return GetTrackHistoryFromStorageUseCase(provideTracksHistoryRepository(context))
+//    }
 
-    fun provideAddTrackToHistoryIntr(context: Context): AddTrackToHistoryIntr{
-        return AddTrackToHistoryUseCase(
-            provideSaveTrackHistoryToStorage(context),
-            provideTracksHistoryRepository(context)
-        )
-    }
-    fun provideGetTrackHistoryIntr(context: Context): GetTrackHistoryIntr{
-        return GetTrackHistoryFromStorageUseCase(provideTracksHistoryRepository(context))
-    }
+//    fun provideClearLocalStorage(context: Context): ClearLocalStorage{
+//        return ClearStorageImpl(provideSharedPrefsClient(context,
+//            Constants.SHAREDPREFS_TRACKS_HISTORY)
+//        )
+//    }
 
-    fun provideClearLocalStorage(context: Context): ClearLocalStorage{
-        return ClearStorageImpl(provideSharedPrefsClient(context,
-            Constants.SHAREDPREFS_TRACKS_HISTORY)
-        )
-    }
-
-    fun provideMediaPlayerRepository(): MediaPlayerRepository {
+    private fun provideMediaPlayerRepository(): MediaPlayerRepository {
         return MediaPlayerRepositoryImpl()
     }
 
