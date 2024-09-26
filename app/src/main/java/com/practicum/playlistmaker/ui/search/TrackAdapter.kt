@@ -1,20 +1,17 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui.search
 
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.model.Track
+
 
 class TrackAdapter(private val onTrackClickListener: OnTrackClickListener)
     : RecyclerView.Adapter<TrackViewHolder>() {
 
-    private var trackList: List<CurrentTrack> = emptyList()
+    private var trackList: List<Track> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
@@ -33,7 +30,7 @@ class TrackAdapter(private val onTrackClickListener: OnTrackClickListener)
         }
     }
 
-    fun updateItems(items: List<CurrentTrack>) {
+    fun updateItems(items: List<Track>) {
 
         val oldItems = this.trackList
         val newItems = items.toMutableList()
@@ -59,7 +56,7 @@ class TrackAdapter(private val onTrackClickListener: OnTrackClickListener)
     }
 
     fun interface OnTrackClickListener {
-        fun onTrackClick(item: CurrentTrack)
+        fun onTrackClick(item: Track)
     }
 
 }

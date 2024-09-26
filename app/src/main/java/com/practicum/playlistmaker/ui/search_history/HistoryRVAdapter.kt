@@ -1,16 +1,18 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui.search_history
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.TrackAdapter.OnTrackClickListener
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.ui.search.TrackViewHolder
+import com.practicum.playlistmaker.domain.model.Track
 
 class HistoryRVAdapter(
     private val onTrackClickListenerHistory: OnTrackClickListenerHistory
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
-    private var historyTrackList: List<CurrentTrack> = emptyList()
+    private var historyTrackList: List<Track> = emptyList()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -32,7 +34,7 @@ class HistoryRVAdapter(
 
     }
 
-    fun updateItems(items: List<CurrentTrack>) {
+    fun updateItems(items: List<Track>) {
         val oldItems = this.historyTrackList
         val newItems = items.toMutableList()
         val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
@@ -60,7 +62,7 @@ class HistoryRVAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
     fun interface OnTrackClickListenerHistory {
-        fun onTrackClick(trackItem: CurrentTrack)
+        fun onTrackClick(trackItem: Track)
     }
 
 }

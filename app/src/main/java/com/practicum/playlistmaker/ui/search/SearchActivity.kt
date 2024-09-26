@@ -1,88 +1,64 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.ui.search
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.os.Handler
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.practicum.playlistmaker.Creator.Creator
+import com.practicum.playlistmaker.Creator.GsonProvider
+import com.practicum.playlistmaker.ui.player.PlayerActivity
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.practicum.playlistmaker.domain.consumer.Consumer
+import com.practicum.playlistmaker.domain.consumer.ConsumerData
+import com.practicum.playlistmaker.domain.model.Track
+import com.practicum.playlistmaker.ui.search_history.HistoryRVAdapter
 
 
 class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY = "KEY"
-        private const val SEARCH_HISTORY_PREFERENCES = "search_history"
         private const val TRACK_ITEM_KEY = "trackItem"
         private const val CLICK_DEBOUNCE_DELAY = 1_000L
         private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }
 
-    private val sharedPrefs by lazy {
-        getSharedPreferences(SEARCH_HISTORY_PREFERENCES, Context.MODE_PRIVATE)
-    }
 
-    private val iTunesBaseUrl = "https://itunes.apple.com"
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val gson = Gson()
-    private val itunesApiService = retrofit.create(ItunesAPI::class.java)
-    private val trackList = mutableListOf<CurrentTrack>()
+    private val getTrackList = Creator.provideGetTrackListFromServerUseCase()
+    private val addTrackToHistory by lazy { Creator.provideAddTrackToHistoryUseCase(this) }
+    private val clearHistory by lazy { Creator.provideClearHistoryUseCase(this) }
+    private val getTracksHistory by lazy { Creator.provideGetTrackHistoryFromStorageUseCase(this) }
+    private val checkIsHistoryEmpty by lazy { Creator.provideCheckIsHistoryEmptyUseCase(this)}
+    private val gson = GsonProvider.gson
 
 
-    private val onTrackClickListener = TrackAdapter.OnTrackClickListener { item ->
-        if(clickDebounce()) {
-            searchHistory.addTracksToHistory(item)
-            val track = gson.toJson(item)
-            val intent = Intent(this, PlayerActivity::class.java)
-            intent.putExtra(TRACK_ITEM_KEY, track)
-            startActivity(intent)
-        }
-
-    }
-    private val adapter = TrackAdapter(onTrackClickListener)
+    private val trackList = mutableListOf<Track>()
 
 
-    private val onTrackClickListenerHistory = HistoryRVAdapter.OnTrackClickListenerHistory { item ->
+    private val adapter = TrackAdapter { item ->
         if (clickDebounce()) {
-            val track = gson.toJson(item)
-            val intent = Intent(this, PlayerActivity::class.java)
-            intent.putExtra(TRACK_ITEM_KEY, track)
-            startActivity(intent)
+            addTrackToHistory(item)
+            trackHistoryAdapter.updateItems(getTracksHistory())
+            showPlayer(item)
         }
     }
-    private val trackHistoryAdapter = HistoryRVAdapter(onTrackClickListenerHistory)
+    private val trackHistoryAdapter = HistoryRVAdapter { item ->
+        showPlayer(item)
+    }
 
-    private val searchHistory by lazy { SearchHistory(sharedPrefs, trackHistoryAdapter) }
 
     val searchRunnable = Runnable { searchSongs() }
     private val handler = Handler(Looper.getMainLooper())
@@ -117,10 +93,11 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerSearch.adapter = adapter
 
         binding.trackHistoryRV?.adapter = trackHistoryAdapter
-        trackHistoryAdapter.updateItems(searchHistory.getTracks())
+        trackHistoryAdapter.updateItems(getTracksHistory())
 
         binding.clearHistorySearchButton?.setOnClickListener {
-            searchHistory.updateTracks(emptyList())
+            clearHistory()
+            trackHistoryAdapter.updateItems(getTracksHistory())
             binding.trackHistory.visibility = View.GONE
         }
 
@@ -131,7 +108,7 @@ class SearchActivity : AppCompatActivity() {
             binding.editTextwather.setText("")
             binding.searchResults.visibility = View.GONE
 
-            if (searchHistory.isTrackHistoryEmpty()) {
+            if (checkIsHistoryEmpty()) {
                 binding.trackHistory?.visibility = View.GONE
             }
             trackList.clear()
@@ -146,7 +123,7 @@ class SearchActivity : AppCompatActivity() {
         binding.editTextwather.setOnFocusChangeListener { view, hasFocus ->
 
             binding.trackHistory?.visibility =
-                if (hasFocus && binding.editTextwather.text.isEmpty() && !searchHistory.isTrackHistoryEmpty()) View.VISIBLE else View.GONE
+                if (hasFocus && binding.editTextwather.text.isEmpty() && !checkIsHistoryEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.editTextwather.setOnEditorActionListener { v, actionId, event ->
@@ -189,6 +166,13 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    private fun showPlayer(item: Track) {
+        val track = gson.toJson(item)
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra(TRACK_ITEM_KEY, track)
+        startActivity(intent)
+    }
+
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
@@ -221,34 +205,44 @@ class SearchActivity : AppCompatActivity() {
         binding.nothingFoundPlaceHolder.visibility = View.GONE
         binding.badConnectionPlaceHolder.visibility = View.GONE
 
-        itunesApiService.getSongsList(binding.editTextwather.text.toString()).enqueue(object :
-            Callback<TrackListResponse> {
-            override fun onResponse(
-                call: Call<TrackListResponse>,
-                response: Response<TrackListResponse>
-            ) {
-                binding.progressBar?.visibility = View.GONE
-                when (response.code()) {
-                    200 -> {
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            binding.recyclerSearch?.visibility = View.VISIBLE
-                            binding.trackHistory?.visibility = View.GONE
-                            binding.nothingFoundPlaceHolder.visibility = View.GONE
-                            binding.badConnectionPlaceHolder.visibility = View.GONE
-                            trackList.clear()
-                            trackList.addAll(response.body()?.results!!)
-                            adapter.updateItems(trackList)
-                        } else {
-                            showErrorNothingFound(binding.editTextwather.text.toString())
+        getTrackList(
+            expression = binding.editTextwather.text.toString(),
+            consumer = object : Consumer<List<Track>> {
+                override fun consume(data: ConsumerData<List<Track>>) {
+                    val currentRunnable = searchRunnable
+                    if (currentRunnable != null) {
+                        handler.removeCallbacks(currentRunnable)
+                    }
+                    val newSearchRunnable = Runnable {
+                        binding.progressBar?.visibility = View.GONE
+                        when (data) {
+                            is ConsumerData.Error -> showError(data.message)
+                            is ConsumerData.NoConnection -> showErrorBadConnection()
+                            is ConsumerData.Data -> {
+                                if (data.value.isNullOrEmpty()) {
+                                    showErrorNothingFound(binding.editTextwather.text.toString())
+                                } else {
+                                    binding.recyclerSearch?.visibility = View.VISIBLE
+                                    binding.trackHistory?.visibility = View.GONE
+                                    binding.nothingFoundPlaceHolder.visibility = View.GONE
+                                    binding.badConnectionPlaceHolder.visibility = View.GONE
+                                    trackList.clear()
+                                    trackList.addAll(data.value!!)
+                                    adapter.updateItems(trackList)
+                                }
+                            }
                         }
                     }
+                    handler.post(newSearchRunnable)
                 }
             }
+        )
 
-            override fun onFailure(call: Call<TrackListResponse>, t: Throwable) {
-                showErrorBadConnection()
-            }
-        })
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        onBackPressedDispatcher.onBackPressed()
     }
 
     private fun showErrorBadConnection() {
