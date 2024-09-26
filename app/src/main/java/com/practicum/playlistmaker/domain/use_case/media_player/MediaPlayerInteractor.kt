@@ -10,4 +10,5 @@ interface MediaPlayerInteractor {
     fun getCurrentPosition(): Int
     fun setOnCompleteListener(listener: OnCompletionListener)
     fun isPlaying(): Boolean
+
 }
