@@ -26,7 +26,9 @@ class TracklistRepositoryImpl(
             trackListResponse.resultCode == 503 -> {
                 return Resourse.NoConnection("Нет сети")
             }
-            else -> return Resourse.Error("Произошла сетевая ошибка")
+            else -> {
+                return Resourse.Error("Произошла сетевая ошибка")
+            }
         }
     }
 }
