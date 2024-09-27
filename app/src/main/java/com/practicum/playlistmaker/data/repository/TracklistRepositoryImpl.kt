@@ -1,14 +1,13 @@
 package com.practicum.playlistmaker.data.repository
 
 
-import com.practicum.playlistmaker.data.dto.NetworkResponse
 import com.practicum.playlistmaker.data.dto.TrackDto
 import com.practicum.playlistmaker.data.dto.TrackListRequest
 import com.practicum.playlistmaker.data.dto.TrackListResponse
 import com.practicum.playlistmaker.data.mapper.TrackMapper
-import com.practicum.playlistmaker.domain.model.Resourse
-import com.practicum.playlistmaker.domain.model.Track
-import com.practicum.playlistmaker.domain.repository.TrackListRepository
+import com.practicum.playlistmaker.search.domain.track_model.Resourse
+import com.practicum.playlistmaker.search.domain.track_model.Track
+import com.practicum.playlistmaker.search.domain.repository.TrackListRepository
 
 class TracklistRepositoryImpl(
     private val tracklistNetworkClient: TracklistNetworkClient,

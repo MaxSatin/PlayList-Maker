@@ -7,20 +7,20 @@ import com.practicum.playlistmaker.data.repository.AppThemeRepositoryImpl
 import com.practicum.playlistmaker.data.repository.TracklistRepositoryImpl
 import com.practicum.playlistmaker.data.storage.SharedPrefsClient
 import com.practicum.playlistmaker.data.storage.impl.TracksHistoryRepositoryImpl
-import com.practicum.playlistmaker.domain.repository.MediaPlayerRepository
-import com.practicum.playlistmaker.domain.repository.TrackListRepository
-import com.practicum.playlistmaker.domain.repository.TracksHistoryRepository
+import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepository
+import com.practicum.playlistmaker.search.domain.repository.TrackListRepository
+import com.practicum.playlistmaker.search.domain.repository.TracksHistoryRepository
 import com.practicum.playlistmaker.data.repository.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.domain.repository.AppThemeRepository
-import com.practicum.playlistmaker.domain.use_case.app_theme.AppThemeInteractorImpl
-import com.practicum.playlistmaker.domain.use_case.interactor.AppThemeInteractor
-import com.practicum.playlistmaker.domain.use_case.media_player.MediaPlayerInteractor
-import com.practicum.playlistmaker.domain.use_case.media_player.MediaPlayerInteractorImpl
-import com.practicum.playlistmaker.domain.use_case.tracks_intr.AddTrackToHistoryUseCase
-import com.practicum.playlistmaker.domain.use_case.tracks_intr.CheckIsHistoryEmptyUseCase
-import com.practicum.playlistmaker.domain.use_case.tracks_intr.ClearHistoryUseCase
-import com.practicum.playlistmaker.domain.use_case.tracks_intr.GetTrackHistoryFromStorageUseCase
-import com.practicum.playlistmaker.domain.use_case.tracks_intr.GetTrackListFromServerUseCase
+import com.practicum.playlistmaker.settings.domain.interactor.AppThemeInteractorImpl
+import com.practicum.playlistmaker.settings.domain.interactor.AppThemeInteractor
+import com.practicum.playlistmaker.player.domain.player_interactor.MediaPlayerInteractor
+import com.practicum.playlistmaker.player.domain.player_interactor.MediaPlayerInteractorImpl
+import com.practicum.playlistmaker.search.domain.tracks_intr.AddTrackToHistoryUseCase
+import com.practicum.playlistmaker.search.domain.tracks_intr.CheckIsHistoryEmptyUseCase
+import com.practicum.playlistmaker.search.domain.tracks_intr.ClearHistoryUseCase
+import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackHistoryFromStorageUseCase
+import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackListFromServerUseCase
 
 object Creator {
 
@@ -31,37 +31,37 @@ object Creator {
         return SharedPrefsClient(context, key)
     }
 
-    fun provideAddTrackToHistoryUseCase(context: Context): AddTrackToHistoryUseCase{
+    fun provideAddTrackToHistoryUseCase(context: Context): AddTrackToHistoryUseCase {
         return AddTrackToHistoryUseCase(
             provideTracksHistoryRepository(
             context)
         )
     }
-    fun provideCheckIsHistoryEmptyUseCase(context: Context): CheckIsHistoryEmptyUseCase{
+    fun provideCheckIsHistoryEmptyUseCase(context: Context): CheckIsHistoryEmptyUseCase {
         return CheckIsHistoryEmptyUseCase(
             provideTracksHistoryRepository(
                 context)
         )
     }
-    fun provideClearHistoryUseCase(context: Context): ClearHistoryUseCase{
+    fun provideClearHistoryUseCase(context: Context): ClearHistoryUseCase {
         return ClearHistoryUseCase(
             provideTracksHistoryRepository(
                 context)
         )
     }
-    fun provideGetTrackHistoryFromStorageUseCase(context: Context): GetTrackHistoryFromStorageUseCase{
+    fun provideGetTrackHistoryFromStorageUseCase(context: Context): GetTrackHistoryFromStorageUseCase {
         return GetTrackHistoryFromStorageUseCase(
             provideTracksHistoryRepository(
                 context)
         )
     }
-    fun provideGetTrackListFromServerUseCase(): GetTrackListFromServerUseCase{
+    fun provideGetTrackListFromServerUseCase(): GetTrackListFromServerUseCase {
         return GetTrackListFromServerUseCase(
             provideTrackListRepository()
         )
     }
 
-    fun provideAppThemeInteractor(context: Context): AppThemeInteractor{
+    fun provideAppThemeInteractor(context: Context): AppThemeInteractor {
         return AppThemeInteractorImpl(provideAppThemeRepository(context))
     }
 
@@ -76,7 +76,7 @@ object Creator {
         )
     }
 
-    private fun provideTrackListRepository(): TrackListRepository{
+    private fun provideTrackListRepository(): TrackListRepository {
         return TracklistRepositoryImpl(TracklistRetrofitNetworkClient())
     }
 

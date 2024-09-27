@@ -1,12 +1,11 @@
 package com.practicum.playlistmaker.data.storage.impl
 
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.Creator.GsonProvider
 import com.practicum.playlistmaker.data.storage.SharedPrefsClient
 
-import com.practicum.playlistmaker.domain.model.Track
-import com.practicum.playlistmaker.domain.repository.TracksHistoryRepository
+import com.practicum.playlistmaker.search.domain.track_model.Track
+import com.practicum.playlistmaker.search.domain.repository.TracksHistoryRepository
 
 class TracksHistoryRepositoryImpl(
     private val sharedPrefs: SharedPrefsClient

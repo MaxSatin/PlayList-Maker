@@ -5,7 +5,7 @@
     android:id="@+id/playerActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.player.PlayerActivity"
+    tools:context=".player.ui.PlayerActivity"
     style="PlayerTrackBackGround">
 
     <androidx.constraintlayout.widget.Guideline

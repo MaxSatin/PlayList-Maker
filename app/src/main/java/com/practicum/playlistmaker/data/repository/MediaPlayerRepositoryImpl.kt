@@ -1,8 +1,7 @@
 package com.practicum.playlistmaker.data.repository
 
 import android.media.MediaPlayer
-import android.widget.TextView
-import com.practicum.playlistmaker.domain.repository.MediaPlayerRepository
+import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepository
 
 
 class MediaPlayerRepositoryImpl(
