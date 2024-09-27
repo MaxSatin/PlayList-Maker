@@ -15,7 +15,7 @@ import com.practicum.playlistmaker.Creator.GsonProvider
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.search.domain.track_model.Track
-import com.practicum.playlistmaker.player.domain.mapper.DateFormatter
+import com.practicum.playlistmaker.player.presentation.mapper.DateFormatter
 
 
 class PlayerActivity : AppCompatActivity() {

@@ -21,8 +21,8 @@ import com.practicum.playlistmaker.Creator.GsonProvider
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.domain.consumer.Consumer
-import com.practicum.playlistmaker.domain.consumer.ConsumerData
+import com.practicum.playlistmaker.search.domain.consumer.Consumer
+import com.practicum.playlistmaker.search.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.search.domain.track_model.Track
 
 

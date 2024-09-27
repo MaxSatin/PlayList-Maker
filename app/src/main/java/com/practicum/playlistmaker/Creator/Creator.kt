@@ -2,16 +2,16 @@ package com.practicum.playlistmaker.Creator
 
 import android.content.Context
 import android.media.MediaPlayer
-import com.practicum.playlistmaker.data.network.TracklistRetrofitNetworkClient
-import com.practicum.playlistmaker.data.repository.AppThemeRepositoryImpl
-import com.practicum.playlistmaker.data.repository.TracklistRepositoryImpl
-import com.practicum.playlistmaker.data.storage.SharedPrefsClient
-import com.practicum.playlistmaker.data.storage.impl.TracksHistoryRepositoryImpl
+import com.practicum.playlistmaker.search.data.network.TracklistRetrofitNetworkClient
+import com.practicum.playlistmaker.settings.data.repository.AppThemeRepositoryImpl
+import com.practicum.playlistmaker.search.data.repository.TracklistRepositoryImpl
+import com.practicum.playlistmaker.search.data.storage.SharedPrefsClient
+import com.practicum.playlistmaker.search.data.storage.impl.TracksHistoryRepositoryImpl
 import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepository
 import com.practicum.playlistmaker.search.domain.repository.TrackListRepository
 import com.practicum.playlistmaker.search.domain.repository.TracksHistoryRepository
-import com.practicum.playlistmaker.data.repository.MediaPlayerRepositoryImpl
-import com.practicum.playlistmaker.domain.repository.AppThemeRepository
+import com.practicum.playlistmaker.player.data.repository.MediaPlayerRepositoryImpl
+import com.practicum.playlistmaker.settings.domain.repository.AppThemeRepository
 import com.practicum.playlistmaker.settings.domain.interactor.AppThemeInteractorImpl
 import com.practicum.playlistmaker.settings.domain.interactor.AppThemeInteractor
 import com.practicum.playlistmaker.player.domain.player_interactor.MediaPlayerInteractor
@@ -65,7 +65,7 @@ object Creator {
         return AppThemeInteractorImpl(provideAppThemeRepository(context))
     }
 
-    private fun provideAppThemeRepository(context: Context) : AppThemeRepository{
+    private fun provideAppThemeRepository(context: Context) : AppThemeRepository {
         return AppThemeRepositoryImpl(provideSharedPrefsClient(context, APP_THEME))
     }
 

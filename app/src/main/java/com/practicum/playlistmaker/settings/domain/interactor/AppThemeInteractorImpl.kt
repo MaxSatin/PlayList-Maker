@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.settings.domain.interactor
 
 import androidx.appcompat.app.AppCompatDelegate
-import com.practicum.playlistmaker.domain.repository.AppThemeRepository
+import com.practicum.playlistmaker.settings.domain.repository.AppThemeRepository
 
 class AppThemeInteractorImpl(
     private val appThemeRepository: AppThemeRepository
