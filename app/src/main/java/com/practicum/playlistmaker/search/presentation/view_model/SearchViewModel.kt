@@ -17,6 +17,7 @@ import com.practicum.playlistmaker.Creator.GsonProvider
 import com.practicum.playlistmaker.search.domain.consumer.Consumer
 import com.practicum.playlistmaker.search.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.search.domain.track_model.Track
+import com.practicum.playlistmaker.search.presentation.state.HistoryTrackListState
 import com.practicum.playlistmaker.search.presentation.state.TrackListState
 
 class SearchViewModel(
@@ -36,6 +37,19 @@ class SearchViewModel(
             getApplication()
         )
     }
+
+    init {
+        renderHistoryState(
+            HistoryTrackListState.Loading
+        )
+        val historyTrackList = getTracksHistory()
+        if (historyTrackList.isNullOrEmpty()){
+            renderHistoryState(HistoryTrackListState.Empty("Список пуст"))
+        } else {
+            renderHistoryState(HistoryTrackListState.Content(historyTrackList))
+        }
+
+    }
     private val gson = GsonProvider.gson
     private val handler = Handler(Looper.getMainLooper())
 
@@ -43,6 +57,8 @@ class SearchViewModel(
     private var latestSearchedText: String? = null
 
     private val stateLiveDate = MutableLiveData<TrackListState>()
+    private val historyStateLiveData = MutableLiveData<HistoryTrackListState>()
+
 
     private val mediatorStateLiveData = MediatorLiveData<TrackListState>().also { livedata ->
         livedata.addSource(stateLiveDate) { trackListState ->
@@ -54,9 +70,20 @@ class SearchViewModel(
                 is TrackListState.Empty -> trackListState
             }
         }
+
+//        livedata.addSource(historyStateLiveData){ historyTrackListState ->
+//            livedata.value = when (historyTrackListState) {
+//                is HistoryTrackListState.Loading -> historyTrackListState
+//                is HistoryTrackListState.Content -> HistoryTrackListState.Content(historyTrackListState.tracks)
+//                is HistoryTrackListState.Empty -> historyTrackListState
+//            }
+//
+//        }
     }
 
+    fun observeHistoryState() : LiveData<HistoryTrackListState> = historyStateLiveData
     fun observeState(): LiveData<TrackListState> = mediatorStateLiveData
+
 
     fun searchDebounce(changedText: String) {
 
@@ -75,7 +102,7 @@ class SearchViewModel(
         )
     }
 
-    fun searchRequest(query: String) {
+    private fun searchRequest(query: String) {
         if (query.isNotEmpty()) {
             renderState(
                 TrackListState.Loading
@@ -140,6 +167,10 @@ class SearchViewModel(
 
     fun renderState(state: TrackListState) {
         stateLiveDate.postValue(state)
+    }
+
+    fun renderHistoryState(historyState: HistoryTrackListState){
+        historyStateLiveData.postValue(historyState)
     }
 
     override fun onCleared() {
