@@ -27,29 +27,22 @@ class SearchViewModel(
     private val getTrackList = Creator.provideGetTrackListFromServerUseCase()
     private val addTrackToHistory by lazy { Creator.provideAddTrackToHistoryUseCase(getApplication()) }
     private val clearHistory by lazy { Creator.provideClearHistoryUseCase(getApplication()) }
-    private val getTracksHistory by lazy {
-        Creator.provideGetTrackHistoryFromStorageUseCase(
-            getApplication()
-        )
-    }
-    private val checkIsHistoryEmpty by lazy {
-        Creator.provideCheckIsHistoryEmptyUseCase(
-            getApplication()
-        )
-    }
+    private val getTracksHistory by lazy { Creator.provideGetTrackHistoryFromStorageUseCase(getApplication()) }
+    private val checkIsHistoryEmpty by lazy { Creator.provideCheckIsHistoryEmptyUseCase(getApplication()) }
 
     init {
         renderHistoryState(
             HistoryTrackListState.Loading
         )
-        val historyTrackList = getTracksHistory()
-        if (historyTrackList.isNullOrEmpty()){
+        val getTracksHistory = getTracksHistory()
+        if (getTracksHistory.isNullOrEmpty()) {
             renderHistoryState(HistoryTrackListState.Empty("Список пуст"))
         } else {
-            renderHistoryState(HistoryTrackListState.Content(historyTrackList))
+            renderHistoryState(HistoryTrackListState.Content(getTracksHistory))
         }
 
     }
+
     private val gson = GsonProvider.gson
     private val handler = Handler(Looper.getMainLooper())
 
@@ -81,19 +74,41 @@ class SearchViewModel(
 //        }
     }
 
-    fun observeHistoryState() : LiveData<HistoryTrackListState> = historyStateLiveData
+    fun observeHistoryState(): LiveData<HistoryTrackListState> = historyStateLiveData
     fun observeState(): LiveData<TrackListState> = mediatorStateLiveData
 
+    fun clearHistoryList() {
+        clearHistory()
+        updateHistoryList()
+    }
+
+    fun clearSearchList() {
+        renderState(
+            TrackListState.Content(
+                emptyList<Track>()
+            )
+        )
+    }
+    fun addTrackToHistoryList(track: Track) {
+        addTrackToHistory(track = track)
+        updateHistoryList()
+    }
+
+    private fun updateHistoryList() {
+        val currentState = historyStateLiveData.value
+        if (currentState is HistoryTrackListState.Content) {
+            historyStateLiveData.value = HistoryTrackListState.Content(getTracksHistory())
+        }
+    }
 
     fun searchDebounce(changedText: String) {
-
         if (latestSearchedText == changedText) {
             return
         }
 
         this.latestSearchedText = changedText
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-        val searchRunnable = Runnable { searchRequest(changedText) }
+        val searchRunnable = Runnable { searchTracks(changedText) }
         val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
         handler.postAtTime(
             searchRunnable,
@@ -102,7 +117,7 @@ class SearchViewModel(
         )
     }
 
-    private fun searchRequest(query: String) {
+    fun searchTracks(query: String) {
         if (query.isNotEmpty()) {
             renderState(
                 TrackListState.Loading
@@ -165,11 +180,11 @@ class SearchViewModel(
 //    )
 
 
-    fun renderState(state: TrackListState) {
+    private fun renderState(state: TrackListState) {
         stateLiveDate.postValue(state)
     }
 
-    fun renderHistoryState(historyState: HistoryTrackListState){
+    private fun renderHistoryState(historyState: HistoryTrackListState) {
         historyStateLiveData.postValue(historyState)
     }
 
