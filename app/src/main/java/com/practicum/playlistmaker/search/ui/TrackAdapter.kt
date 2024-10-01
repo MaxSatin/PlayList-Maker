@@ -1,21 +1,33 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.view.LayoutInflater
+import  android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.TrackItemBinding
 import com.practicum.playlistmaker.search.domain.track_model.Track
 
 
-class TrackAdapter(private val onTrackClickListener: OnTrackClickListener)
-    : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter(
+    private val onTrackClicked: (track: Track) -> Unit,
+) : RecyclerView.Adapter<TrackViewHolder>() {
 
     private var trackList: List<Track> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
-        return TrackViewHolder(view)
+        val binding = TrackItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+
+        return TrackViewHolder(binding) { position: Int ->
+            if (position != RecyclerView.NO_POSITION) {
+                trackList.getOrNull(position)?.let { track: Track ->
+                    onTrackClicked(track)
+                }
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -23,11 +35,14 @@ class TrackAdapter(private val onTrackClickListener: OnTrackClickListener)
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackList[position])
-
-        holder.itemView.setOnClickListener {
-            onTrackClickListener?.onTrackClick(trackList[holder.adapterPosition])
+        trackList.getOrNull(position)?.let { track ->
+            holder.bind(track)
         }
+
+
+//        holder.itemView.setOnClickListener {
+//            onTrackClickListener?.onTrackClick(trackList[holder.adapterPosition])
+//        }
     }
 
     fun updateItems(items: List<Track>) {

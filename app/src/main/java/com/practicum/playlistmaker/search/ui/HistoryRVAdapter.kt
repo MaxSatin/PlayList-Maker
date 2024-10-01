@@ -5,31 +5,48 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.TrackItemBinding
 import com.practicum.playlistmaker.search.domain.track_model.Track
 
 class HistoryRVAdapter(
-    private val onTrackClickListenerHistory: OnTrackClickListenerHistory
+    private val onTrackClicked: (track: Track) -> Unit,
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     private var historyTrackList: List<Track> = emptyList()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val trackView =
-            LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
-        return TrackViewHolder(trackView)
+//        val trackView =
+//            LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
+//        return TrackViewHolder(trackView)
+        val binding = TrackItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+
+        return TrackViewHolder(binding) { position: Int ->
+            if (position != RecyclerView.NO_POSITION) {
+                historyTrackList.getOrNull(position)?.let { track: Track ->
+                    onTrackClicked(track)
+                }
+            }
+        }
     }
+
 
     override fun getItemCount(): Int {
         return historyTrackList.size
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(historyTrackList[position])
-
-        holder.itemView.setOnClickListener{
-            onTrackClickListenerHistory?.onTrackClick(historyTrackList[position])
+        historyTrackList.getOrNull(position)?.let { track ->
+            holder.bind(track)
         }
+
+//        holder.itemView.setOnClickListener{
+//            onTrackClickListenerHistory?.onTrackClick(historyTrackList[position])
+//        }
 
     }
 

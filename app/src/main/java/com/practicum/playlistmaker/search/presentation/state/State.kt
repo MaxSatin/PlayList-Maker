@@ -1,9 +1,10 @@
 package com.practicum.playlistmaker.search.presentation.state
 
 import com.practicum.playlistmaker.search.domain.track_model.Track
-sealed interface TrackListState {
 
-    sealed interface SearchListState : TrackListState {
+sealed interface State {
+
+    sealed interface SearchListState : State {
         data object Loading : SearchListState
 
         data class Content(
@@ -26,7 +27,6 @@ sealed interface TrackListState {
     }
 
     sealed interface HistoryListState : SearchListState {
-        data object Loading : HistoryListState
 
         data class Content(
             val tracks: List<Track>

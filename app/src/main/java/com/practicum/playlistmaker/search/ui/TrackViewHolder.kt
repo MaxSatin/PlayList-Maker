@@ -10,8 +10,16 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import com.practicum.playlistmaker.search.domain.track_model.Track
 
-class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val binding = TrackItemBinding.bind(itemView)
+class TrackViewHolder(
+    private val binding: TrackItemBinding,
+    onTrackClicked: (position: Int) -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
+
+    init{
+        itemView.setOnClickListener {
+            onTrackClicked(bindingAdapterPosition)
+        }
+    }
 
     fun bind(item: Track) {
         binding.trackName.text = item.trackName

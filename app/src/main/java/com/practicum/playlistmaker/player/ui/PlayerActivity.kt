@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.player.ui
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,6 +18,8 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.player.presentation.mapper.DateFormatter
+import com.practicum.playlistmaker.search.ui.SearchActivity
+import com.practicum.playlistmaker.search.ui.SearchActivity.Companion
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -152,6 +156,13 @@ class PlayerActivity : AppCompatActivity() {
     companion object {
         private const val TRACK_ITEM_KEY = "trackItem"
         private const val TIMER_DELAY = 50L
+
+        fun show (context: Context, trackGson: String) {
+            val intent = Intent(context, PlayerActivity::class.java)
+            intent.putExtra(TRACK_ITEM_KEY, trackGson)
+            context.startActivity(intent)
+        }
+
     }
 
 }
