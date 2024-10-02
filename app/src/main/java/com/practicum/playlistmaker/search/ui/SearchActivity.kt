@@ -235,6 +235,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showHistory(tracks: List<Track>) {
         trackHistoryAdapter.updateItems(tracks)
+
     }
 
     private fun hideHistory() {

@@ -26,7 +26,7 @@ sealed interface State {
 
     }
 
-    sealed interface HistoryListState : SearchListState {
+    sealed interface HistoryListState : State {
 
         data class Content(
             val tracks: List<Track>
