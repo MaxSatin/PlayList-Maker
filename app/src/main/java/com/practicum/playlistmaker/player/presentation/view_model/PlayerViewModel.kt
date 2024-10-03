@@ -4,14 +4,24 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.Creator.GsonProvider
+import com.practicum.playlistmaker.player.domain.player_interactor.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.mapper.DateFormatter
-import com.practicum.playlistmaker.search.domain.track_model.Track
+import com.practicum.playlistmaker.player.presentation.model.Track
+import com.practicum.playlistmaker.player.presentation.state.PlayStatus
+import com.practicum.playlistmaker.player.presentation.state.PlayerState
 
 class PlayerViewModel(
     application: Application,
+    playerInteractor: MediaPlayerInteractor,
+    private val trackGson: String,
 ) : AndroidViewModel(application) {
 
     private val handler = Handler(Looper.getMainLooper())
@@ -19,23 +29,46 @@ class PlayerViewModel(
 
     private val mediaPlayer = Creator.provideMediaPlayerInteractor()
 
-    lateinit var trackItem: Track
 
     private var runnable: Runnable? = null
 
-    private fun startPlayer() {
+    private val screenStateLiveData = MutableLiveData<PlayerState>(PlayerState.Loading)
+    private val playStatusLiveData = MutableLiveData<PlayStatus>()
+
+    init {
+        render(
+            PlayerState.Content(
+                loadTrackScreen(trackGson)
+            )
+        )
+    }
+
+    fun getScreenStateLiveData(): LiveData<PlayerState> = screenStateLiveData
+    fun getPlayStatusLiveData(): LiveData<PlayStatus> = playStatusLiveData
+
+    private fun loadTrackScreen(track: String): Track {
+        return gson.fromJson<Track>(track, Track::class.java)
+    }
+
+    private fun getCurrentPlayStatus(): PlayStatus {
+        return playStatusLiveData.value ?: PlayStatus(0f, false)
+    }
+
+    fun startPlayer() {
         mediaPlayer.playerStart()
         showTimeCountDown()
-        binding.stopPlayerButton.isChecked = true
+    }
+
+    private fun render(state: PlayerState) {
+        screenStateLiveData.postValue(state)
     }
 
     private fun pausePlayer() {
         mediaPlayer.playerPause()
         val currentRunnable = runnable
-        if (currentRunnable != null) {
+        if (currentRunnable != null)
             handler.removeCallbacks(currentRunnable)
-        }
-        binding.stopPlayerButton.isChecked = false
+
     }
 
     private fun showTimeCountDown() {
@@ -86,6 +119,17 @@ class PlayerViewModel(
     companion object {
         private const val TRACK_ITEM_KEY = "trackItem"
         private const val TIMER_DELAY = 50L
-    }
 
+        fun getPlayerViewModelFactory(trackGson: String): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    PlayerViewModel(
+                        this[APPLICATION_KEY] as Application,
+                        Creator.provideMediaPlayerInteractor(),
+                        trackGson
+                    )
+                }
+            }
+    }
 }
+
