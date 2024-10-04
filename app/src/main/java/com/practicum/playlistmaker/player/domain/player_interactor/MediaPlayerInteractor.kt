@@ -4,6 +4,7 @@ import android.media.MediaPlayer.OnCompletionListener
 
 interface MediaPlayerInteractor {
     fun preparePlayer(url: String)
+    fun playBackControll()
     fun playerStart()
     fun playerPause()
     fun releasePlayer()

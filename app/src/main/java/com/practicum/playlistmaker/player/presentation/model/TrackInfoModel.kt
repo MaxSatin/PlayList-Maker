@@ -5,7 +5,7 @@ data class TrackInfoModel(
     val trackId: String,
     val artistName: String,
     val trackName: String,
-    val trackTimeMillis: Long,
+    val trackTimeMillis: String,
     val previewUrl: String,
     val artworkUrl100: String,
     val collectionName: String,

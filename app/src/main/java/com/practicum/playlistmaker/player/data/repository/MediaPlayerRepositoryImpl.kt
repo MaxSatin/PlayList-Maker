@@ -18,9 +18,6 @@ class MediaPlayerRepositoryImpl(
 
     private var playerState = STATE_DEFAULT
 
-    fun getPlayerState(): Int {
-        return playerState
-    }
 
     override fun getPlayerCurrentPosition(): Int {
         return player.currentPosition
@@ -41,6 +38,17 @@ class MediaPlayerRepositoryImpl(
             playerState = STATE_PREPARED
         }
 
+    }
+
+    override fun playBackControll() {
+            when(playerState) {
+                STATE_PLAYING -> {
+                    pausePlayer()
+                }
+                STATE_PREPARED, STATE_PAUSE -> {
+                    startPlayer()
+                }
+            }
     }
 
     override fun startPlayer() {

@@ -12,6 +12,11 @@ class MediaPlayerInteractorImpl(
         mediaPlayerRepository.preparePlayer(url)
     }
 
+    override fun playBackControll() {
+        mediaPlayerRepository.playBackControll()
+    }
+
+
     override fun playerStart() {
         mediaPlayerRepository.startPlayer()
 

@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.player.presentation.mapper
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.player.presentation.model.TrackSearchModel
 
-// Аналогично, Маппер для непригодившихся сейчас моделей. Оставил на будущее.
+// Маппер для непригодившихся сейчас моделей. Оставил на будущее.
 class TrackSearchMapper {
     fun map(track: Track): TrackSearchModel {
         return TrackSearchModel(
