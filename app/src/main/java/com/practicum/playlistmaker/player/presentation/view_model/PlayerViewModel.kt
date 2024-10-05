@@ -33,21 +33,21 @@ class PlayerViewModel(
     private val trackItem = loadTrackScreen(trackGson)
 
     private val screenStateLiveData = MutableLiveData<PlayerState>(PlayerState.Loading)
-
-
+    private val playerPreparedLiveData = MutableLiveData<Boolean>(false)
     private val playStatusLiveData = MutableLiveData<PlayStatus>()
 
     init {
         render(PlayerState.Loading)
         preparePlayer()
-        render(
-            PlayerState.Content(
-                TrackInfoMapper.map(trackItem)
-            )
-        )
+           render(
+               PlayerState.Content(
+                   TrackInfoMapper.map(trackItem)
+               )
+           )
     }
 
     fun getScreenStateLiveData(): LiveData<PlayerState> = screenStateLiveData
+    fun getPlayerPreparedStatusLiveData(): LiveData<Boolean> = playerPreparedLiveData
     fun getPlayStatusLiveData(): LiveData<PlayStatus> = playStatusLiveData
 
     private fun loadTrackScreen(track: String?): Track {
@@ -66,7 +66,7 @@ class PlayerViewModel(
 //        playerInteractor.playBackControll()
 //        if(playerInteractor.isPlaying()){
 //            showTimeCountDown()
-//            getCurrentPlayStatus().copy(isPlaying = true)
+//            playStatusLiveData.value = getCurrentPlayStatus().copy(isPlaying = true)
 //        }
         if (playerInteractor.isPlaying()){
             pausePlayer()
@@ -77,6 +77,9 @@ class PlayerViewModel(
 
     fun preparePlayer(){
         playerInteractor.preparePlayer(trackItem.previewUrl)
+        playerInteractor.setOnPreparedListener{
+            playerPreparedLiveData.value = true
+        }
     }
 
     fun startPlayer() {

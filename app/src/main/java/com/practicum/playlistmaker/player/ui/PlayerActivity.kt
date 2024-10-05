@@ -41,6 +41,7 @@ class PlayerActivity : AppCompatActivity() {
     //    private var runnable: Runnable? = null
     lateinit var binding: ActivityPlayerBinding
     lateinit var viewModel: PlayerViewModel
+    private var isPrepared: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,10 +54,13 @@ class PlayerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        binding.stopPlayerButton.isEnabled = false
 
-        viewModel = ViewModelProvider(this,
+        viewModel = ViewModelProvider(
+            this,
             PlayerViewModel
-                .getPlayerViewModelFactory(intent.getStringExtra(TRACK_ITEM_KEY)))[PlayerViewModel::class.java]
+                .getPlayerViewModelFactory(intent.getStringExtra(TRACK_ITEM_KEY))
+        )[PlayerViewModel::class.java]
 
         binding.playerButtonBack.setOnClickListener {
             finish()
@@ -66,8 +70,15 @@ class PlayerActivity : AppCompatActivity() {
 //        showTrackDetails(trackItem)
 //        loadPoster(trackItem)
 
-        viewModel.getScreenStateLiveData().observe(this){ playerState ->
+        viewModel.getScreenStateLiveData().observe(this) { playerState ->
             render(playerState)
+        }
+
+        viewModel.getPlayerPreparedStatusLiveData().observe(this) { isPrepared ->
+            if (isPrepared == true) {
+                binding.stopPlayerButton.isEnabled = true
+                this.isPrepared = true
+            }
         }
 
         viewModel.getPlayStatusLiveData().observe(this) { playStatus ->
@@ -93,13 +104,12 @@ class PlayerActivity : AppCompatActivity() {
 //        return trackItem
 //    }
 
-    private fun render(state: PlayerState){
-        when (state){
+    private fun render(state: PlayerState) {
+        when (state) {
             is PlayerState.Loading -> showLoading()
             is PlayerState.Content -> showTrackDetails(state.track)
         }
     }
-
 
 
 //    private fun startPlayer() {
@@ -141,27 +151,28 @@ class PlayerActivity : AppCompatActivity() {
 //        }
 //    }
 
-    private fun changePlayButtonStyle(state: PlayStatus){
+    private fun changePlayButtonStyle(state: PlayStatus) {
         when (state.isPlaying) {
             true -> binding.stopPlayerButton.isChecked = true
             false -> binding.stopPlayerButton.isChecked = false
         }
     }
+
     private fun showLoading() {
         binding.poster.isVisible = false
-        binding.progressBar.isVisible = true
+        binding.progressbar.isVisible = true
     }
 
     private fun showTrackDetails(trackItem: TrackInfoModel) {
         binding.poster.isVisible = true
-        binding.progressBar.isVisible = false
+        binding.progressbar.isVisible = false
         loadPoster(trackItem)
         binding.songName.text = trackItem.trackName
         binding.bandName.text = trackItem.artistName
         binding.timePlayed.text = "0:30"
         binding.tracklengthTime.text = trackItem.trackTimeMillis
         binding.albumTitle.text = trackItem.collectionName
-        binding.albumYear.text = trackItem.trackTimeMillis
+        binding.albumYear.text = trackItem.releaseDate
         binding.trackGenre.text = trackItem.primaryGenreName
         binding.trackCountry.text = trackItem.country
     }
@@ -190,6 +201,7 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.pausePlayer()
 
     }
+
     companion object {
         private const val TRACK_ITEM_KEY = "trackItem"
         private const val TIMER_DELAY = 50L

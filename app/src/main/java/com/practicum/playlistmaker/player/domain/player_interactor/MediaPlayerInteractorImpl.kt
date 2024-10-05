@@ -12,10 +12,17 @@ class MediaPlayerInteractorImpl(
         mediaPlayerRepository.preparePlayer(url)
     }
 
+    override fun setOnPreparedListener(listener: MediaPlayer.OnPreparedListener){
+        mediaPlayerRepository.setOnPreparedListener(listener)
+    }
+
     override fun playBackControll() {
         mediaPlayerRepository.playBackControll()
     }
 
+    override fun isPlayerPrepared(): Boolean {
+        return mediaPlayerRepository.isPlayerPrepared()
+    }
 
     override fun playerStart() {
         mediaPlayerRepository.startPlayer()

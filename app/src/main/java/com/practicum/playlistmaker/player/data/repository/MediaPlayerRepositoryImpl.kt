@@ -5,7 +5,7 @@ import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepositor
 
 
 class MediaPlayerRepositoryImpl(
-    private val player: MediaPlayer
+    private val player: MediaPlayer,
 ) : MediaPlayerRepository {
 
     companion object {
@@ -27,6 +27,10 @@ class MediaPlayerRepositoryImpl(
         player.setOnCompletionListener(listener)
     }
 
+    override fun setOnPreparedListener(listener: MediaPlayer.OnPreparedListener){
+        player.setOnPreparedListener(listener)
+    }
+
     override fun isPlaying(): Boolean {
         return player.isPlaying
     }
@@ -41,14 +45,19 @@ class MediaPlayerRepositoryImpl(
     }
 
     override fun playBackControll() {
-            when(playerState) {
-                STATE_PLAYING -> {
-                    pausePlayer()
-                }
-                STATE_PREPARED, STATE_PAUSE -> {
-                    startPlayer()
-                }
+        when (playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
             }
+
+            STATE_PREPARED, STATE_PAUSE -> {
+                startPlayer()
+            }
+        }
+    }
+
+    override fun isPlayerPrepared(): Boolean {
+        return (playerState == STATE_PREPARED)
     }
 
     override fun startPlayer() {
