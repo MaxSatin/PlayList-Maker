@@ -27,7 +27,6 @@ sealed interface State {
     }
 
     sealed interface HistoryListState : State {
-
         data class Content(
             val tracks: List<Track>
         ) : HistoryListState
@@ -35,7 +34,6 @@ sealed interface State {
         data class Empty(
             val message: String
         ) : HistoryListState
-
     }
 }
 

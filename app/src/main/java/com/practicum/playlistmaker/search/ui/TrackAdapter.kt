@@ -39,10 +39,6 @@ class TrackAdapter(
             holder.bind(track)
         }
 
-
-//        holder.itemView.setOnClickListener {
-//            onTrackClickListener?.onTrackClick(trackList[holder.adapterPosition])
-//        }
     }
 
     fun updateItems(items: List<Track>) {

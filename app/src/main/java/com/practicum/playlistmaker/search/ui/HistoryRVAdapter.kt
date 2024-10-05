@@ -16,9 +16,7 @@ class HistoryRVAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-//        val trackView =
-//            LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
-//        return TrackViewHolder(trackView)
+
         val binding = TrackItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -43,11 +41,6 @@ class HistoryRVAdapter(
         historyTrackList.getOrNull(position)?.let { track ->
             holder.bind(track)
         }
-
-//        holder.itemView.setOnClickListener{
-//            onTrackClickListenerHistory?.onTrackClick(historyTrackList[position])
-//        }
-
     }
 
     fun updateItems(items: List<Track>) {

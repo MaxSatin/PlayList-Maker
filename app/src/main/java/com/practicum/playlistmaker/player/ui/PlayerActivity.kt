@@ -31,14 +31,6 @@ import com.practicum.playlistmaker.search.ui.SearchActivity.Companion
 
 class PlayerActivity : AppCompatActivity() {
 
-//    private val handler = Handler(Looper.getMainLooper())
-//    private val gson = GsonProvider.gson
-
-//    private val mediaPlayer = Creator.provideMediaPlayerInteractor()
-//
-//    lateinit var trackItem: Track
-
-    //    private var runnable: Runnable? = null
     lateinit var binding: ActivityPlayerBinding
     lateinit var viewModel: PlayerViewModel
     private var isPrepared: Boolean = false
@@ -66,9 +58,6 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-//        trackItem = obtainTrackInstance()
-//        showTrackDetails(trackItem)
-//        loadPoster(trackItem)
 
         viewModel.getScreenStateLiveData().observe(this) { playerState ->
             render(playerState)
@@ -85,24 +74,11 @@ class PlayerActivity : AppCompatActivity() {
             changePlayButtonStyle(playStatus)
             binding.timePlayed.text = playStatus.progress
         }
-//        viewModel.preparePlayer()
-//        mediaPlayer.preparePlayer(trackItem.previewUrl)
+
         binding.stopPlayerButton.setOnClickListener {
             viewModel.playerController()
-//            if (!mediaPlayer.isPlaying()) {
-//                startPlayer()
-//            } else {
-//                pausePlayer()
-//            }
         }
     }
-
-//    private fun obtainTrackInstance(): Track {
-//        val intent = intent
-//        val trackItemGson = intent.getStringExtra(TRACK_ITEM_KEY)
-//        val trackItem = gson.fromJson<Track>(trackItemGson, Track::class.java)
-//        return trackItem
-//    }
 
     private fun render(state: PlayerState) {
         when (state) {
@@ -111,45 +87,6 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-
-//    private fun startPlayer() {
-//        mediaPlayer.playerStart()
-//        showTimeCountDown()
-//        binding.stopPlayerButton.isChecked = true
-//    }
-//
-//    private fun pausePlayer() {
-//        mediaPlayer.playerPause()
-//        val currentRunnable = runnable
-//        if (currentRunnable != null) {
-//            handler.removeCallbacks(currentRunnable)
-//        }
-//        binding.stopPlayerButton.isChecked = false
-//    }
-//
-//    private fun showTimeCountDown() {
-//        val currentRunnable = runnable
-//        if (currentRunnable != null) {
-//            handler.removeCallbacks(currentRunnable)
-//        }
-//        val newTimerRunnable = object : Runnable {
-//            override fun run() {
-//                binding.timePlayed.text =
-//                    DateFormatter.timeFormatter.format(mediaPlayer.getCurrentPosition())
-//                handler.postDelayed(this, TIMER_DELAY)
-//            }
-//        }
-//
-//        this.runnable = newTimerRunnable
-//
-//        handler.postDelayed(newTimerRunnable, TIMER_DELAY)
-//
-//        mediaPlayer.setOnCompleteListener {
-//            handler.removeCallbacks(newTimerRunnable)
-//            binding.timePlayed.text = DateFormatter.timeFormatter.format(0)
-//            binding.stopPlayerButton.isChecked = false
-//        }
-//    }
 
     private fun changePlayButtonStyle(state: PlayStatus) {
         when (state.isPlaying) {
@@ -186,15 +123,6 @@ class PlayerActivity : AppCompatActivity() {
             .into(binding.poster)
     }
 
-//        override fun onDestroy() {
-//        super.onDestroy()
-//        mediaPlayer.releasePlayer()
-//        val currentRunnable = runnable
-//        if (currentRunnable != null) {
-//            handler.removeCallbacks(currentRunnable)
-//        }
-//    }
-
     override fun onPause() {
         super.onPause()
         binding.stopPlayerButton.isChecked = false
@@ -204,7 +132,6 @@ class PlayerActivity : AppCompatActivity() {
 
     companion object {
         private const val TRACK_ITEM_KEY = "trackItem"
-        private const val TIMER_DELAY = 50L
 
         fun show(context: Context, trackGson: String) {
             val intent = Intent(context, PlayerActivity::class.java)

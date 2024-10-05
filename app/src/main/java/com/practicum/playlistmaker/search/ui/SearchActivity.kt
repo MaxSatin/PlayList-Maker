@@ -29,44 +29,12 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY = "KEY"
-        private const val TRACK_ITEM_KEY = "trackItem"
-        private const val CLICK_DEBOUNCE_DELAY = 1_000L
-        private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }
 
-
-//    private val getTrackList = Creator.provideGetTrackListFromServerUseCase()
-//    private val addTrackToHistory by lazy { Creator.provideAddTrackToHistoryUseCase(this) }
-//    private val clearHistory by lazy { Creator.provideClearHistoryUseCase(this) }
-//    private val getTracksHistory by lazy { Creator.provideGetTrackHistoryFromStorageUseCase(this) }
-//    private val checkIsHistoryEmpty by lazy { Creator.provideCheckIsHistoryEmptyUseCase(this)}
-//    private val gson = GsonProvider.gson
-
-
-//    private val trackList = mutableListOf<Track>()
     private val viewModel by viewModels<SearchViewModel> { SearchViewModel.getSearchViewModelFactory() }
-//    private lateinit var viewModel : SearchViewModel
     private lateinit var adapter: TrackAdapter
     private lateinit var trackHistoryAdapter: HistoryRVAdapter
-//    private val adapter = TrackAdapter(viewModel::showTrackPlayer)
 
-    //    { item ->
-////        if (clickDebounce()) {
-////            addTrackToHistory(item)
-////            trackHistoryAdapter.updateItems(getTracksHistory())
-////            showPlayer(item)
-////        }
-////    }
-//    private val trackHistoryAdapter = HistoryRVAdapter(viewModel::showTrackPlayer)
-//    { item ->
-//        showPlayer(item)
-//    }
-
-
-//    val searchRunnable = Runnable { searchSongs() }
-//    private val handler = Handler(Looper.getMainLooper())
-
-    private var isClickAllowed = true
     private var isHistoryEmpty: Boolean = false
 
     lateinit var binding: ActivitySearchBinding
@@ -79,8 +47,7 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
         enableEdgeToEdge()
 
-//        viewModel by viewModels<SearchViewModel> { SearchViewModel.getSearchViewModelFactory() }
-//        viewModel = ViewModelProvider(this, SearchViewModel.getSearchViewModelFactory())[SearchViewModel::class.java]
+
         adapter = TrackAdapter(viewModel::showTrackPlayer)
         trackHistoryAdapter = HistoryRVAdapter(viewModel::showTrackPlayer)
 
@@ -102,15 +69,12 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerSearch.adapter = adapter
         binding.trackHistoryRV?.adapter = trackHistoryAdapter
 
-
-//        trackHistoryAdapter.updateItems(getTracksHistory())
-
         viewModel.observeTrackSearchState().observe(this) { trackListState ->
             render(trackListState)
         }
 
         viewModel.observeHistoryState().observe(this) { historyListState ->
-            if(historyListState is State.HistoryListState.Empty) {
+            if (historyListState is State.HistoryListState.Empty) {
                 isHistoryEmpty = true
             } else {
                 isHistoryEmpty = false
@@ -125,8 +89,6 @@ class SearchActivity : AppCompatActivity() {
 
         binding.clearHistorySearchButton?.setOnClickListener {
             viewModel.clearHistoryList()
-//            clearHistory()
-//            trackHistoryAdapter.updateItems(getTracksHistory())
             binding.trackHistory.visibility = View.GONE
         }
 
@@ -140,8 +102,7 @@ class SearchActivity : AppCompatActivity() {
             if (isHistoryEmpty) {
                 binding.trackHistory?.visibility = View.GONE
             }
-//            trackList.clear()
-//            adapter.updateItems(trackList)
+
             inputMethodManager?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         }
 
@@ -162,7 +123,6 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
-
 
         val editTextWatcher = object : TextWatcher {
 
@@ -197,36 +157,10 @@ class SearchActivity : AppCompatActivity() {
 
     private fun render(state: State) {
         when (state) {
-            is State.SearchListState.Loading -> {
-                showLoading()
-//                    binding.searchResults.visibility = View.VISIBLE
-//                    binding.progressBar?.visibility = View.VISIBLE
-//                    binding.recyclerSearch.visibility = View.GONE
-//                    binding.nothingFoundPlaceHolder.visibility = View.GONE
-//                    binding.badConnectionPlaceHolder.visibility = View.GONE
-            }
-
-            is State.SearchListState.Content -> {
-                showTracks(state.tracks)
-            }
-
-            is State.SearchListState.NoConnection -> {
-                showErrorBadConnection()
-//                    binding.badConnectionPlaceHolder.visibility = View.VISIBLE
-//                    binding.searchResults.visibility = View.VISIBLE
-//                    binding.trackHistory?.visibility = View.GONE
-//                    binding.nothingFoundPlaceHolder.visibility = View.GONE
-//                    binding.progressBar?.visibility = View.GONE
-            }
-
-            is State.SearchListState.Empty -> {
-                showErrorNothingFound(textInput)
-//                    binding.searchResults.visibility = View.VISIBLE
-//                    binding.nothingFoundPlaceHolder.visibility = View.VISIBLE
-//                    binding.trackHistory?.visibility = View.GONE
-//                    binding.badConnectionPlaceHolder.visibility = View.GONE
-            }
-
+            is State.SearchListState.Loading -> showLoading()
+            is State.SearchListState.Content -> showTracks(state.tracks)
+            is State.SearchListState.NoConnection -> showErrorBadConnection()
+            is State.SearchListState.Empty ->  showErrorNothingFound(textInput)
             is State.SearchListState.Error -> showError(state.errorMessage)
             is State.HistoryListState.Content -> showHistory(state.tracks)
             is State.HistoryListState.Empty -> hideHistory()
@@ -261,31 +195,11 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showPlayer(trackGson: String) {
         PlayerActivity.show(this, trackGson)
-//        val track = gson.toJson(item)
-//        val intent = Intent(this, PlayerActivity::class.java)
-//        intent.putExtra(TRACK_ITEM_KEY, track)
-//        startActivity(intent)
     }
 
-//    private fun clickDebounce(): Boolean {
-//        val current = isClickAllowed
-//        if (isClickAllowed) {
-//            isClickAllowed = false
-//            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-//        }
-//        return current
-//    }
-
-//    private fun searchDebounce() {
-//        handler.removeCallbacks(searchRunnable)
-//        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-//    }
 
     private fun showErrorNothingFound(text: String) {
         if (text.isNotEmpty()) {
-//            viewModel.clearSearchList()
-////            trackList.clear()
-//            adapter.updateItems(trackList)
             binding.searchResults.visibility = View.VISIBLE
             binding.progressBar?.visibility = View.GONE
             binding.trackHistory?.visibility = View.GONE
@@ -294,59 +208,12 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-//    private fun searchSongs() {
-//        binding.searchResults.visibility = View.VISIBLE
-//        binding.progressBar?.visibility = View.VISIBLE
-//        binding.recyclerSearch.visibility = View.GONE
-//        binding.nothingFoundPlaceHolder.visibility = View.GONE
-//        binding.badConnectionPlaceHolder.visibility = View.GONE
-
-//        getTrackList(
-//            expression = binding.editTextwather.text.toString(),
-//            consumer = object : Consumer<List<Track>> {
-//                override fun consume(data: ConsumerData<List<Track>>) {
-//                    val currentRunnable = searchRunnable
-//                    if (currentRunnable != null) {
-//                        handler.removeCallbacks(currentRunnable)
-//                    }
-//                    val newSearchRunnable = Runnable {
-//                        binding.progressBar?.visibility = View.GONE
-//                        when (data) {
-//                            is ConsumerData.Error -> showError(data.message)
-//                            is ConsumerData.NoConnection -> showErrorBadConnection()
-//                            is ConsumerData.Data -> {
-//                                if (data.value.isNullOrEmpty()) {
-//                                    showErrorNothingFound(binding.editTextwather.text.toString())
-//                                } else {
-//                                    binding.recyclerSearch?.visibility = View.VISIBLE
-//                                    binding.trackHistory?.visibility = View.GONE
-//                                    binding.nothingFoundPlaceHolder.visibility = View.GONE
-//                                    binding.badConnectionPlaceHolder.visibility = View.GONE
-//                                    trackList.clear()
-//                                    trackList.addAll(data.value!!)
-//                                    adapter.updateItems(trackList)
-//                                }
-//                            }
-//
-//
-//                        }
-//                    }
-//                    handler.post(newSearchRunnable)
-//                }
-//            }
-//        )
-//
-//    }
-
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         onBackPressedDispatcher.onBackPressed()
     }
 
     private fun showErrorBadConnection() {
-//        viewModel.clearSearchList()
-//        trackList.clear()
-//        adapter.updateItems(trackList)
         binding.searchResults.visibility = View.VISIBLE
         binding.trackHistory?.visibility = View.GONE
         binding.nothingFoundPlaceHolder.visibility = View.GONE

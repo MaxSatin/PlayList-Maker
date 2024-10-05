@@ -70,27 +70,7 @@ class SearchViewModel(
         }
 
     }
-//    private val mediatorStateLiveData = MediatorLiveData<State.SearchListState>().also { livedata ->
-//        livedata.addSource(stateLiveData) { trackListState ->
-//            livedata.value = when (trackListState) {
-//                is State.SearchListState.Loading -> trackListState
-//                is State.SearchListState.Content -> State.SearchListState.Content(trackListState.tracks)
-//                is State.SearchListState.Error -> trackListState
-//                is State.SearchListState.NoConnection -> trackListState
-//                is State.SearchListState.Empty -> trackListState
-//            }
-//
-//        }
 
-//        livedata.addSource(historyStateLiveData){ historyTrackListState ->
-//            livedata.value = when (historyTrackListState) {
-//                is HistoryTrackListState.Loading -> historyTrackListState
-//                is HistoryTrackListState.Content -> HistoryTrackListState.Content(historyTrackListState.tracks)
-//                is HistoryTrackListState.Empty -> historyTrackListState
-//            }
-//
-//        }
-//    }
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed

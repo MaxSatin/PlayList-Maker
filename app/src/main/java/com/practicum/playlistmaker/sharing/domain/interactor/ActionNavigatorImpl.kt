@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.sharing.domain.interactor
 import android.content.Intent
 import android.net.Uri
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.sharing.domain.model.Mail
 
 class ActionNavigatorImpl() : ActionNavigator {
     override fun share(text: String): Intent {

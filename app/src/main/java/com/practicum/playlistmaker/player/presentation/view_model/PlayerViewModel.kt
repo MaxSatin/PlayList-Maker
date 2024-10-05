@@ -22,14 +22,13 @@ import com.practicum.playlistmaker.player.presentation.state.PlayerState
 
 class PlayerViewModel(
     application: Application,
+    trackGson: String?,
     private val playerInteractor: MediaPlayerInteractor,
-    private val trackGson: String?,
 ) : AndroidViewModel(application) {
 
     private val handler = Handler(Looper.getMainLooper())
     private val gson = GsonProvider.gson
     private var runnable: Runnable? = null
-    private var trackTimer: String? = null
     private val trackItem = loadTrackScreen(trackGson)
 
     private val screenStateLiveData = MutableLiveData<PlayerState>(PlayerState.Loading)
@@ -39,11 +38,11 @@ class PlayerViewModel(
     init {
         render(PlayerState.Loading)
         preparePlayer()
-           render(
-               PlayerState.Content(
-                   TrackInfoMapper.map(trackItem)
-               )
-           )
+        render(
+            PlayerState.Content(
+                TrackInfoMapper.map(trackItem)
+            )
+        )
     }
 
     fun getScreenStateLiveData(): LiveData<PlayerState> = screenStateLiveData
@@ -63,21 +62,17 @@ class PlayerViewModel(
     }
 
     fun playerController() {
-//        playerInteractor.playBackControll()
-//        if(playerInteractor.isPlaying()){
-//            showTimeCountDown()
-//            playStatusLiveData.value = getCurrentPlayStatus().copy(isPlaying = true)
-//        }
-        if (playerInteractor.isPlaying()){
+
+        if (playerInteractor.isPlaying()) {
             pausePlayer()
         } else {
             startPlayer()
         }
     }
 
-    fun preparePlayer(){
+    fun preparePlayer() {
         playerInteractor.preparePlayer(trackItem.previewUrl)
-        playerInteractor.setOnPreparedListener{
+        playerInteractor.setOnPreparedListener {
             playerPreparedLiveData.value = true
         }
     }
@@ -101,9 +96,7 @@ class PlayerViewModel(
     }
 
     private fun showTimeCountDown() {
-//        if (this.runnable != null) {
-//            handler.removeCallbacksAndMessages(TRACK_TIMER_TOKEN)
-//        }
+
         val newTimerRunnable = object : Runnable {
             override fun run() {
                 playStatusLiveData.value = getCurrentPlayStatus().copy(
@@ -122,17 +115,15 @@ class PlayerViewModel(
         this.runnable = newTimerRunnable
 
         handler.postDelayed(newTimerRunnable, TIMER_DELAY)
-//        handler.removeCallbacksAndMessages(TRACK_TIMER_TOKEN)
 
         playerInteractor.setOnCompleteListener {
             handler.removeCallbacksAndMessages(TRACK_TIMER_TOKEN)
-//            trackTimer = DateFormatter.timeFormatter.format(0)
+
             playStatusLiveData.value = getCurrentPlayStatus()
-                .copy(isPlaying = false,
-                    progress =  DateFormatter.timeFormatter.format(0)
+                .copy(
+                    isPlaying = false,
+                    progress = DateFormatter.timeFormatter.format(0)
                 )
-//            binding.timePlayed.text = DateFormatter.timeFormatter.format(0)
-//            binding.stopPlayerButton.isChecked = false
         }
     }
 
@@ -142,29 +133,8 @@ class PlayerViewModel(
         playerInteractor.releasePlayer()
         handler.removeCallbacksAndMessages(TRACK_TIMER_TOKEN)
     }
-//    () {
-////        super.onDestroy()
-//
-//
-////        val currentRunnable = runnable
-////        if (currentRunnable != null) {
-////            handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-////        }
-//    }
-
-//    override fun onPause() {
-//        super.onPause()
-//        binding.stopPlayerButton.isChecked = false
-//        val currentRunnable = runnable
-//        if (currentRunnable != null) {
-//            handler.removeCallbacksAndMessages(TRACK_TIMER_TOKEN)
-//        }
-//        playerInteractor.playerPause()
-//
-//    }
 
     companion object {
-        private const val TRACK_ITEM_KEY = "trackItem"
         private const val TIMER_DELAY = 50L
         private val TRACK_TIMER_TOKEN = Any()
 
@@ -174,8 +144,8 @@ class PlayerViewModel(
                 initializer {
                     PlayerViewModel(
                         this[APPLICATION_KEY] as Application,
+                        trackGson,
                         mediaPlayerInteractor,
-                        trackGson
                     )
                 }
             }
