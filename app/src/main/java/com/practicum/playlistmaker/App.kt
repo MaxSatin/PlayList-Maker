@@ -12,7 +12,8 @@ class App : Application() {
         super.onCreate()
         appThemeInteractor.setAppTheme()
     }
-    fun switchTheme(isDarkModeEnabled: Boolean){
-        appThemeInteractor.switchAppTheme(isDarkModeEnabled)
-    }
+
+//    fun switchTheme(isDarkModeEnabled: Boolean){
+//        appThemeInteractor.switchAppTheme(isDarkModeEnabled)
+//    }
 }

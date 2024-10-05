@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.player.presentation.model
 
-// Этой модели не нашел применение( Буду очень рад любым комментариям!
+
 data class TrackInfoModel(
     val trackId: String,
     val artistName: String,

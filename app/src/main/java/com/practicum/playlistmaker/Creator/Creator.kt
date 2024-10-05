@@ -21,6 +21,8 @@ import com.practicum.playlistmaker.search.domain.tracks_intr.CheckIsHistoryEmpty
 import com.practicum.playlistmaker.search.domain.tracks_intr.ClearHistoryUseCase
 import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackHistoryFromStorageUseCase
 import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackListFromServerUseCase
+import com.practicum.playlistmaker.sharing.domain.interactor.ActionNavigator
+import com.practicum.playlistmaker.sharing.domain.interactor.ActionNavigatorImpl
 
 object Creator {
 
@@ -34,27 +36,35 @@ object Creator {
     fun provideAddTrackToHistoryUseCase(context: Context): AddTrackToHistoryUseCase {
         return AddTrackToHistoryUseCase(
             provideTracksHistoryRepository(
-            context)
+                context
+            )
         )
     }
+
     fun provideCheckIsHistoryEmptyUseCase(context: Context): CheckIsHistoryEmptyUseCase {
         return CheckIsHistoryEmptyUseCase(
             provideTracksHistoryRepository(
-                context)
+                context
+            )
         )
     }
+
     fun provideClearHistoryUseCase(context: Context): ClearHistoryUseCase {
         return ClearHistoryUseCase(
             provideTracksHistoryRepository(
-                context)
+                context
+            )
         )
     }
+
     fun provideGetTrackHistoryFromStorageUseCase(context: Context): GetTrackHistoryFromStorageUseCase {
         return GetTrackHistoryFromStorageUseCase(
             provideTracksHistoryRepository(
-                context)
+                context
+            )
         )
     }
+
     fun provideGetTrackListFromServerUseCase(): GetTrackListFromServerUseCase {
         return GetTrackListFromServerUseCase(
             provideTrackListRepository()
@@ -65,14 +75,16 @@ object Creator {
         return AppThemeInteractorImpl(provideAppThemeRepository(context))
     }
 
-    private fun provideAppThemeRepository(context: Context) : AppThemeRepository {
+    private fun provideAppThemeRepository(context: Context): AppThemeRepository {
         return AppThemeRepositoryImpl(provideSharedPrefsClient(context, APP_THEME))
     }
 
     private fun provideTracksHistoryRepository(context: Context): TracksHistoryRepository {
-        return TracksHistoryRepositoryImpl(provideSharedPrefsClient(
-            context,
-            SHAREDPREFS_TRACKS_HISTORY)
+        return TracksHistoryRepositoryImpl(
+            provideSharedPrefsClient(
+                context,
+                SHAREDPREFS_TRACKS_HISTORY
+            )
         )
     }
 
@@ -86,6 +98,10 @@ object Creator {
 
     fun provideMediaPlayerInteractor(): MediaPlayerInteractor {
         return MediaPlayerInteractorImpl(provideMediaPlayerRepository())
+    }
+
+    fun provideActionNavigator(): ActionNavigator {
+        return ActionNavigatorImpl()
     }
 
 }
