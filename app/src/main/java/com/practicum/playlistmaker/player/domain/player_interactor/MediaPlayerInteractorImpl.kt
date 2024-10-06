@@ -12,7 +12,7 @@ class MediaPlayerInteractorImpl(
         mediaPlayerRepository.preparePlayer(url)
     }
 
-    override fun setOnPreparedListener(listener: MediaPlayer.OnPreparedListener){
+    override fun setOnPreparedListener(listener:() -> Unit){
         mediaPlayerRepository.setOnPreparedListener(listener)
     }
 

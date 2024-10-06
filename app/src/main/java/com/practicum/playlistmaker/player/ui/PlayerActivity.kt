@@ -3,11 +3,8 @@ package com.practicum.playlistmaker.player.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,18 +12,12 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.Creator.Creator
-import com.practicum.playlistmaker.Creator.GsonProvider
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.search.domain.track_model.Track
-import com.practicum.playlistmaker.player.presentation.mapper.DateFormatter
 import com.practicum.playlistmaker.player.presentation.model.TrackInfoModel
 import com.practicum.playlistmaker.player.presentation.state.PlayStatus
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
 import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
-import com.practicum.playlistmaker.search.ui.SearchActivity
-import com.practicum.playlistmaker.search.ui.SearchActivity.Companion
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -58,22 +49,36 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-
-        viewModel.getScreenStateLiveData().observe(this) { playerState ->
+        viewModel.getPlayerStateLiveData().observe(this) { playerState ->
             render(playerState)
-        }
 
-        viewModel.getPlayerPreparedStatusLiveData().observe(this) { isPrepared ->
-            if (isPrepared == true) {
+            if (playerState.playStatus.isPrepared) {
                 binding.stopPlayerButton.isEnabled = true
                 this.isPrepared = true
             }
-        }
 
-        viewModel.getPlayStatusLiveData().observe(this) { playStatus ->
-            changePlayButtonStyle(playStatus)
-            binding.timePlayed.text = playStatus.progress
+            changePlayButtonStyle(playerState.playStatus.isPlaying)
+
+            if (playerState.playStatus.isPlaying) {
+                binding.timePlayed.text = playerState.playStatus.progress
+            }
         }
+//
+//        viewModel.getPlayerStateLiveData().observe(this) { playerState ->
+//            render(playerState)
+//        }
+//
+//        viewModel.getPlayerPreparedStatusLiveData().observe(this) { isPrepared ->
+//            if (isPrepared == true) {
+//                binding.stopPlayerButton.isEnabled = true
+//                this.isPrepared = true
+//            }
+//        }
+//
+//        viewModel.getPlayStatusLiveData().observe(this) { playStatus ->
+//            changePlayButtonStyle(playStatus)
+//            binding.timePlayed.text = playStatus.progress
+//        }
 
         binding.stopPlayerButton.setOnClickListener {
             viewModel.playerController()
@@ -81,15 +86,22 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun render(state: PlayerState) {
-        when (state) {
-            is PlayerState.Loading -> showLoading()
-            is PlayerState.Content -> showTrackDetails(state.track)
+        if (state.isLoading) {
+            showLoading()
+        } else {
+            showTrackDetails(state.track)
         }
+//        when (state) {
+//            is PlayerState.Loading ->
+//            is PlayerState.Content -> showTrackDetails(state.track)
+//        }
     }
 
 
-    private fun changePlayButtonStyle(state: PlayStatus) {
-        when (state.isPlaying) {
+    //    private fun changePlayButtonStyle(state: PlayStatus) {
+//        when (state.isPlaying) {
+    private fun changePlayButtonStyle(isPlaying: Boolean) {
+        when (isPlaying) {
             true -> binding.stopPlayerButton.isChecked = true
             false -> binding.stopPlayerButton.isChecked = false
         }

@@ -27,8 +27,10 @@ class MediaPlayerRepositoryImpl(
         player.setOnCompletionListener(listener)
     }
 
-    override fun setOnPreparedListener(listener: MediaPlayer.OnPreparedListener){
-        player.setOnPreparedListener(listener)
+    override fun setOnPreparedListener(listener: () -> Unit){
+        player.setOnPreparedListener{
+            listener()
+        }
     }
 
     override fun isPlaying(): Boolean {

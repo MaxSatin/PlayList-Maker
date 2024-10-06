@@ -101,6 +101,8 @@ class SearchActivity : AppCompatActivity() {
 
             if (isHistoryEmpty) {
                 binding.trackHistory?.visibility = View.GONE
+            } else {
+                binding.trackHistory?.visibility = View.VISIBLE
             }
 
             inputMethodManager?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
