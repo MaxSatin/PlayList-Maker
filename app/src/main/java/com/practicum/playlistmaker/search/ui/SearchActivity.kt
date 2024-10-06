@@ -74,11 +74,12 @@ class SearchActivity : AppCompatActivity() {
         }
 
         viewModel.observeHistoryState().observe(this) { historyListState ->
-            if (historyListState is State.HistoryListState.Empty) {
-                isHistoryEmpty = true
-            } else {
-                isHistoryEmpty = false
-                render(historyListState)
+            when (historyListState) {
+                is State.HistoryListState.Empty -> isHistoryEmpty = true
+                is State.HistoryListState.Content -> {
+                    isHistoryEmpty = false
+                    render(historyListState)
+                }
             }
         }
 
@@ -140,7 +141,7 @@ class SearchActivity : AppCompatActivity() {
 
                 }
                 val isFocusedAndEmpty =
-                    if (binding.editTextwather.hasFocus() && s?.isEmpty() == true) {
+                    if (binding.editTextwather.hasFocus() && s?.isEmpty() == true && !isHistoryEmpty) {
                         View.VISIBLE
                     } else {
                         View.GONE
@@ -162,7 +163,7 @@ class SearchActivity : AppCompatActivity() {
             is State.SearchListState.Loading -> showLoading()
             is State.SearchListState.Content -> showTracks(state.tracks)
             is State.SearchListState.NoConnection -> showErrorBadConnection()
-            is State.SearchListState.Empty ->  showErrorNothingFound(textInput)
+            is State.SearchListState.Empty -> showErrorNothingFound(textInput)
             is State.SearchListState.Error -> showError(state.errorMessage)
             is State.HistoryListState.Content -> showHistory(state.tracks)
             is State.HistoryListState.Empty -> hideHistory()
