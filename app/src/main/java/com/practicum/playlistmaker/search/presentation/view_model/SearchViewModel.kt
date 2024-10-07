@@ -108,10 +108,10 @@ class SearchViewModel(
     }
 
     private fun updateHistoryList() {
-        val currentState = historyStateLiveData.value
-        if (currentState is State.HistoryListState.Content) {
+//        val currentState = historyStateLiveData.value
+//        if (currentState is State.HistoryListState.Content) {
             historyStateLiveData.value = State.HistoryListState.Content(getTracksHistory())
-        }
+
     }
 
     fun searchDebounce(changedText: String) {

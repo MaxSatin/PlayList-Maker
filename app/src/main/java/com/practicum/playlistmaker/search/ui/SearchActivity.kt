@@ -74,8 +74,18 @@ class SearchActivity : AppCompatActivity() {
         }
 
         viewModel.observeHistoryState().observe(this) { historyListState ->
+
+//            if (historyListState is State.HistoryListState.Empty){
+//                isHistoryEmpty = true
+//            } else {
+//                isHistoryEmpty = false
+//                    render(historyListState as State.HistoryListState.Content)
+//            }
             when (historyListState) {
-                is State.HistoryListState.Empty -> isHistoryEmpty = true
+                is State.HistoryListState.Empty -> {
+                    isHistoryEmpty = true
+                    hideHistory()
+                }
                 is State.HistoryListState.Content -> {
                     isHistoryEmpty = false
                     render(historyListState)
@@ -90,6 +100,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.clearHistorySearchButton?.setOnClickListener {
             viewModel.clearHistoryList()
+//            isHistoryEmpty = true
             binding.trackHistory.visibility = View.GONE
         }
 
@@ -99,8 +110,7 @@ class SearchActivity : AppCompatActivity() {
         binding.clearIcon.setOnClickListener {
             binding.editTextwather.setText("")
             binding.searchResults.visibility = View.GONE
-
-            if (isHistoryEmpty) {
+            if (isHistoryEmpty == true) {
                 binding.trackHistory?.visibility = View.GONE
             } else {
                 binding.trackHistory?.visibility = View.VISIBLE
@@ -141,9 +151,9 @@ class SearchActivity : AppCompatActivity() {
 
                 }
                 val isFocusedAndEmpty =
-                    if (binding.editTextwather.hasFocus() && s?.isEmpty() == true && !isHistoryEmpty) {
+                    if (binding.editTextwather.hasFocus() && s?.isEmpty() == true && isHistoryEmpty) {
                         View.VISIBLE
-                    } else {
+                    }  else  {
                         View.GONE
                     }
                 binding.trackHistory?.visibility = isFocusedAndEmpty
