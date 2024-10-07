@@ -87,6 +87,7 @@ class SearchActivity : AppCompatActivity() {
                     isHistoryEmpty = true
                     hideHistory()
                 }
+
                 is State.HistoryListState.Content -> {
                     isHistoryEmpty = false
                     render(historyListState)
@@ -144,14 +145,29 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, ncout: Int) {
+
                 if (binding.editTextwather.hasFocus() && (s?.isEmpty() == true) && !isHistoryEmpty) {
                     binding.searchResults.visibility = View.GONE
+                    binding.nothingFoundPlaceHolder.visibility = View.GONE
+                    binding.badConnectionPlaceHolder.visibility = View.GONE
                     binding.trackHistory.visibility = View.VISIBLE
+                } else {
+                    binding.searchResults.visibility = View.GONE
                 }
 
+//                    if(s?.isEmpty() == true){
+//                        binding.nothingFoundPlaceHolder.visibility = View.GONE
+//                        binding.badConnectionPlaceHolder.visibility = View.GONE
+//                        }
+//                    else -> {
+//                        binding.searchResults.visibility = View.GONE
+//                        binding.nothingFoundPlaceHolder.visibility = View.GONE
+//                        binding.badConnectionPlaceHolder.visibility = View.GONE
+//                    }
+
 //                } else {
-                    textInput = s.toString()
-                    viewModel.searchDebounce(textInput)
+                textInput = s.toString()
+                viewModel.searchDebounce(textInput)
 //                }
 //                val isFocusedAndEmpty =
 //                    if (binding.editTextwather.hasFocus() && s?.isEmpty() == true && isHistoryEmpty) {
@@ -230,11 +246,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showErrorBadConnection() {
-        binding.searchResults.visibility = View.VISIBLE
-        binding.trackHistory?.visibility = View.GONE
-        binding.nothingFoundPlaceHolder.visibility = View.GONE
-        binding.badConnectionPlaceHolder.visibility = View.VISIBLE
-        binding.progressBar?.visibility = View.GONE
+        if (textInput.isNotEmpty()) {
+            binding.searchResults.visibility = View.VISIBLE
+            binding.trackHistory?.visibility = View.GONE
+            binding.nothingFoundPlaceHolder.visibility = View.GONE
+            binding.badConnectionPlaceHolder.visibility = View.VISIBLE
+            binding.progressBar?.visibility = View.GONE
+        }
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
