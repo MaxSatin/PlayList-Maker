@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.settings.domain.view_model
+package com.practicum.playlistmaker.settings.presentation.view_model
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -22,7 +22,7 @@ class SettingsViewModel(
     fun getIsDarkThemeOnLiveData(): LiveData<Boolean> = isDarkThemeOnLiveData
 
     init {
-        isDarkThemeOnLiveData.value = appThemeInteractor.isDarkThemeOn()
+        isDarkThemeOnLiveData.value = appThemeInteractor.checkIsDarkThemeOn()
     }
 
     fun switchTheme(isDarkModeEnabled: Boolean) {

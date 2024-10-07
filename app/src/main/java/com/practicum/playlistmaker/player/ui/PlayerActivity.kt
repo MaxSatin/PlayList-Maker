@@ -22,8 +22,8 @@ import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewMode
 
 class PlayerActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityPlayerBinding
-    lateinit var viewModel: PlayerViewModel
+    private lateinit var binding: ActivityPlayerBinding
+    private lateinit var viewModel: PlayerViewModel
     private var isPrepared: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,11 +108,13 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        binding.poster.isVisible = false
-        binding.progressbar.isVisible = true
+        binding.loadingOverlay.isVisible = true
+//        binding.poster.isVisible = false
+//        binding.progressbar.isVisible = true
     }
 
     private fun showTrackDetails(trackItem: TrackInfoModel) {
+        binding.loadingOverlay.isVisible = false
         binding.poster.isVisible = true
         binding.progressbar.isVisible = false
         loadPoster(trackItem)

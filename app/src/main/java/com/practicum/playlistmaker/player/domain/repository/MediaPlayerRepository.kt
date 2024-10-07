@@ -13,6 +13,6 @@ interface MediaPlayerRepository {
     fun releasePlayer()
     fun isPlaying(): Boolean
     fun getPlayerCurrentPosition(): Int
-    fun setOnCompleteListener(listener: OnCompletionListener)
+    fun setOnCompleteListener(listener:() -> Unit)
 
 }

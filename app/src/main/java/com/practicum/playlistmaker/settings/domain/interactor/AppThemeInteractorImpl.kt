@@ -9,29 +9,32 @@ class AppThemeInteractorImpl(
 
     private var isDarkTheme = appThemeRepository.checkIsDarkThemeOn()
 
-    override fun isDarkThemeOn(): Boolean {
+    override fun checkIsDarkThemeOn(): Boolean {
         return appThemeRepository.checkIsDarkThemeOn()
     }
+
     override fun setAppTheme() {
-        AppCompatDelegate.setDefaultNightMode(
-            if (isDarkTheme) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-        )
+        appThemeRepository.setAppTheme()
+//        AppCompatDelegate.setDefaultNightMode(
+//            if (isDarkTheme) {
+//                AppCompatDelegate.MODE_NIGHT_YES
+//            } else {
+//                AppCompatDelegate.MODE_NIGHT_NO
+//            }
+//        )
     }
 
     override fun switchAppTheme(isDarkModeEnabled: Boolean) {
-        isDarkTheme = isDarkModeEnabled
-        appThemeRepository.setDarkTheme(isDarkTheme)
-        AppCompatDelegate.setDefaultNightMode(
-            if (isDarkModeEnabled) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-        )
+        appThemeRepository.switchAppTheme(isDarkModeEnabled)
+//        isDarkTheme = isDarkModeEnabled
+//        appThemeRepository.setDarkTheme(isDarkTheme)
+//        AppCompatDelegate.setDefaultNightMode(
+//            if (isDarkModeEnabled) {
+//                AppCompatDelegate.MODE_NIGHT_YES
+//            } else {
+//                AppCompatDelegate.MODE_NIGHT_NO
+//            }
+//        )
     }
 }
 

@@ -14,6 +14,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.R
@@ -100,7 +101,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.clearHistorySearchButton?.setOnClickListener {
             viewModel.clearHistoryList()
-//            isHistoryEmpty = true
+            isHistoryEmpty = true
             binding.trackHistory.visibility = View.GONE
         }
 
@@ -143,20 +144,22 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, ncout: Int) {
-                if (s.isNullOrEmpty()) {
-                    binding.editTextwather.setBackgroundColor(getColor(R.color.grey_pale))
-                } else {
+                if (binding.editTextwather.hasFocus() && (s?.isEmpty() == true) && !isHistoryEmpty) {
+                    binding.searchResults.visibility = View.GONE
+                    binding.trackHistory.visibility = View.VISIBLE
+                }
+
+//                } else {
                     textInput = s.toString()
                     viewModel.searchDebounce(textInput)
-
-                }
-                val isFocusedAndEmpty =
-                    if (binding.editTextwather.hasFocus() && s?.isEmpty() == true && isHistoryEmpty) {
-                        View.VISIBLE
-                    }  else  {
-                        View.GONE
-                    }
-                binding.trackHistory?.visibility = isFocusedAndEmpty
+//                }
+//                val isFocusedAndEmpty =
+//                    if (binding.editTextwather.hasFocus() && s?.isEmpty() == true && isHistoryEmpty) {
+//                        View.VISIBLE
+//                    }  else  {
+//                        View.GONE
+//                    }
+//                binding.trackHistory?.visibility = isFocusedAndEmpty
 
                 binding.clearIcon.visibility = clearButtonVisibility(s)
             }

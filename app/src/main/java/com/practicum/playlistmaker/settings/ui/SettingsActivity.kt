@@ -13,7 +13,7 @@ import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
-import com.practicum.playlistmaker.settings.domain.view_model.SettingsViewModel
+import com.practicum.playlistmaker.settings.presentation.view_model.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {
 

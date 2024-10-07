@@ -23,8 +23,10 @@ class MediaPlayerRepositoryImpl(
         return player.currentPosition
     }
 
-    override fun setOnCompleteListener(listener: MediaPlayer.OnCompletionListener) {
-        player.setOnCompletionListener(listener)
+    override fun setOnCompleteListener(listener:() -> Unit) {
+        player.setOnCompletionListener{
+            listener()
+        }
     }
 
     override fun setOnPreparedListener(listener: () -> Unit){

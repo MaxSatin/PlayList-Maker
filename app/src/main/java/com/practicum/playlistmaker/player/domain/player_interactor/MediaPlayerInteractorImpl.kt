@@ -33,7 +33,7 @@ class MediaPlayerInteractorImpl(
         return mediaPlayerRepository.isPlaying()
     }
 
-    override fun setOnCompleteListener(listener: MediaPlayer.OnCompletionListener) {
+    override fun setOnCompleteListener(listener:() -> Unit) {
         mediaPlayerRepository.setOnCompleteListener(listener)
     }
 

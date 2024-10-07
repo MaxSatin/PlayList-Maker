@@ -32,9 +32,9 @@ class PlayerViewModel(
     private val trackItem = loadTrackScreen(trackGson)
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
-    private val playerPreparedLiveData = MutableLiveData<Boolean>(false)
-
-//    private val playStatusLiveData = MutableLiveData<PlayStatus>()
+//    private val playerPreparedLiveData = MutableLiveData<Boolean>(false)
+//
+////    private val playStatusLiveData = MutableLiveData<PlayStatus>()
 
     init {
         showLoading()
@@ -43,8 +43,8 @@ class PlayerViewModel(
     }
 
     fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
-    fun getPlayerPreparedStatusLiveData(): LiveData<Boolean> = playerPreparedLiveData
-//    fun getPlayStatusLiveData(): LiveData<PlayStatus> = playStatusLiveData
+//    fun getPlayerPreparedStatusLiveData(): LiveData<Boolean> = playerPreparedLiveData
+////    fun getPlayStatusLiveData(): LiveData<PlayStatus> = playStatusLiveData
 
     private fun loadTrackScreen(track: String?): Track {
         val trackItem = gson.fromJson<Track>(track, Track::class.java)

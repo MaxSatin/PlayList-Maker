@@ -12,7 +12,7 @@ interface MediaPlayerInteractor {
     fun playerPause()
     fun releasePlayer()
     fun getCurrentPosition(): Int
-    fun setOnCompleteListener(listener: OnCompletionListener)
+    fun setOnCompleteListener(listener:() -> Unit)
     fun isPlaying(): Boolean
 
 }

@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.settings.domain.interactor
 
 interface AppThemeInteractor {
+    fun checkIsDarkThemeOn(): Boolean
     fun setAppTheme()
-    fun isDarkThemeOn(): Boolean
-    fun switchAppTheme(isDarkMode: Boolean)
+    fun switchAppTheme(isDarkModeEnabled: Boolean)
 }

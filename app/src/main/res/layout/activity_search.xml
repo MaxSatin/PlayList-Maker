@@ -55,6 +55,7 @@
             android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textColorHint="@color/grey"
+            android:textCursorDrawable="@drawable/edit_text_cursor"
             android:textSize="@dimen/text_size_16sp" />
 
         <ImageView
@@ -79,7 +80,7 @@
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_gravity="center"
-            android:indeterminateTint="@color/blue"
+            android:indeterminateTint="@color/yp_blue"
             android:visibility="gone" />
 
 

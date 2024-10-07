@@ -39,6 +39,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                app:thumbTint="@color/yp_blue"
+                app:trackTint="@color/yp_blue_light"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </FrameLayout>
