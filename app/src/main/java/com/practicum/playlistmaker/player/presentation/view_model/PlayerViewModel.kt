@@ -32,9 +32,6 @@ class PlayerViewModel(
     private val trackItem = loadTrackScreen(trackGson)
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
-//    private val playerPreparedLiveData = MutableLiveData<Boolean>(false)
-//
-////    private val playStatusLiveData = MutableLiveData<PlayStatus>()
 
     init {
         showLoading()
@@ -43,8 +40,6 @@ class PlayerViewModel(
     }
 
     fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
-//    fun getPlayerPreparedStatusLiveData(): LiveData<Boolean> = playerPreparedLiveData
-////    fun getPlayStatusLiveData(): LiveData<PlayStatus> = playStatusLiveData
 
     private fun loadTrackScreen(track: String?): Track {
         val trackItem = gson.fromJson<Track>(track, Track::class.java)
@@ -60,18 +55,9 @@ class PlayerViewModel(
                 progress =  DateFormatter.timeFormatter.format(0),
                 isPlaying= false)
         )
-//        return playStatus ?:
-//            PlayStatus(false, DateFormatter.timeFormatter.format(0),false)
-
-
-//            null,
-//            DateFormatter.timeFormatter.format(0),
-//            false
-//        )
     }
 
     fun playerController() {
-
         if (playerInteractor.isPlaying()) {
             pausePlayer()
         } else {
@@ -91,7 +77,6 @@ class PlayerViewModel(
         )
     }
 
-
     fun preparePlayer() {
         playerInteractor.preparePlayer(trackItem.previewUrl)
         playerInteractor.setOnPreparedListener {
@@ -100,8 +85,6 @@ class PlayerViewModel(
                 isLoading = false,
                 playStatus = newState.playStatus.copy(isPrepared = true)
             )
-//            playStatus = getCurrentPlayStatus().copy(isPrepared = true)
-//            playerPreparedLiveData.value = true
         }
     }
 
@@ -112,14 +95,7 @@ class PlayerViewModel(
         playerStateLiveData.value = newState.copy(
             playStatus = newState.playStatus.copy(isPlaying = true)
         )
-//        playerStateLiveData.value =
-//            playStatus = getCurrentPlayStatus().copy(isPlaying = true)
-//        playStatusLiveData.value = getCurrentPlayStatus().copy(isPlaying = true)
     }
-
-//    private fun render(state: PlayerState) {
-//        playerStateLiveData.postValue(state)
-//    }
 
     fun pausePlayer() {
         playerInteractor.playerPause()
@@ -129,15 +105,12 @@ class PlayerViewModel(
         playerStateLiveData.value = newState.copy(
             playStatus = newState.playStatus.copy(isPlaying = false)
         )
-//       playStatus = getCurrentPlayStatus().copy(isPlaying = false)
-
     }
 
     private fun showTimeCountDown() {
 
         val newTimerRunnable = object : Runnable {
             override fun run() {
-//                playStatusLiveData.value = getCurrentPlayerModelStatus().copy
                 val newState = getCurrentPlayerState()
                 playerStateLiveData.value = newState.copy(
                     playStatus = newState.playStatus.copy(
@@ -145,12 +118,6 @@ class PlayerViewModel(
                         isPlaying = playerInteractor.isPlaying()
                     )
                 )
-//                playerStateLiveData.value = getCurrentPlayerState().copy(
-//                    playStatus = playStatus!!.copy(
-//                        progress = DateFormatter.timeFormatter.format(playerInteractor.getCurrentPosition()),
-//                        isPlaying = playerInteractor.isPlaying()
-//                    )
-//                )
                 val postTime = SystemClock.uptimeMillis() + TIMER_DELAY
                 handler.postAtTime(
                     this,
@@ -167,8 +134,6 @@ class PlayerViewModel(
         playerInteractor.setOnCompleteListener {
             handler.removeCallbacksAndMessages(TRACK_TIMER_TOKEN)
 
-//            playStatusLiveData.value = getCurrentPlayerModelStatus()
-
             val newState = getCurrentPlayerState()
             playerStateLiveData.value = newState.copy(
                 playStatus = newState.playStatus.copy(
@@ -176,12 +141,6 @@ class PlayerViewModel(
                     progress = DateFormatter.timeFormatter.format(0)
                 )
             )
-//            playerStateLiveData.value = getCurrentPlayerState().copy(
-//                playStatus = playStatus!!.copy(
-//                    isPlaying = false,
-//                    progress = DateFormatter.timeFormatter.format(0)
-//                )
-//            )
         }
     }
 

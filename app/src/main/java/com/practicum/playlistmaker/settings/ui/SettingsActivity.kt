@@ -17,10 +17,7 @@ import com.practicum.playlistmaker.settings.presentation.view_model.SettingsView
 
 class SettingsActivity : AppCompatActivity() {
 
-//    private val appThemeInteractor by lazy { Creator.provideAppThemeInteractor(this) }
-
     private val actionNavigator = Creator.provideActionNavigator()
-
     private val viewModel by viewModels<SettingsViewModel> { SettingsViewModel.getSettingsViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,35 +39,19 @@ class SettingsActivity : AppCompatActivity() {
         viewModel.getIsDarkThemeOnLiveData().observe(this) { isDarkThemeOn ->
             binding.themeSwither.isChecked = isDarkThemeOn
         }
-//        binding.themeSwither.isChecked = appThemeInteractor.isDarkThemeOn()
+
 
         binding.themeSwither.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)
         }
 
         binding.buttonSettingsShare.setOnClickListener {
-//            actionNavigator.share(getString(R.string.ShareAppText))
-//            val messengerIntent = Intent().apply {
-//                action = Intent.ACTION_SEND
-//                putExtra(Intent.EXTRA_TEXT, getString(R.string.ShareAppText))
-//                type = "text/plain"
-//            }
             startActivity(
                 actionNavigator.share(getString(R.string.ShareAppText))
             )
         }
 
         binding.buttonSettingsSupport.setOnClickListener {
-//            val mailIntent = Intent().apply {
-//                action = Intent.ACTION_SENDTO
-//                setData(Uri.parse("mailto:"))
-//                putExtra(
-//                    Intent.EXTRA_EMAIL,
-//                    arrayOf(getString(R.string.practicum_support_mail))
-//                )
-//                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.SupportTextHeader))
-//                putExtra(Intent.EXTRA_TEXT, getString(R.string.SupportTextBody))
-//            }
             startActivity(
                 actionNavigator.callSupport(
                     arrayOf(getString(R.string.practicum_support_mail)),
@@ -81,10 +62,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.buttonSettingsUserAgreement.setOnClickListener {
-//            val browserIntent = Intent().apply {
-//                action = Intent.ACTION_VIEW
-//                setData(Uri.parse(getString(R.string.Offer)))
-//            }
+
             val agreementIntent = actionNavigator.showUserAgrement(getString(R.string.Offer))
             startActivity(agreementIntent)
         }

@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.player.domain.player_interactor
 
-import android.media.MediaPlayer
 
 import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepository
 

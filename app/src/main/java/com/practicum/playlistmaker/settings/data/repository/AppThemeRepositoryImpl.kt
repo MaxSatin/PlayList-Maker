@@ -19,10 +19,6 @@ class AppThemeRepositoryImpl(
         return sharedPrefsAppTheme.getBoolean(IS_DARK_MODE_ON_KEY, false)
     }
 
-//    override fun isDarkThemeOn(): Boolean {
-//        return appThemeRepository.checkIsDarkThemeOn()
-//    }
-
     override fun setAppTheme() {
         AppCompatDelegate.setDefaultNightMode(
             if (isDarkTheme) {

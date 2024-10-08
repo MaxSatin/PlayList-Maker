@@ -76,18 +76,11 @@ class SearchActivity : AppCompatActivity() {
 
         viewModel.observeHistoryState().observe(this) { historyListState ->
 
-//            if (historyListState is State.HistoryListState.Empty){
-//                isHistoryEmpty = true
-//            } else {
-//                isHistoryEmpty = false
-//                    render(historyListState as State.HistoryListState.Content)
-//            }
             when (historyListState) {
                 is State.HistoryListState.Empty -> {
                     isHistoryEmpty = true
                     hideHistory()
                 }
-
                 is State.HistoryListState.Content -> {
                     isHistoryEmpty = false
                     render(historyListState)
@@ -98,7 +91,6 @@ class SearchActivity : AppCompatActivity() {
         viewModel.getShowTrackPlayerTrigger().observe(this) { track ->
             showPlayer(track)
         }
-
 
         binding.clearHistorySearchButton?.setOnClickListener {
             viewModel.clearHistoryList()
@@ -154,29 +146,8 @@ class SearchActivity : AppCompatActivity() {
                 } else {
                     binding.searchResults.visibility = View.GONE
                 }
-
-//                    if(s?.isEmpty() == true){
-//                        binding.nothingFoundPlaceHolder.visibility = View.GONE
-//                        binding.badConnectionPlaceHolder.visibility = View.GONE
-//                        }
-//                    else -> {
-//                        binding.searchResults.visibility = View.GONE
-//                        binding.nothingFoundPlaceHolder.visibility = View.GONE
-//                        binding.badConnectionPlaceHolder.visibility = View.GONE
-//                    }
-
-//                } else {
                 textInput = s.toString()
                 viewModel.searchDebounce(textInput)
-//                }
-//                val isFocusedAndEmpty =
-//                    if (binding.editTextwather.hasFocus() && s?.isEmpty() == true && isHistoryEmpty) {
-//                        View.VISIBLE
-//                    }  else  {
-//                        View.GONE
-//                    }
-//                binding.trackHistory?.visibility = isFocusedAndEmpty
-
                 binding.clearIcon.visibility = clearButtonVisibility(s)
             }
 
@@ -184,7 +155,6 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         binding.editTextwather.addTextChangedListener(editTextWatcher)
-
     }
 
     private fun render(state: State) {

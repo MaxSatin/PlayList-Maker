@@ -63,22 +63,6 @@ class PlayerActivity : AppCompatActivity() {
                 binding.timePlayed.text = playerState.playStatus.progress
             }
         }
-//
-//        viewModel.getPlayerStateLiveData().observe(this) { playerState ->
-//            render(playerState)
-//        }
-//
-//        viewModel.getPlayerPreparedStatusLiveData().observe(this) { isPrepared ->
-//            if (isPrepared == true) {
-//                binding.stopPlayerButton.isEnabled = true
-//                this.isPrepared = true
-//            }
-//        }
-//
-//        viewModel.getPlayStatusLiveData().observe(this) { playStatus ->
-//            changePlayButtonStyle(playStatus)
-//            binding.timePlayed.text = playStatus.progress
-//        }
 
         binding.stopPlayerButton.setOnClickListener {
             viewModel.playerController()
@@ -91,15 +75,8 @@ class PlayerActivity : AppCompatActivity() {
         } else {
             showTrackDetails(state.track)
         }
-//        when (state) {
-//            is PlayerState.Loading ->
-//            is PlayerState.Content -> showTrackDetails(state.track)
-//        }
     }
 
-
-    //    private fun changePlayButtonStyle(state: PlayStatus) {
-//        when (state.isPlaying) {
     private fun changePlayButtonStyle(isPlaying: Boolean) {
         when (isPlaying) {
             true -> binding.stopPlayerButton.isChecked = true
@@ -109,8 +86,6 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun showLoading() {
         binding.loadingOverlay.isVisible = true
-//        binding.poster.isVisible = false
-//        binding.progressbar.isVisible = true
     }
 
     private fun showTrackDetails(trackItem: TrackInfoModel) {

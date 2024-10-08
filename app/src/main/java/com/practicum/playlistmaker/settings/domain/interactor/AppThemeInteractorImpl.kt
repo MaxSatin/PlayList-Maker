@@ -15,26 +15,10 @@ class AppThemeInteractorImpl(
 
     override fun setAppTheme() {
         appThemeRepository.setAppTheme()
-//        AppCompatDelegate.setDefaultNightMode(
-//            if (isDarkTheme) {
-//                AppCompatDelegate.MODE_NIGHT_YES
-//            } else {
-//                AppCompatDelegate.MODE_NIGHT_NO
-//            }
-//        )
     }
 
     override fun switchAppTheme(isDarkModeEnabled: Boolean) {
         appThemeRepository.switchAppTheme(isDarkModeEnabled)
-//        isDarkTheme = isDarkModeEnabled
-//        appThemeRepository.setDarkTheme(isDarkTheme)
-//        AppCompatDelegate.setDefaultNightMode(
-//            if (isDarkModeEnabled) {
-//                AppCompatDelegate.MODE_NIGHT_YES
-//            } else {
-//                AppCompatDelegate.MODE_NIGHT_NO
-//            }
-//        )
     }
 }
 
