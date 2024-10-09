@@ -64,20 +64,20 @@ object Creator {
 //            )
 //        )
 //    }
-//
+
 //    fun provideGetTrackListFromServerUseCase(): GetTrackListFromServerUseCase {
 //        return GetTrackListFromServerUseCase(
 //            provideTrackListRepository()
 //        )
 //    }
 
-    fun provideAppThemeInteractor(context: Context): AppThemeInteractor {
-        return AppThemeInteractorImpl(provideAppThemeRepository(context))
-    }
-
-    private fun provideAppThemeRepository(context: Context): AppThemeRepository {
-        return AppThemeRepositoryImpl(provideSharedPrefsClient(context, APP_THEME))
-    }
+//    fun provideAppThemeInteractor(context: Context): AppThemeInteractor {
+//        return AppThemeInteractorImpl(provideAppThemeRepository(context))
+//    }
+//
+//    private fun provideAppThemeRepository(context: Context): AppThemeRepository {
+//        return AppThemeRepositoryImpl(provideSharedPrefsClient(context, APP_THEME))
+//    }
 
 //    private fun provideTracksHistoryRepository(context: Context): TracksHistoryRepository {
 //        return TracksHistoryRepositoryImpl(
@@ -92,13 +92,13 @@ object Creator {
 //        return TracklistRepositoryImpl(TracklistRetrofitNetworkClient())
 //    }
 
-    private fun provideMediaPlayerRepository(): MediaPlayerRepository {
-        return MediaPlayerRepositoryImpl(MediaPlayer())
-    }
-
-    fun provideMediaPlayerInteractor(): MediaPlayerInteractor {
-        return MediaPlayerInteractorImpl(provideMediaPlayerRepository())
-    }
+//    private fun provideMediaPlayerRepository(): MediaPlayerRepository {
+//        return MediaPlayerRepositoryImpl(MediaPlayer())
+//    }
+//
+//    fun provideMediaPlayerInteractor(): MediaPlayerInteractor {
+//        return MediaPlayerInteractorImpl(provideMediaPlayerRepository())
+//    }
 
     fun provideActionNavigator(): ActionNavigator {
         return ActionNavigatorImpl()

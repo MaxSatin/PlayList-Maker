@@ -18,12 +18,18 @@ import com.practicum.playlistmaker.player.presentation.model.TrackInfoModel
 import com.practicum.playlistmaker.player.presentation.state.PlayStatus
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
 import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel: PlayerViewModel by inject {
+        parametersOf(intent.getStringExtra(TRACK_ITEM_KEY))
+    }
+
     private var isPrepared: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,11 +45,14 @@ class PlayerActivity : AppCompatActivity() {
         }
         binding.stopPlayerButton.isEnabled = false
 
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel
-                .getPlayerViewModelFactory(intent.getStringExtra(TRACK_ITEM_KEY))
-        )[PlayerViewModel::class.java]
+//        viewModel: PlayerViewModel by viewModel {
+//            parametersOf()
+//        }
+//        viewModel = ViewModelProvider(
+//            this,
+//            PlayerViewModel
+//                .getPlayerViewModelFactory(intent.getStringExtra(TRACK_ITEM_KEY))
+//        )[PlayerViewModel::class.java]
 
         binding.playerButtonBack.setOnClickListener {
             finish()

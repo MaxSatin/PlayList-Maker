@@ -11,7 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.Creator.Creator
+import com.google.gson.Gson
+//import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.Creator.GsonProvider
 import com.practicum.playlistmaker.player.domain.player_interactor.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.mapper.DateFormatter
@@ -24,10 +25,11 @@ class PlayerViewModel(
     application: Application,
     trackGson: String?,
     private val playerInteractor: MediaPlayerInteractor,
+    private val gson: Gson
 ) : AndroidViewModel(application) {
 
     private val handler = Handler(Looper.getMainLooper())
-    private val gson = GsonProvider.gson
+//    private val gson = GsonProvider.gson
     private var runnable: Runnable? = null
     private val trackItem = loadTrackScreen(trackGson)
 
@@ -155,17 +157,17 @@ class PlayerViewModel(
         private const val TIMER_DELAY = 50L
         private val TRACK_TIMER_TOKEN = Any()
 
-        fun getPlayerViewModelFactory(trackGson: String?): ViewModelProvider.Factory =
-            viewModelFactory {
-                val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
-                initializer {
-                    PlayerViewModel(
-                        this[APPLICATION_KEY] as Application,
-                        trackGson,
-                        mediaPlayerInteractor,
-                    )
-                }
-            }
+//        fun getPlayerViewModelFactory(trackGson: String?): ViewModelProvider.Factory =
+//            viewModelFactory {
+//                val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
+//                initializer {
+//                    PlayerViewModel(
+//                        this[APPLICATION_KEY] as Application,
+//                        trackGson,
+//                        mediaPlayerInteractor,
+//                    )
+//                }
+//            }
     }
 }
 
