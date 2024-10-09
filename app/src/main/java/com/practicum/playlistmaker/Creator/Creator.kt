@@ -33,43 +33,43 @@ object Creator {
         return SharedPrefsClient(context, key)
     }
 
-    fun provideAddTrackToHistoryUseCase(context: Context): AddTrackToHistoryUseCase {
-        return AddTrackToHistoryUseCase(
-            provideTracksHistoryRepository(
-                context
-            )
-        )
-    }
+//    fun provideAddTrackToHistoryUseCase(context: Context): AddTrackToHistoryUseCase {
+//        return AddTrackToHistoryUseCase(
+//            provideTracksHistoryRepository(
+//                context
+//            )
+//        )
+//    }
+//
+//    fun provideCheckIsHistoryEmptyUseCase(context: Context): CheckIsHistoryEmptyUseCase {
+//        return CheckIsHistoryEmptyUseCase(
+//            provideTracksHistoryRepository(
+//                context
+//            )
+//        )
+//    }
+//
+//    fun provideClearHistoryUseCase(context: Context): ClearHistoryUseCase {
+//        return ClearHistoryUseCase(
+//            provideTracksHistoryRepository(
+//                context
+//            )
+//        )
+//    }
 
-    fun provideCheckIsHistoryEmptyUseCase(context: Context): CheckIsHistoryEmptyUseCase {
-        return CheckIsHistoryEmptyUseCase(
-            provideTracksHistoryRepository(
-                context
-            )
-        )
-    }
-
-    fun provideClearHistoryUseCase(context: Context): ClearHistoryUseCase {
-        return ClearHistoryUseCase(
-            provideTracksHistoryRepository(
-                context
-            )
-        )
-    }
-
-    fun provideGetTrackHistoryFromStorageUseCase(context: Context): GetTrackHistoryFromStorageUseCase {
-        return GetTrackHistoryFromStorageUseCase(
-            provideTracksHistoryRepository(
-                context
-            )
-        )
-    }
-
-    fun provideGetTrackListFromServerUseCase(): GetTrackListFromServerUseCase {
-        return GetTrackListFromServerUseCase(
-            provideTrackListRepository()
-        )
-    }
+//    fun provideGetTrackHistoryFromStorageUseCase(context: Context): GetTrackHistoryFromStorageUseCase {
+//        return GetTrackHistoryFromStorageUseCase(
+//            provideTracksHistoryRepository(
+//                context
+//            )
+//        )
+//    }
+//
+//    fun provideGetTrackListFromServerUseCase(): GetTrackListFromServerUseCase {
+//        return GetTrackListFromServerUseCase(
+//            provideTrackListRepository()
+//        )
+//    }
 
     fun provideAppThemeInteractor(context: Context): AppThemeInteractor {
         return AppThemeInteractorImpl(provideAppThemeRepository(context))
@@ -79,18 +79,18 @@ object Creator {
         return AppThemeRepositoryImpl(provideSharedPrefsClient(context, APP_THEME))
     }
 
-    private fun provideTracksHistoryRepository(context: Context): TracksHistoryRepository {
-        return TracksHistoryRepositoryImpl(
-            provideSharedPrefsClient(
-                context,
-                SHAREDPREFS_TRACKS_HISTORY
-            )
-        )
-    }
+//    private fun provideTracksHistoryRepository(context: Context): TracksHistoryRepository {
+//        return TracksHistoryRepositoryImpl(
+//            provideSharedPrefsClient(
+//                context,
+//                SHAREDPREFS_TRACKS_HISTORY
+//            )
+//        )
+//    }
 
-    private fun provideTrackListRepository(): TrackListRepository {
-        return TracklistRepositoryImpl(TracklistRetrofitNetworkClient())
-    }
+//    private fun provideTrackListRepository(): TrackListRepository {
+//        return TracklistRepositoryImpl(TracklistRetrofitNetworkClient())
+//    }
 
     private fun provideMediaPlayerRepository(): MediaPlayerRepository {
         return MediaPlayerRepositoryImpl(MediaPlayer())

@@ -24,7 +24,7 @@ import com.practicum.playlistmaker.search.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.presentation.state.State
 import com.practicum.playlistmaker.search.presentation.view_model.SearchViewModel
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -32,7 +32,9 @@ class SearchActivity : AppCompatActivity() {
         private const val KEY = "KEY"
     }
 
-    private val viewModel by viewModels<SearchViewModel> { SearchViewModel.getSearchViewModelFactory() }
+//    private val viewModel by viewModels<SearchViewModel> { SearchViewModel.getSearchViewModelFactory() }
+    private val viewModel: SearchViewModel by viewModel()
+
     private lateinit var adapter: TrackAdapter
     private lateinit var trackHistoryAdapter: HistoryRVAdapter
 
