@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -18,9 +19,17 @@ import com.practicum.playlistmaker.player.presentation.model.TrackInfoModel
 import com.practicum.playlistmaker.player.presentation.state.PlayStatus
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
 import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.get
+import org.koin.core.component.KoinScopeComponent
+import org.koin.core.parameter.parametersOf
+import org.koin.java.KoinJavaComponent.getKoin
 
 
 class PlayerActivity : AppCompatActivity() {
+
 
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var viewModel: PlayerViewModel
@@ -30,20 +39,17 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityPlayerBinding.inflate(LayoutInflater.from(this))
-
         setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.playerActivity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        binding.stopPlayerButton.isEnabled = false
 
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel
-                .getPlayerViewModelFactory(intent.getStringExtra(TRACK_ITEM_KEY))
-        )[PlayerViewModel::class.java]
+        val trackGson = intent.getStringExtra(TRACK_ITEM_KEY)
+        viewModel = getViewModel { parametersOf(trackGson) }
+        binding.stopPlayerButton.isEnabled = false
 
         binding.playerButtonBack.setOnClickListener {
             finish()

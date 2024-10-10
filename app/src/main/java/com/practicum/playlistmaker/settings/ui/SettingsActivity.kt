@@ -10,15 +10,18 @@ import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.practicum.playlistmaker.App
-import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.settings.presentation.view_model.SettingsViewModel
+import com.practicum.playlistmaker.sharing.domain.interactor.ActionNavigator
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
-    private val actionNavigator = Creator.provideActionNavigator()
-    private val viewModel by viewModels<SettingsViewModel> { SettingsViewModel.getSettingsViewModelFactory() }
+    private val actionNavigator: ActionNavigator by inject()
+
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -12,36 +12,32 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.Creator.Creator
-import com.practicum.playlistmaker.Creator.GsonProvider
+import com.google.gson.Gson
+//import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.search.domain.consumer.Consumer
 import com.practicum.playlistmaker.search.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.search.domain.track_model.Track
+import com.practicum.playlistmaker.search.domain.tracks_intr.AddTrackToHistoryUseCase
+import com.practicum.playlistmaker.search.domain.tracks_intr.CheckIsHistoryEmptyUseCase
+import com.practicum.playlistmaker.search.domain.tracks_intr.ClearHistoryUseCase
+import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackHistoryFromStorageUseCase
+import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackListFromServerUseCase
 import com.practicum.playlistmaker.search.presentation.state.State
 import com.practicum.playlistmaker.search.presentation.utils.SingleEventLifeData
 
 class SearchViewModel(
     application: Application,
+    private val getTrackList: GetTrackListFromServerUseCase,
+    private val addTrackToHistory: AddTrackToHistoryUseCase,
+    private val clearHistory: ClearHistoryUseCase,
+    private val getTracksHistory: GetTrackHistoryFromStorageUseCase,
+    private val checkIsHistoryEmpty: CheckIsHistoryEmptyUseCase,
+    private val gson: Gson
 ) : AndroidViewModel(application) {
 
-    private val getTrackList = Creator.provideGetTrackListFromServerUseCase()
-    private val addTrackToHistory by lazy { Creator.provideAddTrackToHistoryUseCase(getApplication()) }
-    private val clearHistory by lazy { Creator.provideClearHistoryUseCase(getApplication()) }
-    private val getTracksHistory by lazy {
-        Creator.provideGetTrackHistoryFromStorageUseCase(
-            getApplication()
-        )
-    }
-    private val checkIsHistoryEmpty by lazy {
-        Creator.provideCheckIsHistoryEmptyUseCase(
-            getApplication()
-        )
-    }
     private var isClickAllowed = true
     private var emptyTrackList = emptyList<Track>()
 
-
-    private val gson = GsonProvider.gson
     private val handler = Handler(Looper.getMainLooper())
 
     private val trackList = mutableListOf<Track>()
@@ -108,8 +104,6 @@ class SearchViewModel(
     }
 
     private fun updateHistoryList() {
-//        val currentState = historyStateLiveData.value
-//        if (currentState is State.HistoryListState.Content) {
             historyStateLiveData.value = State.HistoryListState.Content(getTracksHistory())
 
     }
@@ -181,11 +175,6 @@ class SearchViewModel(
     companion object {
         private val SEARCH_REQUEST_TOKEN = Any()
 
-        fun getSearchViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
 
         private const val KEY = "KEY"
         private const val TRACK_ITEM_KEY = "trackItem"
