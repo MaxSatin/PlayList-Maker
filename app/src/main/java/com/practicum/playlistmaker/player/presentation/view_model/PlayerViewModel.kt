@@ -13,7 +13,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.gson.Gson
 //import com.practicum.playlistmaker.Creator.Creator
-import com.practicum.playlistmaker.Creator.GsonProvider
 import com.practicum.playlistmaker.player.domain.player_interactor.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.mapper.DateFormatter
 import com.practicum.playlistmaker.player.presentation.mapper.TrackInfoMapper

@@ -8,7 +8,6 @@ class AppThemeRepositoryImpl(
     private val sharedPrefsAppTheme: SharedPreferences
 ): AppThemeRepository {
 
-//    private val sharedPrefsAppTheme = sharedPrefs.getSharedPrefs()
     private var isDarkTheme = checkIsDarkThemeOn()
 
     override fun setDarkTheme(isDarkTheme: Boolean) {

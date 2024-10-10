@@ -39,12 +39,4 @@ val dataModule = module {
         TracklistRetrofitNetworkClient(get())
     }
 
-//    single <TrackListRepository> {
-//        TracklistRepositoryImpl(get())
-//    }
-//
-//    single <TracksHistoryRepository> {
-//        TracksHistoryRepositoryImpl(get(), get(named("sharedPrefsHistory")))
-//    }
-
 }
