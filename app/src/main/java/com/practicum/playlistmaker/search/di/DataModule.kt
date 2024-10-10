@@ -33,13 +33,6 @@ val dataModule = module {
         )
     }
 
-//    single(named("sharedPrefsAppTheme")) {
-//        androidContext().getSharedPreferences(
-//            "app_theme",
-//            Context.MODE_PRIVATE
-//        )
-//    }
-
     factory { Gson() }
 
     single<TracklistNetworkClient> {

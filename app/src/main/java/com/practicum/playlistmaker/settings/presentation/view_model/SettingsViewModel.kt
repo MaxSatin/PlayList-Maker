@@ -16,8 +16,6 @@ class SettingsViewModel(
     private val appThemeInteractor: AppThemeInteractor
     ) : AndroidViewModel(application) {
 
-//    private val appThemeInteractor: AppThemeInteractor =
-//        Creator.provideAppThemeInteractor(getApplication())
 
     private val isDarkThemeOnLiveData = MutableLiveData<Boolean>()
     fun getIsDarkThemeOnLiveData(): LiveData<Boolean> = isDarkThemeOnLiveData
@@ -31,13 +29,4 @@ class SettingsViewModel(
         isDarkThemeOnLiveData.value = isDarkModeEnabled
     }
 
-//    companion object {
-//        fun getSettingsViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-//            initializer {
-//                SettingsViewModel(
-//                    this[APPLICATION_KEY] as Application,
-//                )
-//            }
-//        }
-//    }
 }

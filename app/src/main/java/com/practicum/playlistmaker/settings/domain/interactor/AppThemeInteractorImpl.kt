@@ -7,7 +7,7 @@ class AppThemeInteractorImpl(
     private val appThemeRepository: AppThemeRepository
 ) : AppThemeInteractor {
 
-    private var isDarkTheme = appThemeRepository.checkIsDarkThemeOn()
+//    private var isDarkTheme = appThemeRepository.checkIsDarkThemeOn()
 
     override fun checkIsDarkThemeOn(): Boolean {
         return appThemeRepository.checkIsDarkThemeOn()

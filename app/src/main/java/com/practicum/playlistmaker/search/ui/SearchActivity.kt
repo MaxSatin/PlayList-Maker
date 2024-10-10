@@ -32,7 +32,6 @@ class SearchActivity : AppCompatActivity() {
         private const val KEY = "KEY"
     }
 
-//    private val viewModel by viewModels<SearchViewModel> { SearchViewModel.getSearchViewModelFactory() }
     private val viewModel: SearchViewModel by viewModel()
 
     private lateinit var adapter: TrackAdapter

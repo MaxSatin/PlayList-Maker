@@ -14,6 +14,7 @@ import com.practicum.playlistmaker.settings.di.themeDataModule
 import com.practicum.playlistmaker.settings.di.themeInteractorModule
 import com.practicum.playlistmaker.settings.di.themeRepositoryModule
 import com.practicum.playlistmaker.settings.domain.interactor.AppThemeInteractor
+import com.practicum.playlistmaker.sharing.di.actionNavigatorModule
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
@@ -32,7 +33,8 @@ class App : Application() {
             androidContext(this@App)
             modules(dataModule, repositoryModule, interactorModule, viewModelModule,
                 playerViewModelModule, playerRepositoryModule, playerInteractorModule,
-                themeDataModule, themeRepositoryModule, themeInteractorModule, settingsViewModelModule)
+                themeDataModule, themeRepositoryModule, themeInteractorModule, settingsViewModelModule,
+                actionNavigatorModule)
         }
         appThemeInteractor.setAppTheme()
     }
