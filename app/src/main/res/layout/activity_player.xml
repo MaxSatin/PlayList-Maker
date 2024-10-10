@@ -5,8 +5,9 @@
     android:id="@+id/playerActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.player.PlayerActivity"
+    tools:context=".player.ui.PlayerActivity"
     style="PlayerTrackBackGround">
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder"
@@ -51,7 +52,9 @@
         app:layout_constraintTop_toBottomOf="@id/buttonBackBarrier"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:srcCompat="@drawable/vector_empty_album_placeholder" />
+        app:srcCompat="@drawable/vector_empty_album_placeholder"
+        android:visibility="visible"/>
+
 
     <TextView
         style="@style/PlayerTrackText"
@@ -300,4 +303,32 @@
         android:ellipsize="end"
         tools:text="Великобритания"/>
 
+    <FrameLayout
+        style="@style/loadingOverlayStyle"
+        android:id="@+id/loadingOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:visibility="visible" />
+        <!--        app:layout_constraintTop_toBottomOf="@id/buttonBackBarrier"-->
+        <!--        app:layout_constraintBottom_toTopOf="@id/bandNameBarrier"-->
+        <!--        app:layout_constraintStart_toStartOf="@id/leftBorder"-->
+        <!--        app:layout_constraintEnd_toStartOf="@id/rightBorder"/>-->
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

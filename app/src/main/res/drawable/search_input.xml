@@ -8,11 +8,18 @@
         </shape>
     </item>
 
-    <item android:state_enabled="true">
+    <item android:state_enabled="true" android:state_focused="false">
         <shape android:shape="rectangle">
             <solid android:color="@color/grey_pale"/>
             <corners android:radius="8dp"/>
         </shape>
+
     </item>
+
+
+
+
+
+
 
 </selector>
