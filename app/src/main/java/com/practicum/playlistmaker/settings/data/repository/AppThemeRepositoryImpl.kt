@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.settings.data.repository
 
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
-import com.practicum.playlistmaker.search.data.storage.SharedPrefsClient
 import com.practicum.playlistmaker.settings.domain.repository.AppThemeRepository
 
 class AppThemeRepositoryImpl(

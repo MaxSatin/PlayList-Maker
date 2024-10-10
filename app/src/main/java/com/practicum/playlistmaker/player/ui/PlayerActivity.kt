@@ -32,8 +32,6 @@ class PlayerActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityPlayerBinding
-//    override val scope by lazy { getKoin().createScope<PlayerActivity>(this)}
-//    private val playerScope = getKoin().createScope<PlayerActivity>("player_scope")
     private lateinit var viewModel: PlayerViewModel
     private var isPrepared: Boolean = false
 
@@ -51,7 +49,6 @@ class PlayerActivity : AppCompatActivity() {
 
         val trackGson = intent.getStringExtra(TRACK_ITEM_KEY)
         viewModel = getViewModel { parametersOf(trackGson) }
-//        viewModel = playerScope.get { parametersOf(trackGson) }
         binding.stopPlayerButton.isEnabled = false
 
         binding.playerButtonBack.setOnClickListener {
@@ -127,11 +124,6 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.pausePlayer()
 
     }
-
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        playerScope.close()
-//    }
 
     companion object {
         private const val TRACK_ITEM_KEY = "trackItem"

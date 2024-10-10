@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.Creator.GsonProvider
-import com.practicum.playlistmaker.search.data.storage.SharedPrefsClient
+
 
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.domain.repository.TracksHistoryRepository
@@ -12,11 +12,7 @@ import com.practicum.playlistmaker.search.domain.repository.TracksHistoryReposit
 class TracksHistoryRepositoryImpl(
     private val gson: Gson,
     private val sharedPrefsHistory: SharedPreferences
-//    private val sharedPrefsHistory: SharedPrefsClient
 ) : TracksHistoryRepository {
-
-//    private val gson = GsonProvider.gson
-//    private val sharedPrefsHistory = sharedPrefs.getSharedPrefs()
 
     override fun saveTracksHistoryToLocalStorage(data: List<Track>) {
         val trackToGson: String = gson.toJson(data)

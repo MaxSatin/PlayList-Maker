@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val playerRepositoryModule = module {
 
-    single <MediaPlayerRepository> {
+    factory <MediaPlayerRepository> {
         MediaPlayerRepositoryImpl(get())
     }
 

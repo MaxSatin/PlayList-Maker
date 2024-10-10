@@ -5,7 +5,7 @@ import android.media.MediaPlayer
 import com.practicum.playlistmaker.search.data.network.TracklistRetrofitNetworkClient
 import com.practicum.playlistmaker.settings.data.repository.AppThemeRepositoryImpl
 import com.practicum.playlistmaker.search.data.repository.TracklistRepositoryImpl
-import com.practicum.playlistmaker.search.data.storage.SharedPrefsClient
+
 import com.practicum.playlistmaker.search.data.storage.impl.TracksHistoryRepositoryImpl
 import com.practicum.playlistmaker.player.domain.repository.MediaPlayerRepository
 import com.practicum.playlistmaker.search.domain.repository.TrackListRepository
@@ -29,9 +29,9 @@ object Creator {
     private const val APP_THEME = "app_theme"
     private const val SHAREDPREFS_TRACKS_HISTORY = "history_track_list_shared_prefs"
 
-    fun provideSharedPrefsClient(context: Context, key: String): SharedPrefsClient {
-        return SharedPrefsClient(context, key)
-    }
+//    fun provideSharedPrefsClient(context: Context, key: String): SharedPrefsClient {
+//        return SharedPrefsClient(context, key)
+//    }
 
 //    fun provideAddTrackToHistoryUseCase(context: Context): AddTrackToHistoryUseCase {
 //        return AddTrackToHistoryUseCase(
