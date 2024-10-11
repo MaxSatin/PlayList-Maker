@@ -26,14 +26,15 @@ val dataModule = module {
             .create(ItunesAPI::class.java)
     }
 
-    single(named("sharedPrefsHistory")) {
+//    single(named("sharedPrefsHistory")) {
+    single {
         androidContext().getSharedPreferences(
             "history_track_list_shared_prefs",
             Context.MODE_PRIVATE
         )
     }
 
-    factory { Gson() }
+    single { Gson() }
 
     single<TracklistNetworkClient> {
         TracklistRetrofitNetworkClient(get())

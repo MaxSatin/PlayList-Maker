@@ -14,9 +14,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
-
-//    private val actionNavigator: ActionRepository by inject()
-
     private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,9 +43,6 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.buttonSettingsShare.setOnClickListener {
             startActivity(viewModel.share(getString(R.string.ShareAppText)))
-//            startActivity(
-//                actionNavigator.share(getString(R.string.ShareAppText))
-//            )
         }
 
         binding.buttonSettingsSupport.setOnClickListener {

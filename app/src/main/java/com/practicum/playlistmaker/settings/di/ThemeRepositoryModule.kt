@@ -12,7 +12,8 @@ import org.koin.dsl.module
 val themeRepositoryModule = module {
 
     single <AppThemeRepository> {
-        AppThemeRepositoryImpl(get(named("sharedPrefsAppTheme")))
+//        AppThemeRepositoryImpl(get(named("sharedPrefsAppTheme")))
+        AppThemeRepositoryImpl(get())
     }
 
 }

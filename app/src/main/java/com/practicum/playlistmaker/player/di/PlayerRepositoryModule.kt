@@ -14,5 +14,5 @@ val playerRepositoryModule = module {
 
     factory { MediaPlayer() }
 
-    factory { Gson() }
+    single { Gson() }
 }

@@ -18,8 +18,11 @@ val repositoryModule = module {
         TracklistRepositoryImpl(get())
     }
 
+//    single <TracksHistoryRepository> {
+//        TracksHistoryRepositoryImpl(get(), get(named("sharedPrefsHistory")))
+//    }
     single <TracksHistoryRepository> {
-        TracksHistoryRepositoryImpl(get(), get(named("sharedPrefsHistory")))
+        TracksHistoryRepositoryImpl(get(), get())
     }
 
 

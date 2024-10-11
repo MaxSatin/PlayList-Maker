@@ -7,7 +7,8 @@ import org.koin.dsl.module
 
 val themeDataModule = module {
 
-    single (named("sharedPrefsAppTheme")){
+//    single (named("sharedPrefsAppTheme")){
+    single {
         androidContext()
             .getSharedPreferences(
                 "app_theme",
