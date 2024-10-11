@@ -1,8 +1,9 @@
 package com.practicum.playlistmaker.sharing.domain.interactor
 
+import android.content.Context
 import android.content.Intent
 
-interface ActionNavigator {
+interface ActionInteractor {
     fun share(text: String): Intent
     fun callSupport(mail: Array<String>, subject: String, text: String): Intent
     fun showUserAgrement(uri: String): Intent

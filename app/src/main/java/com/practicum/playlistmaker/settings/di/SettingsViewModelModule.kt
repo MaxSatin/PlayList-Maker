@@ -9,7 +9,7 @@ import org.koin.dsl.module
 val settingsViewModelModule = module {
     viewModel {
         SettingsViewModel(
-            androidApplication(), get()
+            androidApplication(), get(), get()
         )
     }
 }

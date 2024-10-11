@@ -1,25 +1,21 @@
 package com.practicum.playlistmaker.settings.ui
 
-import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.settings.presentation.view_model.SettingsViewModel
-import com.practicum.playlistmaker.sharing.domain.interactor.ActionNavigator
+import com.practicum.playlistmaker.sharing.domain.repository.ActionRepository
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
-    private val actionNavigator: ActionNavigator by inject()
+//    private val actionNavigator: ActionRepository by inject()
 
     private val viewModel: SettingsViewModel by viewModel()
 
@@ -49,14 +45,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.buttonSettingsShare.setOnClickListener {
-            startActivity(
-                actionNavigator.share(getString(R.string.ShareAppText))
-            )
+            startActivity(viewModel.share(getString(R.string.ShareAppText)))
+//            startActivity(
+//                actionNavigator.share(getString(R.string.ShareAppText))
+//            )
         }
 
         binding.buttonSettingsSupport.setOnClickListener {
             startActivity(
-                actionNavigator.callSupport(
+                viewModel.callSupport(
                     arrayOf(getString(R.string.practicum_support_mail)),
                     getString(R.string.SupportTextHeader),
                     getString(R.string.SupportTextBody)
@@ -65,9 +62,9 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.buttonSettingsUserAgreement.setOnClickListener {
-
-            val agreementIntent = actionNavigator.showUserAgrement(getString(R.string.Offer))
-            startActivity(agreementIntent)
+            startActivity(
+                viewModel.showUserAgrement(getString(R.string.Offer))
+            )
         }
     }
 
