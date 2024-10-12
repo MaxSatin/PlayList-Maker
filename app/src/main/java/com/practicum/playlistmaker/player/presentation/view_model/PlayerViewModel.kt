@@ -7,12 +7,7 @@ import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.gson.Gson
-//import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.player.domain.player_interactor.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.mapper.DateFormatter
 import com.practicum.playlistmaker.player.presentation.mapper.TrackInfoMapper
@@ -28,7 +23,6 @@ class PlayerViewModel(
 ) : AndroidViewModel(application) {
 
     private val handler = Handler(Looper.getMainLooper())
-//    private val gson = GsonProvider.gson
     private var runnable: Runnable? = null
     private val trackItem = loadTrackScreen(trackGson)
 
@@ -135,11 +129,17 @@ class PlayerViewModel(
         playerInteractor.setOnCompleteListener {
             handler.removeCallbacksAndMessages(TRACK_TIMER_TOKEN)
 
-            val newState = getCurrentPlayerState()
-            playerStateLiveData.value = newState.copy(
-                playStatus = newState.playStatus.copy(
-                    isPlaying = false,
+            val onTrackComplete = getCurrentPlayerState()
+            playerStateLiveData.value = onTrackComplete.copy(
+                playStatus = onTrackComplete.playStatus.copy(
                     progress = DateFormatter.timeFormatter.format(0)
+                )
+            )
+
+            val onPlayerComplete = getCurrentPlayerState()
+            playerStateLiveData.value = onPlayerComplete.copy(
+                playStatus = onPlayerComplete.playStatus.copy(
+                    isPlaying = false
                 )
             )
         }
@@ -156,17 +156,6 @@ class PlayerViewModel(
         private const val TIMER_DELAY = 50L
         private val TRACK_TIMER_TOKEN = Any()
 
-//        fun getPlayerViewModelFactory(trackGson: String?): ViewModelProvider.Factory =
-//            viewModelFactory {
-//                val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
-//                initializer {
-//                    PlayerViewModel(
-//                        this[APPLICATION_KEY] as Application,
-//                        trackGson,
-//                        mediaPlayerInteractor,
-//                    )
-//                }
-//            }
     }
 }
 

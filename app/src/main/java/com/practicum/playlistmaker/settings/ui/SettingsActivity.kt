@@ -9,8 +9,6 @@ import androidx.core.view.WindowInsetsCompat
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.settings.presentation.view_model.SettingsViewModel
-import com.practicum.playlistmaker.sharing.domain.repository.ActionRepository
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {

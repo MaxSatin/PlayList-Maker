@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker
 
 import android.app.Application
-//import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.player.di.playerRepositoryModule
 import com.practicum.playlistmaker.player.di.playerInteractorModule
 import com.practicum.playlistmaker.player.di.playerViewModelModule
@@ -22,7 +21,6 @@ import org.koin.core.context.GlobalContext.startKoin
 
 class App : Application() {
 
-//    private val appThemeInteractor by lazy { Creator.provideAppThemeInteractor(this) }
     private val appThemeInteractor: AppThemeInteractor by inject()
 
     override fun onCreate() {

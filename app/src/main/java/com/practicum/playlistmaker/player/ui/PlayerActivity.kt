@@ -5,27 +5,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.presentation.model.TrackInfoModel
-import com.practicum.playlistmaker.player.presentation.state.PlayStatus
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
 import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.android.ext.android.get
-import org.koin.core.component.KoinScopeComponent
 import org.koin.core.parameter.parametersOf
-import org.koin.java.KoinJavaComponent.getKoin
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -34,6 +26,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var viewModel: PlayerViewModel
     private var isPrepared: Boolean = false
+    private var isPreloaded: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,11 +69,15 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun render(state: PlayerState) {
-        if (state.isLoading) {
-            showLoading()
-        } else {
-            showTrackDetails(state.track)
+        when {
+            state.isLoading -> showLoading()
+            !isPreloaded -> showTrackDetails(state.track)
         }
+//        if (state.isLoading) {
+//            showLoading()
+//        } else {
+//            showTrackDetails(state.track)
+//        }
     }
 
     private fun changePlayButtonStyle(isPlaying: Boolean) {
@@ -101,12 +98,13 @@ class PlayerActivity : AppCompatActivity() {
         loadPoster(trackItem)
         binding.songName.text = trackItem.trackName
         binding.bandName.text = trackItem.artistName
-        binding.timePlayed.text = "0:30"
+        binding.timePlayed.text = "00:30"
         binding.tracklengthTime.text = trackItem.trackTimeMillis
         binding.albumTitle.text = trackItem.collectionName
         binding.albumYear.text = trackItem.releaseDate
         binding.trackGenre.text = trackItem.primaryGenreName
         binding.trackCountry.text = trackItem.country
+        isPreloaded = true
     }
 
     private fun loadPoster(trackItem: TrackInfoModel) {

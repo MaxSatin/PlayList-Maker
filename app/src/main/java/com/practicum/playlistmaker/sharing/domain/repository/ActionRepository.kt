@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.sharing.domain.repository
 
-import android.content.Context
 import android.content.Intent
 
 interface ActionRepository {

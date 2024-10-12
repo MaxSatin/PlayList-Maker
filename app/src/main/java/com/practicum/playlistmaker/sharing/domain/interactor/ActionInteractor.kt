@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.sharing.domain.interactor
 
-import android.content.Context
 import android.content.Intent
 
 interface ActionInteractor {

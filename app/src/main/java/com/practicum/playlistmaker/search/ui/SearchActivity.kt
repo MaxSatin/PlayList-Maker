@@ -11,16 +11,11 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.search.domain.consumer.Consumer
-import com.practicum.playlistmaker.search.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.presentation.state.State
 import com.practicum.playlistmaker.search.presentation.view_model.SearchViewModel

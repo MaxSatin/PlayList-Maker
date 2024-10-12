@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.sharing.di
 
-import com.practicum.playlistmaker.sharing.data.repository.ActionRepositoryImpl
 import com.practicum.playlistmaker.sharing.domain.interactor.ActionInteractor
 import com.practicum.playlistmaker.sharing.domain.interactor.ActionInteractorImpl
 import org.koin.dsl.module

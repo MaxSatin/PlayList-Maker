@@ -8,8 +8,3 @@ data class PlayerState(
     val track: TrackInfoModel,
     val playStatus: PlayStatus
 )
-//sealed interface PlayerState {
-//    object Loading : PlayerState
-//    data class Content(val track: TrackInfoModel, val playStatus: PlayStatus) : PlayerState
-////    data class Content(val track: TrackInfoModel): PlayerState
-//}

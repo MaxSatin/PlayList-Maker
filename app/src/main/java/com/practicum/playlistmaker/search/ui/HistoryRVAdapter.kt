@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.TrackItemBinding
 import com.practicum.playlistmaker.search.domain.track_model.Track
 

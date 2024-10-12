@@ -10,7 +10,6 @@ class TracklistRetrofitNetworkClient(
     override fun doTrackRequest(dto: Any?): NetworkResponse {
         return if (dto is TrackListRequest) {
             try {
-//                val response = RetrofitClient.iTunesApi.getSongsList(dto.expression).execute()
                 val response = iTunesApi.getSongsList(dto.expression).execute()
                 val body = response.body() ?: NetworkResponse()
                 return body.apply {
