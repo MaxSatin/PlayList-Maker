@@ -73,11 +73,6 @@ class PlayerActivity : AppCompatActivity() {
             state.isLoading -> showLoading()
             !isPreloaded -> showTrackDetails(state.track)
         }
-//        if (state.isLoading) {
-//            showLoading()
-//        } else {
-//            showTrackDetails(state.track)
-//        }
     }
 
     private fun changePlayButtonStyle(isPlaying: Boolean) {

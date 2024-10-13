@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.settings.presentation.view_model
 
 import android.app.Application
-import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,14 +26,16 @@ class SettingsViewModel(
         isDarkThemeOnLiveData.value = isDarkModeEnabled
     }
 
-    fun share(text: String): Intent {
-        return actionInteractor.share(text)
+    fun share(text: String){
+        actionInteractor.share(text)
     }
-    fun callSupport(mail: Array<String>, subject: String, text: String): Intent{
-        return actionInteractor.callSupport(mail, subject, text)
+
+    fun callSupport(mail: Array<String>, subject: String, text: String) {
+        actionInteractor.callSupport(mail, subject, text)
     }
-    fun showUserAgrement(uri: String): Intent {
-        return actionInteractor.showUserAgrement(uri)
+
+    fun showUserAgreement(uri: String) {
+        actionInteractor.showUserAgrement(uri)
     }
 
 }

@@ -34,29 +34,25 @@ class SettingsActivity : AppCompatActivity() {
             binding.themeSwither.isChecked = isDarkThemeOn
         }
 
-
         binding.themeSwither.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)
         }
 
         binding.buttonSettingsShare.setOnClickListener {
-            startActivity(viewModel.share(getString(R.string.ShareAppText)))
+            viewModel.share(getString(R.string.ShareAppText))
         }
 
         binding.buttonSettingsSupport.setOnClickListener {
-            startActivity(
-                viewModel.callSupport(
-                    arrayOf(getString(R.string.practicum_support_mail)),
-                    getString(R.string.SupportTextHeader),
-                    getString(R.string.SupportTextBody)
-                )
+            viewModel.callSupport(
+                arrayOf(getString(R.string.practicum_support_mail)),
+                getString(R.string.SupportTextHeader),
+                getString(R.string.SupportTextBody),
             )
         }
 
         binding.buttonSettingsUserAgreement.setOnClickListener {
-            startActivity(
-                viewModel.showUserAgrement(getString(R.string.Offer))
-            )
+            viewModel.showUserAgreement(getString(R.string.Offer))
+
         }
     }
 
