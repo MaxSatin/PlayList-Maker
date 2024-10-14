@@ -4,19 +4,15 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.settings.domain.interactor.AppThemeInteractor
+import com.practicum.playlistmaker.sharing.domain.interactor.ActionInteractor
 
 class SettingsViewModel(
     application: Application,
+    private val appThemeInteractor: AppThemeInteractor,
+    private val actionInteractor: ActionInteractor
     ) : AndroidViewModel(application) {
 
-    private val appThemeInteractor: AppThemeInteractor =
-        Creator.provideAppThemeInteractor(getApplication())
 
     private val isDarkThemeOnLiveData = MutableLiveData<Boolean>()
     fun getIsDarkThemeOnLiveData(): LiveData<Boolean> = isDarkThemeOnLiveData
@@ -30,13 +26,16 @@ class SettingsViewModel(
         isDarkThemeOnLiveData.value = isDarkModeEnabled
     }
 
-    companion object {
-        fun getSettingsViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(
-                    this[APPLICATION_KEY] as Application,
-                )
-            }
-        }
+    fun share(text: String){
+        actionInteractor.share(text)
     }
+
+    fun callSupport(mail: Array<String>, subject: String, text: String) {
+        actionInteractor.callSupport(mail, subject, text)
+    }
+
+    fun showUserAgreement(uri: String) {
+        actionInteractor.showUserAgrement(uri)
+    }
+
 }

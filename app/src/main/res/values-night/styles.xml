@@ -140,9 +140,10 @@
     </style>
 
     <style name="PlayerTrackButtonPlay">
-        <item name="android:background">@drawable/play_button_selector_nightmode</item>
-        <item name="iconTint">@color/white</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:background">@drawable/play_button_background_selector_night</item>
+        <item name="android:foreground">@drawable/play_button_image_selector_night</item>
+<!--        <item name="iconTint">@color/white</item>-->
+<!--        <item name="android:foreground">?attr/selectableItemBackground</item>-->
     </style>
 
     <style name="PlayerTrackButtonaAddToTrackList">

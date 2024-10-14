@@ -1,7 +1,5 @@
 package com.practicum.playlistmaker.player.domain.repository
 
-import android.media.MediaPlayer
-import android.media.MediaPlayer.OnCompletionListener
 
 interface MediaPlayerRepository {
     fun preparePlayer(url: String)
