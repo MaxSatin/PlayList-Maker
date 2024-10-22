@@ -8,26 +8,25 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.practicum.playlistmaker.databinding.PlaylistsFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
-import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.FavoriteTracksViewModel
+import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.PlayListsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.practicum.playlistmaker.databinding.FavoriteTracksFragmentBinding
 
-class FavoriteTracksFragment(): Fragment() {
-
+class PlayListsFragment(): Fragment() {
     companion object {
 
-        private const val FAVORITE_TRACKLIST = "favorite_track_list"
+        private const val FAVORITE_TRACKLIST = "playlist"
 
-        fun newInstance(favoriteTracks: List<Track>): FavoriteTracksFragment {
+        fun newInstance(favoriteTracks: List<List<Track>>): FavoriteTracksFragment {
             return FavoriteTracksFragment().apply {
                 arguments = bundleOf(FAVORITE_TRACKLIST to ArrayList(favoriteTracks))
             }
         }
     }
 
-    private val viewModel: FavoriteTracksViewModel by viewModel()
-    private var _binding: FavoriteTracksFragmentBinding? = null
+    private val viewModel: PlayListsViewModel by viewModel()
+    private var _binding: PlaylistsFragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -35,15 +34,15 @@ class FavoriteTracksFragment(): Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FavoriteTracksFragmentBinding.inflate(inflater, container, false)
+        _binding = PlaylistsFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val favoriteTracks: ArrayList<Track>? = arguments?.getSerializable(FAVORITE_TRACKLIST, ArrayList::class.java) as? ArrayList<Track>
-        if (favoriteTracks.isNullOrEmpty()){
+        val playLists: ArrayList<List<Track>>? = arguments?.getSerializable(FAVORITE_TRACKLIST, ArrayList::class.java) as? ArrayList<List<Track>>
+        if (playLists.isNullOrEmpty()){
             TODO()
         }
     }
