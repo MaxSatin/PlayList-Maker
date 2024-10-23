@@ -18,9 +18,9 @@ class PlayListsFragment(): Fragment() {
 
         private const val FAVORITE_TRACKLIST = "playlist"
 
-        fun newInstance(favoriteTracks: List<List<Track>>): FavoriteTracksFragment {
-            return FavoriteTracksFragment().apply {
-                arguments = bundleOf(FAVORITE_TRACKLIST to ArrayList(favoriteTracks))
+        fun newInstance(favoriteTracks: List<List<Track>>?):PlayListsFragment {
+            return PlayListsFragment().apply {
+                arguments = bundleOf(FAVORITE_TRACKLIST to favoriteTracks)
             }
         }
     }
@@ -41,9 +41,5 @@ class PlayListsFragment(): Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val playLists: ArrayList<List<Track>>? = arguments?.getSerializable(FAVORITE_TRACKLIST, ArrayList::class.java) as? ArrayList<List<Track>>
-        if (playLists.isNullOrEmpty()){
-            TODO()
-        }
     }
 }

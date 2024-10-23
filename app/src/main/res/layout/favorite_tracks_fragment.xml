@@ -5,22 +5,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
+        style="@style/SearchActivityNothingFoundImagePH"
         android:id="@+id/emptyLibraryPH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_104"
-        android:src="@drawable/vector_nothing_found_light_mode"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        style="@style/SearchActivityNothingFoundTextPH"
+        style="@style/LibraryNothingFoundTextPH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_16"
         android:text="@string/library_is_empty"
-        android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/emptyLibraryPH"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

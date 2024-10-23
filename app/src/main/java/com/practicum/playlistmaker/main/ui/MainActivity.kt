@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
 
         mediaLibraryButton.setOnClickListener {
-            startActivity(Intent(this, MediaLibraryActivity::class.java))
+            startActivity(Intent(this, com.practicum.playlistmaker.medialibrary.ui.activity.MediaLibraryActivity::class.java))
         }
 
         settingsButton.setOnClickListener {

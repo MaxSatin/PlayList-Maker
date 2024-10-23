@@ -9,8 +9,8 @@ import com.practicum.playlistmaker.medialibrary.ui.fragment.FavoriteTracksFragme
 import com.practicum.playlistmaker.medialibrary.ui.fragment.PlayListsFragment
 
 class MediaLibraryViewPagerAdapter(
-    private val favoriteTrackList: List<Track>,
-    private val playLists: List<List<Track>>,
+    private val favoriteTrackList: List<Track>?,
+    private val playLists: List<List<Track>>?,
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
 

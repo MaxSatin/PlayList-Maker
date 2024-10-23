@@ -2,31 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/MediaLibraryLayoutStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".player.ui.MediaLibraryActivity">
+    tools:context=".medialibrary.ui.activity.MediaLibraryActivity">
 
     <Toolbar
+        style="@style/ToolBarStyle"
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:navigationIcon="@drawable/vector_arrow_back"
         android:title="Медиатека"
-        android:titleTextColor="@color/black"
         android:titleTextAppearance="@style/ToolbarHeader"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
+        style="@style/TabLayoutStyle"
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:tabIndicator="@color/yp_black"
+        android:layout_marginStart="@dimen/padding_16"
+        android:layout_marginEnd="@dimen/padding_16"
+        app:tabMode="fixed"
         app:tabRippleColor="@color/white"
-        app:tabTextColor="@color/yp_black" />
+        app:tabIndicatorFullWidth="true"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

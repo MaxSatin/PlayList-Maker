@@ -17,7 +17,7 @@ class MediaLibraryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMedialibraryBinding
     private val viewModel: MediaLibraryViewModel by viewModel()
-    lateinit var tabLayoutMediator: TabLayoutMediator
+    private lateinit var tabLayoutMediator: TabLayoutMediator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,24 +31,26 @@ class MediaLibraryActivity : AppCompatActivity() {
             insets
         }
 
+        binding.toolBar.setNavigationOnClickListener{
+            finish()
+        }
+
         viewModel.getMediaLibraryStateLiveData().observe(this) { state ->
             binding.viewPager.adapter = MediaLibraryViewPagerAdapter(
-                state.favoriteTracks!!,
-                state.playList!!,
+                state.favoriteTracks,
+                state.playList,
                 supportFragmentManager,
                 lifecycle = lifecycle
             )
             tabLayoutMediator =
                 TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
                     when (position) {
-                        0 -> tab.text = "Постер"
-                        1 -> tab.text = "Детали"
+                        0 -> tab.text = "Избранные треки"
+                        1 -> tab.text = "Плейлисты"
                     }
-                    tabLayoutMediator.attach()
-
                 }
+            tabLayoutMediator.attach()
         }
-
     }
 
     override fun onDestroy() {

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.google.android.material.button.MaterialButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/createPlayListButton"
         style="@style/RefreshButtonStyle"
         android:layout_width="wrap_content"
@@ -12,28 +13,28 @@
         android:layout_marginTop="@dimen/padding_24"
         android:text="@string/new_playlist"
         android:textSize="@dimen/text_size_14sp"
+        app:cornerRadius="@dimen/padding_54"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
+        style="@style/SearchActivityNothingFoundImagePH"
         android:id="@+id/emptyPlaylistPH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_46"
-        android:src="@drawable/vector_nothing_found_light_mode"
         app:layout_constraintTop_toBottomOf="@id/createPlayListButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        style="@style/SearchActivityNothingFoundTextPH"
+        style="@style/LibraryNothingFoundTextPH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_16"
         android:text="@string/playlists_are_empty"
         android:gravity="center"
-        android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/emptyPlaylistPH"
         app:layout_constraintStart_toStartOf="@id/emptyPlaylistPH"
         app:layout_constraintEnd_toEndOf="@id/emptyPlaylistPH"/>

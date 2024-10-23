@@ -19,9 +19,9 @@ class FavoriteTracksFragment(): Fragment() {
 
         private const val FAVORITE_TRACKLIST = "favorite_track_list"
 
-        fun newInstance(favoriteTracks: List<Track>): FavoriteTracksFragment {
+        fun newInstance(favoriteTracks: List<Track>?): FavoriteTracksFragment {
             return FavoriteTracksFragment().apply {
-                arguments = bundleOf(FAVORITE_TRACKLIST to ArrayList(favoriteTracks))
+                arguments = bundleOf(FAVORITE_TRACKLIST to favoriteTracks)
             }
         }
     }
@@ -34,7 +34,7 @@ class FavoriteTracksFragment(): Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FavoriteTracksFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,9 +42,5 @@ class FavoriteTracksFragment(): Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val favoriteTracks: ArrayList<Track>? = arguments?.getSerializable(FAVORITE_TRACKLIST, ArrayList::class.java) as? ArrayList<Track>
-        if (favoriteTracks.isNullOrEmpty()){
-            TODO()
-        }
     }
 }

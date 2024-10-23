@@ -1,6 +1,9 @@
 package com.practicum.playlistmaker
 
 import android.app.Application
+import com.practicum.playlistmaker.medialibrary.di.mediaLibraryDataModule
+import com.practicum.playlistmaker.medialibrary.di.mediaLibraryInteractorModule
+import com.practicum.playlistmaker.medialibrary.di.mediaLibraryViewModelModule
 import com.practicum.playlistmaker.player.di.playerRepositoryModule
 import com.practicum.playlistmaker.player.di.playerInteractorModule
 import com.practicum.playlistmaker.player.di.playerViewModelModule
@@ -31,7 +34,8 @@ class App : Application() {
             modules(dataModule, repositoryModule, interactorModule, viewModelModule,
                 playerViewModelModule, playerRepositoryModule, playerInteractorModule,
                 themeDataModule, themeRepositoryModule, themeInteractorModule, settingsViewModelModule,
-                actionRepositoryModule, actionInteractorModule)
+                actionRepositoryModule, actionInteractorModule, mediaLibraryViewModelModule, mediaLibraryInteractorModule,
+                mediaLibraryDataModule)
         }
         appThemeInteractor.setAppTheme()
     }
