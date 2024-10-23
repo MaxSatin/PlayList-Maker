@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
 import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.FavoriteTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.practicum.playlistmaker.databinding.FavoriteTracksFragmentBinding
 
-class FavoriteTracksFragment(): Fragment() {
+class FavoriteTracksFragment() : Fragment() {
 
     companion object {
 
@@ -33,14 +34,29 @@ class FavoriteTracksFragment(): Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FavoriteTracksFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val favorites =
+                arguments?.getParcelable(FAVORITE_TRACKLIST, ArrayList::class.java) as List<Track>
+            if (favorites.isNullOrEmpty()) {
+                binding.emptyLibraryPH.isVisible = true
+            }
+        }
+        else {
+            val favorites = arguments?.getParcelableArrayList<Track>(FAVORITE_TRACKLIST)
+            if (favorites.isNullOrEmpty()) {
+                if (favorites.isNullOrEmpty()) {
+                    binding.emptyLibraryPH.isVisible = true
+                }
+            }
+        }
     }
 }
