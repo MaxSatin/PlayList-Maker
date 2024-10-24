@@ -15,7 +15,6 @@ class MediaLibraryViewModel(
     fun getMediaLibraryStateLiveData(): LiveData<State> = mediaLibraryStateLiveData
 
     init{
-//        showLoading()
         showContent()
     }
 
@@ -25,12 +24,6 @@ class MediaLibraryViewModel(
             playList = emptyList()
         )
     }
-
-//    private fun showLoading() {
-//        favoriteTrackListLiveData.value = getCurrentMediaLibraryState().copy(
-//            isLoading = true
-//        )
-//    }
 
     private fun showContent() {
         mediaLibraryStateLiveData.value = getCurrentMediaLibraryState().copy(
