@@ -22,9 +22,6 @@
             android:name=".player.ui.PlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".player.ui.MediaLibraryActivity"
-            android:exported="false" />
-        <activity
             android:name=".search.ui.SearchActivity"
             android:exported="false" />
         <activity

@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityMedialibraryBinding
+import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
 import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.MediaLibraryViewModel
 import com.practicum.playlistmaker.medialibrary.ui.viewpager.MediaLibraryViewPagerAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,6 +19,7 @@ class MediaLibraryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMedialibraryBinding
     private val viewModel: MediaLibraryViewModel by viewModel()
     private lateinit var tabLayoutMediator: TabLayoutMediator
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +33,7 @@ class MediaLibraryActivity : AppCompatActivity() {
             insets
         }
 
-        binding.toolBar.setNavigationOnClickListener{
+        binding.toolBar.setNavigationOnClickListener {
             finish()
         }
 
@@ -45,8 +47,8 @@ class MediaLibraryActivity : AppCompatActivity() {
             tabLayoutMediator =
                 TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
                     when (position) {
-                        0 -> tab.text = "Избранные треки"
-                        1 -> tab.text = "Плейлисты"
+                        0 -> tab.text = getString(R.string.favorite_tracks)
+                        1 -> tab.text = getString(R.string.playlists)
                     }
                 }
             tabLayoutMediator.attach()
@@ -54,7 +56,8 @@ class MediaLibraryActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         tabLayoutMediator.detach()
+        super.onDestroy()
+
     }
 }

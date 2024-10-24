@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.medialibrary.ui.fragment
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,21 +28,15 @@ class PlayListsFragment() : Fragment() {
 
             favoriteTracks?.forEach { trackList ->
                 sizes.add(trackList.size)
+
                 flatList.addAll(trackList)
             }
-
             return PlayListsFragment().apply {
-                arguments = bundleOf(KEY_TRACKS to flatList)
-                arguments = bundleOf(KEY_SIZES to sizes)
+                arguments = bundleOf(
+                    KEY_TRACKS to ArrayList(flatList),
+                    KEY_SIZES to ArrayList(sizes)
+                )
             }
-//            val arrayList = ArrayList<List<Track>>()
-//            favoriteTracks?.forEach { trackList ->
-//                arrayList.add(ArrayList(trackList))
-//            }
-//            return PlayListsFragment().apply {
-//
-//                arguments = bundleOf(PLAY_LIST to arrayList)
-//            }
         }
     }
 
@@ -62,14 +57,17 @@ class PlayListsFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val favorites =
-                arguments?.getParcelable(PLAY_LIST, ArrayList::class.java) as List<List<Track>>
+            // получаем flatList отедельно и передаем в параметр getTrackList, чтобы использовать
+            // соответствующие методы для соответствующих версий Android
+            val flatList =
+                arguments?.getParcelable(KEY_TRACKS, ArrayList::class.java) as ArrayList<Track>
+            val favorites = getTrackListList(arguments, flatList)
             if (favorites.isNullOrEmpty()) {
                 binding.emptyPlayListsPH.isVisible = true
             }
-        }
-        else {
-            val favorites = getTrackListList(arguments)
+        } else {
+            val flatList = arguments?.getParcelableArrayList<Track>(KEY_TRACKS)
+            val favorites = getTrackListList(arguments, flatList)
             if (favorites.isNullOrEmpty()) {
                 if (favorites.isNullOrEmpty()) {
                     binding.emptyPlayListsPH.isVisible = true
@@ -78,8 +76,10 @@ class PlayListsFragment() : Fragment() {
         }
     }
 
-    private fun getTrackListList(arguments: Bundle?): List<List<Track>>? {
-        val flatList = arguments?.getParcelableArrayList<Track>(KEY_TRACKS)
+    private fun getTrackListList(
+        arguments: Bundle?,
+        flatList: ArrayList<Track>?,
+    ): List<List<Track>>? {
         val sizes = arguments?.getIntegerArrayList(KEY_SIZES)
 
         if (flatList == null || sizes == null) return null

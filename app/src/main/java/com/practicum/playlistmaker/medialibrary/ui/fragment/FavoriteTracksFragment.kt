@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.medialibrary.ui.fragment
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,8 @@ class FavoriteTracksFragment() : Fragment() {
 
         fun newInstance(favoriteTracks: List<Track>?): FavoriteTracksFragment {
             return FavoriteTracksFragment().apply {
-                arguments = bundleOf(FAVORITE_TRACKLIST to favoriteTracks)
+                arguments = bundleOf(FAVORITE_TRACKLIST to ArrayList(favoriteTracks))
+//                Log.d("favoritesFragmentNewInstance", "$favoriteTracks")
             }
         }
     }
@@ -52,6 +54,7 @@ class FavoriteTracksFragment() : Fragment() {
         }
         else {
             val favorites = arguments?.getParcelableArrayList<Track>(FAVORITE_TRACKLIST)
+            Log.d("favoritevalue", "$favorites")
             if (favorites.isNullOrEmpty()) {
                 if (favorites.isNullOrEmpty()) {
                     binding.emptyLibraryPH.isVisible = true
