@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/emptyPlayListsPH"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="gone">
+
+    <com.google.android.material.button.MaterialButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/createPlayListButton"
+        style="@style/RefreshButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_24"
+        android:text="@string/new_playlist"
+        android:textSize="@dimen/text_size_14sp"
+        app:cornerRadius="@dimen/padding_54"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        style="@style/SearchActivityNothingFoundImagePH"
+        android:id="@+id/emptyPlaylistImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_46"
+        app:layout_constraintTop_toBottomOf="@id/createPlayListButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        style="@style/LibraryNothingFoundTextPH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_16"
+        android:text="@string/playlists_are_empty"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/emptyPlaylistImg"
+        app:layout_constraintStart_toStartOf="@id/emptyPlaylistImg"
+        app:layout_constraintEnd_toEndOf="@id/emptyPlaylistImg"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

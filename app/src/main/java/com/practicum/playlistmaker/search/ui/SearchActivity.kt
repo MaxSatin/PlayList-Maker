@@ -21,7 +21,7 @@ import com.practicum.playlistmaker.search.presentation.state.State
 import com.practicum.playlistmaker.search.presentation.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class   SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY = "KEY"
