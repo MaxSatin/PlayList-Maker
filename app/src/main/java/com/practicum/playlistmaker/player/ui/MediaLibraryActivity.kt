@@ -7,6 +7,6 @@ import com.practicum.playlistmaker.R
 class MediaLibraryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_medialibrary)
+        setContentView(R.layout.medialibrary_fragment)
     }
 }
