@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.medialibrary.domain.track_model
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.io.Serializable
 
 data class Track(
     val trackId: String,

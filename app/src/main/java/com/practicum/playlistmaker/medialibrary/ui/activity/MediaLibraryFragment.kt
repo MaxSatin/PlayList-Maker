@@ -58,39 +58,3 @@ class MediaLibraryFragment : Fragment() {
 }
 
 
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
-//        binding = ActivityMedialibraryBinding.inflate(LayoutInflater.from(this))
-//        setContentView(binding.root)
-//
-//        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
-//
-//        binding.toolBar.setNavigationOnClickListener {
-//            finish()
-//        }
-//
-//        viewModel.getMediaLibraryStateLiveData().observe(this) { state ->
-//            binding.viewPager.adapter = MediaLibraryViewPagerAdapter(
-//                state.favoriteTracks,
-//                state.playList,
-//                supportFragmentManager,
-//                lifecycle = lifecycle
-//            )
-//            tabLayoutMediator =
-//                TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-//                    when (position) {
-//                        0 -> tab.text = getString(R.string.favorite_tracks)
-//                        1 -> tab.text = getString(R.string.playlists)
-//                    }
-//                }
-//            tabLayoutMediator.attach()
-//        }
-//    }
-
-
