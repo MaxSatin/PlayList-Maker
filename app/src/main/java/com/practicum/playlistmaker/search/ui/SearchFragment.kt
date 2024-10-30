@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.FocusFinder
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +17,13 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.SearchFragmentBinding
+import com.practicum.playlistmaker.main.ui.RootActivity
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.presentation.state.State
 import com.practicum.playlistmaker.search.presentation.view_model.SearchViewModel
@@ -42,7 +45,7 @@ class SearchFragment : Fragment() {
     private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var editTextWatcher: TextWatcher
+    private var editTextWatcher: TextWatcher? = null
 
     private var textInput = ""
 
@@ -52,17 +55,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = SearchFragmentBinding.inflate(inflater, container, false)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
-            val bottom = if (ime.bottom > 0) {
-                ime.bottom
-            } else {
-                systemBars.bottom
-            }
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, bottom)
-            insets
-        }
+
         return binding.root
     }
 
@@ -78,6 +71,7 @@ class SearchFragment : Fragment() {
 
         viewModel.observeTrackSearchState().observe(viewLifecycleOwner) { trackListState ->
             render(trackListState)
+            Log.d("trackListState", "$trackListState")
         }
 
         viewModel.observeHistoryState().observe(viewLifecycleOwner) { historyListState ->
@@ -125,6 +119,7 @@ class SearchFragment : Fragment() {
 
             binding.trackHistory?.visibility =
                 if (hasFocus && binding.editTextwatcher.text.isEmpty() && !isHistoryEmpty) View.VISIBLE else View.GONE
+
         }
 
         binding.editTextwatcher.setOnEditorActionListener { v, actionId, event ->

@@ -24,11 +24,6 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         _binding = SettingsFragmentBinding.inflate(inflater, container, false)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
         return binding.root
     }
 

@@ -6,7 +6,7 @@
     app:startDestination="@+id/mediaLibraryFragment">
 
     <activity
-        android:id="@+id/playerActivity2"
+        android:id="@+id/playerActivity"
         android:name="com.practicum.playlistmaker.player.ui.PlayerActivity"
         android:label="activity_player"
         tools:layout="@layout/activity_player" />
@@ -21,8 +21,8 @@
         android:label="search_fragment"
         tools:layout="@layout/search_fragment" >
         <action
-            android:id="@+id/action_searchFragment_to_playerActivity2"
-            app:destination="@id/playerActivity2" />
+            android:id="@+id/action_searchFragment_to_playerActivity"
+            app:destination="@id/playerActivity" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
