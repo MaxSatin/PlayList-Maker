@@ -15,27 +15,6 @@
         android:title="@string/search"
         android:titleTextAppearance="@style/ToolbarHeader"/>
 
-<!--    <FrameLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="56dp">-->
-
-<!--        <FrameLayout style="@style/InnerActivityHeaderFrameLayout" />-->
-
-<!--        <TextView-->
-<!--            style="@style/TitleTextStyle"-->
-<!--            android:layout_marginLeft="52dp"-->
-<!--            android:layout_marginTop="@dimen/padding_16"-->
-<!--            android:layout_marginRight="100dp"-->
-<!--            android:text="@string/search" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/buttonSearchBack"-->
-<!--            style="@style/SettingsActivityButtonBack"-->
-<!--            android:layout_gravity="start"-->
-<!--            app:icon="@drawable/vector_arrow_back"-->
-<!--            app:iconGravity="textStart" />-->
-<!--    </FrameLayout>-->
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"

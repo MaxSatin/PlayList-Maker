@@ -38,17 +38,6 @@ class RootActivity : AppCompatActivity() {
         val bottomNavigationView = binding.bottomNavigationView
         bottomNavigationView.setupWithNavController(navHostController)
 
-        navHostController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.searchFragment -> {
-                    bottomNavigationView.isVisible = false
-                    binding.shadowView.isVisible = false
-
-                }
-                else -> bottomNavigationView.isVisible = true
-            }
-
-        }
     }
 }
 

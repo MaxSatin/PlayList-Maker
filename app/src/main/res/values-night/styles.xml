@@ -207,9 +207,11 @@
     </style>
 
 
-    <style name="BottomNavigationStyle">
+    <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView" >
         <item name="itemTextColor">@color/nav_item_color_night</item>
         <item name="itemIconTint">@color/nav_item_color_night</item>
+
+        <item name="backgroundTint">@color/yp_black</item>
 
         <item name="itemTextAppearanceActive">@style/BottomNavTextAppearance</item>
         <item name="itemTextAppearanceInactive">@style/BottomNavTextAppearance</item>
@@ -219,6 +221,7 @@
     <style name="BottomNavTextAppearance">
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">12sp</item>
+        <item name="android:fontWeight">400</item>
     </style>
 
 </resources>

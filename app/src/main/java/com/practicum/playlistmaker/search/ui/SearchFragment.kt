@@ -229,6 +229,7 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         editTextWatcher?.let { binding.editTextwatcher.removeTextChangedListener(it) }
+        _binding = null
     }
 
 }

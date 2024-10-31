@@ -33,6 +33,8 @@
         style="@style/BottomNavigationStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:itemBackground="@android:color/transparent"
+        app:itemRippleColor="@android:color/transparent"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,21 +45,4 @@
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--        <Button style="@style/MainActivityButtonStyle"-->
-<!--            android:id="@+id/buttonSearchMainActivity"-->
-<!--            android:text="@string/search"-->
-<!--            app:icon="@drawable/vector_search"-->
-<!--            app:iconGravity="textStart"/>-->
-
-<!--        <Button style="@style/MainActivityButtonStyle"-->
-<!--            android:id="@+id/buttonMediaLibraryMainActivity"-->
-<!--            android:text="@string/mediateka"-->
-<!--            app:icon="@drawable/vector_mediateka"-->
-<!--            app:iconGravity="textStart"/>-->
-
-<!--        <Button style="@style/MainActivityButtonStyle"-->
-<!--            android:id="@+id/buttonSettingsMainActivity"-->
-<!--            android:text="@string/settings"-->
-<!--            app:icon="@drawable/vector_settings"-->
-<!--            app:iconGravity="textStart"/>-->
 
