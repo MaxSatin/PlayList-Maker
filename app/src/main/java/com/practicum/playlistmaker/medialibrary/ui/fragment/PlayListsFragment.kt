@@ -94,5 +94,10 @@ class PlayListsFragment() : Fragment() {
         }
         return trackLists
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
 

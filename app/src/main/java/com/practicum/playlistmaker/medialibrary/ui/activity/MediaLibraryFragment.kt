@@ -2,46 +2,42 @@ package com.practicum.playlistmaker.medialibrary.ui.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivityMedialibraryBinding
-import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
+import com.practicum.playlistmaker.databinding.MedialibraryFragmentBinding
 import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.MediaLibraryViewModel
 import com.practicum.playlistmaker.medialibrary.ui.viewpager.MediaLibraryViewPagerAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MediaLibraryActivity : AppCompatActivity() {
+class MediaLibraryFragment : Fragment() {
 
-    private lateinit var binding: ActivityMedialibraryBinding
+    private var _binding: MedialibraryFragmentBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: MediaLibraryViewModel by viewModel()
     private lateinit var tabLayoutMediator: TabLayoutMediator
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = MedialibraryFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = ActivityMedialibraryBinding.inflate(LayoutInflater.from(this))
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-        binding.toolBar.setNavigationOnClickListener {
-            finish()
-        }
-
-        viewModel.getMediaLibraryStateLiveData().observe(this) { state ->
+        viewModel.getMediaLibraryStateLiveData().observe(viewLifecycleOwner) { state ->
             binding.viewPager.adapter = MediaLibraryViewPagerAdapter(
                 state.favoriteTracks,
                 state.playList,
-                supportFragmentManager,
+                parentFragmentManager,
                 lifecycle = lifecycle
             )
             tabLayoutMediator =
@@ -55,9 +51,11 @@ class MediaLibraryActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
+        super.onDestroyView()
         tabLayoutMediator.detach()
-        super.onDestroy()
-
+        _binding = null
     }
 }
+
+

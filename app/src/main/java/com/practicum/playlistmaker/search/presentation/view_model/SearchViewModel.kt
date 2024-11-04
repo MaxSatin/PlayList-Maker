@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -147,6 +148,7 @@ class SearchViewModel(
                                 renderState(State.SearchListState.Empty("По запросу ничего не нашлось"))
                             } else {
                                 renderState(State.SearchListState.Content(data.value))
+                                Log.d("trackListViewModel", "${renderState(State.SearchListState.Content(data.value))}")
                             }
                         }
                     }

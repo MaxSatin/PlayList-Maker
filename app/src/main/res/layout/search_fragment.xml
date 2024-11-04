@@ -4,28 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/searchActivity"
     style="@style/InnerActivityLayoutStyle"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".search.ui.SearchFragment">
 
-    <FrameLayout
+    <Toolbar
+        style="@style/ToolBarStyle"
+        android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
-
-        <FrameLayout style="@style/InnerActivityHeaderFrameLayout" />
-
-        <TextView
-            style="@style/TitleTextStyle"
-            android:layout_marginLeft="52dp"
-            android:layout_marginTop="@dimen/padding_16"
-            android:layout_marginRight="100dp"
-            android:text="@string/search" />
-
-        <Button
-            android:id="@+id/buttonSearchBack"
-            style="@style/SettingsActivityButtonBack"
-            android:layout_gravity="start"
-            app:icon="@drawable/vector_arrow_back"
-            app:iconGravity="textStart" />
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:title="@string/search"
+        android:titleTextAppearance="@style/ToolbarHeader"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -37,7 +25,7 @@
         android:paddingBottom="@dimen/padding_8">
 
         <EditText
-            android:id="@+id/editTextwather"
+            android:id="@+id/editTextwatcher"
             style="@style/SearchActivityTextInput"
             android:layout_width="match_parent"
             android:layout_height="36dp"
@@ -101,10 +89,10 @@
             android:visibility="gone">
 
             <ImageView
+                style="@style/SearchActivityNothingFoundImagePH"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/vector_nothing_found_light_mode" />
+                android:layout_gravity="center_horizontal" />
 
             <TextView
                 style="@style/SearchActivityNothingFoundTextPH"
@@ -127,10 +115,10 @@
             android:visibility="gone">
 
             <ImageView
+                style="@style/SearchActivityBadConnectionImagePH"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/vector_connection_error_light_mode" />
+                android:layout_gravity="center_horizontal" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

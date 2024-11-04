@@ -1,27 +1,24 @@
 package com.practicum.playlistmaker.search.ui
-
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import com.practicum.playlistmaker.player.ui.PlayerActivity
-import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.databinding.SearchFragmentBinding
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.presentation.state.State
 import com.practicum.playlistmaker.search.presentation.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class   SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
     companion object {
         private const val KEY = "KEY"
@@ -34,43 +31,39 @@ class   SearchActivity : AppCompatActivity() {
 
     private var isHistoryEmpty: Boolean = false
 
-    lateinit var binding: ActivitySearchBinding
+    private var _binding: SearchFragmentBinding? = null
+    private val binding get() = _binding!!
+
+    private var editTextWatcher: TextWatcher? = null
+
     private var textInput = ""
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = SearchFragmentBinding.inflate(inflater, container, false)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
-        setContentView(binding.root)
-        enableEdgeToEdge()
+        return binding.root
+    }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         adapter = TrackAdapter(viewModel::showTrackPlayer)
         trackHistoryAdapter = HistoryRVAdapter(viewModel::showTrackPlayer)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.searchActivity)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
-            val bottom = if (ime.bottom > 0) {
-                ime.bottom
-            } else {
-                systemBars.bottom
-            }
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, bottom)
-            insets
-        }
-
         val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
         binding.recyclerSearch.adapter = adapter
         binding.trackHistoryRV?.adapter = trackHistoryAdapter
 
-        viewModel.observeTrackSearchState().observe(this) { trackListState ->
+        viewModel.observeTrackSearchState().observe(viewLifecycleOwner) { trackListState ->
             render(trackListState)
+            Log.d("trackListState", "$trackListState")
         }
 
-        viewModel.observeHistoryState().observe(this) { historyListState ->
+        viewModel.observeHistoryState().observe(viewLifecycleOwner) { historyListState ->
 
             when (historyListState) {
                 is State.HistoryListState.Empty -> {
@@ -84,7 +77,7 @@ class   SearchActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getShowTrackPlayerTrigger().observe(this) { track ->
+        viewModel.getShowTrackPlayerTrigger().observe(viewLifecycleOwner) { track ->
             showPlayer(track)
         }
 
@@ -94,11 +87,9 @@ class   SearchActivity : AppCompatActivity() {
             binding.trackHistory.visibility = View.GONE
         }
 
-        binding.buttonSearchBack.setOnClickListener {
-            finish()
-        }
+
         binding.clearIcon.setOnClickListener {
-            binding.editTextwather.setText("")
+            binding.editTextwatcher.setText("")
             binding.searchResults.visibility = View.GONE
             if (isHistoryEmpty == true) {
                 binding.trackHistory?.visibility = View.GONE
@@ -106,20 +97,21 @@ class   SearchActivity : AppCompatActivity() {
                 binding.trackHistory?.visibility = View.VISIBLE
             }
 
-            inputMethodManager?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+            inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0)
         }
 
         binding.refreshSearchButton.setOnClickListener {
             viewModel.searchTracks(textInput)
         }
 
-        binding.editTextwather.setOnFocusChangeListener { view, hasFocus ->
+        binding.editTextwatcher.setOnFocusChangeListener { view, hasFocus ->
 
             binding.trackHistory?.visibility =
-                if (hasFocus && binding.editTextwather.text.isEmpty() && !isHistoryEmpty) View.VISIBLE else View.GONE
+                if (hasFocus && binding.editTextwatcher.text.isEmpty() && !isHistoryEmpty) View.VISIBLE else View.GONE
+
         }
 
-        binding.editTextwather.setOnEditorActionListener { v, actionId, event ->
+        binding.editTextwatcher.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.searchTracks(textInput)
                 true
@@ -134,7 +126,7 @@ class   SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, ncout: Int) {
 
-                if (binding.editTextwather.hasFocus() && (s?.isEmpty() == true) && !isHistoryEmpty) {
+                if (binding.editTextwatcher.hasFocus() && (s?.isEmpty() == true) && !isHistoryEmpty) {
                     binding.searchResults.visibility = View.GONE
                     binding.nothingFoundPlaceHolder.visibility = View.GONE
                     binding.badConnectionPlaceHolder.visibility = View.GONE
@@ -150,7 +142,8 @@ class   SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
             }
         }
-        binding.editTextwather.addTextChangedListener(editTextWatcher)
+        binding.editTextwatcher.addTextChangedListener(editTextWatcher)
+
     }
 
     private fun render(state: State) {
@@ -192,7 +185,7 @@ class   SearchActivity : AppCompatActivity() {
     }
 
     private fun showPlayer(trackGson: String) {
-        PlayerActivity.show(this, trackGson)
+        PlayerActivity.show(requireContext(), trackGson)
     }
 
 
@@ -207,8 +200,7 @@ class   SearchActivity : AppCompatActivity() {
     }
 
     private fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        onBackPressedDispatcher.onBackPressed()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showErrorBadConnection() {
@@ -234,9 +226,10 @@ class   SearchActivity : AppCompatActivity() {
         outState.putString(KEY, textInput)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        textInput = savedInstanceState.getString(KEY, textInput)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        editTextWatcher?.let { binding.editTextwatcher.removeTextChangedListener(it) }
+        _binding = null
     }
 
 }
