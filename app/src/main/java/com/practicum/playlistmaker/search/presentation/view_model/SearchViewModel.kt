@@ -11,6 +11,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.gson.Gson
@@ -25,6 +26,9 @@ import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackHistoryFrom
 import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackListFromServerUseCase
 import com.practicum.playlistmaker.search.presentation.state.State
 import com.practicum.playlistmaker.search.presentation.utils.SingleEventLifeData
+import com.practicum.playlistmaker.search.presentation.utils.debounce
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     application: Application,
@@ -33,13 +37,24 @@ class SearchViewModel(
     private val clearHistory: ClearHistoryUseCase,
     private val getTracksHistory: GetTrackHistoryFromStorageUseCase,
     private val checkIsHistoryEmpty: CheckIsHistoryEmptyUseCase,
-    private val gson: Gson
+    private val gson: Gson,
 ) : AndroidViewModel(application) {
 
     private var isClickAllowed = true
     private var emptyTrackList = emptyList<Track>()
 
     private val handler = Handler(Looper.getMainLooper())
+
+    private val debounceSearch = debounce<String>(
+        SEARCH_DEBOUNCE_DELAY,
+        viewModelScope,
+        true
+    )
+    { query ->
+        searchTracks(query)
+    }
+
+    private var searchJob: Job? = null
 
     private val trackList = mutableListOf<Track>()
     private var latestSearchedText: String? = null
@@ -105,7 +120,7 @@ class SearchViewModel(
     }
 
     private fun updateHistoryList() {
-            historyStateLiveData.value = State.HistoryListState.Content(getTracksHistory())
+        historyStateLiveData.value = State.HistoryListState.Content(getTracksHistory())
 
     }
 
@@ -115,14 +130,15 @@ class SearchViewModel(
         }
 
         this.latestSearchedText = changedText
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-        val searchRunnable = Runnable { searchTracks(changedText) }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handler.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime
-        )
+        debounceSearch(changedText)
+//        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+//        val searchRunnable = Runnable { searchTracks(changedText) }
+//        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
+//        handler.postAtTime(
+//            searchRunnable,
+//            SEARCH_REQUEST_TOKEN,
+//            postTime
+//        )
     }
 
     fun searchTracks(query: String) {
@@ -131,30 +147,61 @@ class SearchViewModel(
                 State.SearchListState.Loading
             )
         }
-        getTrackList(
-            expression = query,
-            consumer = object : Consumer<List<Track>> {
-                override fun consume(data: ConsumerData<List<Track>>) {
-                    when (data) {
-                        is ConsumerData.Error -> renderState(State.SearchListState.Error(data.message))
-                        is ConsumerData.NoConnection -> renderState(
-                            State.SearchListState.NoConnection(
-                                data.message
-                            )
-                        )
 
-                        is ConsumerData.Data -> {
-                            if (data.value.isNullOrEmpty()) {
-                                renderState(State.SearchListState.Empty("По запросу ничего не нашлось"))
-                            } else {
-                                renderState(State.SearchListState.Content(data.value))
-                                Log.d("trackListViewModel", "${renderState(State.SearchListState.Content(data.value))}")
-                            }
-                        }
-                    }
+        viewModelScope.launch {
+            getTrackList(query)
+                .collect { consumerData ->
+                    processResult(consumerData)
+                }
+        }
+//        getTrackList(
+//            expression = query,
+//            consumer = object : Consumer<List<Track>> {
+//                override fun consume(data: ConsumerData<List<Track>>) {
+//                    when (data) {
+//                        is ConsumerData.Error -> renderState(State.SearchListState.Error(data.message))
+//                        is ConsumerData.NoConnection -> renderState(
+//                            State.SearchListState.NoConnection(
+//                                data.message
+//                            )
+//                        )
+//
+//                        is ConsumerData.Data -> {
+//                            if (data.value.isNullOrEmpty()) {
+//                                renderState(State.SearchListState.Empty("По запросу ничего не нашлось"))
+//                            } else {
+//                                renderState(State.SearchListState.Content(data.value))
+//                                Log.d("trackListViewModel", "${renderState(State.SearchListState.Content(data.value))}")
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        )
+
+    }
+
+    private fun processResult(data: ConsumerData<List<Track>>) {
+        when (data) {
+            is ConsumerData.Error -> renderState(State.SearchListState.Error(data.message))
+            is ConsumerData.NoConnection -> renderState(
+                State.SearchListState.NoConnection(
+                    data.message
+                )
+            )
+
+            is ConsumerData.Data -> {
+                if (data.value.isNullOrEmpty()) {
+                    renderState(State.SearchListState.Empty("По запросу ничего не нашлось"))
+                } else {
+                    renderState(State.SearchListState.Content(data.value))
+                    Log.d(
+                        "trackListViewModel",
+                        "${renderState(State.SearchListState.Content(data.value))}"
+                    )
                 }
             }
-        )
+        }
 
     }
 
@@ -176,7 +223,6 @@ class SearchViewModel(
 
     companion object {
         private val SEARCH_REQUEST_TOKEN = Any()
-
 
         private const val KEY = "KEY"
         private const val TRACK_ITEM_KEY = "trackItem"

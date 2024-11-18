@@ -30,7 +30,7 @@ val dataModule = module {
     single { Gson() }
 
     single<TracklistNetworkClient> {
-        TracklistRetrofitNetworkClient(get())
+        TracklistRetrofitNetworkClient(androidContext(),get())
     }
 
 }

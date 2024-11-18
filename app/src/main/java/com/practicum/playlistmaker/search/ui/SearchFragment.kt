@@ -135,6 +135,7 @@ class SearchFragment : Fragment() {
                     binding.searchResults.visibility = View.GONE
                 }
                 textInput = s.toString()
+                Log.d("textInput", "$textInput")
                 viewModel.searchDebounce(textInput)
                 binding.clearIcon.visibility = clearButtonVisibility(s)
             }
