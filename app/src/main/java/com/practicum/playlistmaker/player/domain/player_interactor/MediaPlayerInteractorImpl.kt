@@ -25,7 +25,10 @@ class MediaPlayerInteractorImpl(
 
     override fun playerStart() {
         mediaPlayerRepository.startPlayer()
+    }
 
+    override fun seekTo(msec: Int) {
+        mediaPlayerRepository.seekTo(msec)
     }
 
     override fun isPlaying(): Boolean {

@@ -7,6 +7,7 @@ interface MediaPlayerInteractor {
     fun playBackControll()
     fun isPlayerPrepared(): Boolean
     fun playerStart()
+    fun seekTo(msec: Int)
     fun playerPause()
     fun releasePlayer()
     fun getCurrentPosition(): Int

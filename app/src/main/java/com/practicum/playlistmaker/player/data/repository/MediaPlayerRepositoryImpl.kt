@@ -69,6 +69,10 @@ class MediaPlayerRepositoryImpl(
         playerState = STATE_PLAYING
     }
 
+    override fun seekTo(msec: Int) {
+        player.seekTo(msec)
+    }
+
     override fun pausePlayer() {
         player.pause()
         playerState = STATE_PAUSE
