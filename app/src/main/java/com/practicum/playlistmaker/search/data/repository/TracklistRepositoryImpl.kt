@@ -24,12 +24,6 @@ class TracklistRepositoryImpl(
                 }
                 emit(Resourse.Success(data))
             }
-//            trackListResponse is TrackListResponse -> {
-//                val trackListDto = trackListResponse.results ?: emptyList<TrackDto>()
-//                val tracks = trackListDto.map { trackDto -> TrackMapper.map(trackDto) }
-//                return Resourse.Success(tracks)
-//            }
-//            trackListResponse.resultCode == 503 -> {
             503 -> emit(Resourse.NoConnection("Нет сети"))
             else -> emit(Resourse.Error("Произошла сетевая ошибка"))
 

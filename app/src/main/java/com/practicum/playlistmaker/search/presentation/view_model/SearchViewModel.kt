@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-//import com.practicum.playlistmaker.Creator.Creator
 import com.practicum.playlistmaker.search.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.domain.tracks_intr.AddTrackToHistoryUseCase
@@ -55,9 +54,6 @@ class SearchViewModel(
         isClickAllowed = isAllowed
     }
 
-//    private var searchJob: Job? = null
-//
-//    private val trackList = mutableListOf<Track>()
     private var latestSearchedText: String? = null
 
     private val stateLiveData = MutableLiveData<State.SearchListState>()
@@ -89,7 +85,6 @@ class SearchViewModel(
         if (isClickAllowed) {
             isClickAllowed = false
             setIsClickAllowed(true)
-//            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
     }
@@ -130,14 +125,6 @@ class SearchViewModel(
         }
         this.latestSearchedText = changedText
         debounceSearch(changedText)
-//        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-//        val searchRunnable = Runnable { searchTracks(changedText) }
-//        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-//        handler.postAtTime(
-//            searchRunnable,
-//            SEARCH_REQUEST_TOKEN,
-//            postTime
-//        )
     }
 
     fun searchTracks(query: String) {
@@ -146,38 +133,12 @@ class SearchViewModel(
                 State.SearchListState.Loading
             )
         }
-
         viewModelScope.launch {
             getTrackList(query)
                 .collect { consumerData ->
                     processResult(consumerData)
                 }
         }
-//        getTrackList(
-//            expression = query,
-//            consumer = object : Consumer<List<Track>> {
-//                override fun consume(data: ConsumerData<List<Track>>) {
-//                    when (data) {
-//                        is ConsumerData.Error -> renderState(State.SearchListState.Error(data.message))
-//                        is ConsumerData.NoConnection -> renderState(
-//                            State.SearchListState.NoConnection(
-//                                data.message
-//                            )
-//                        )
-//
-//                        is ConsumerData.Data -> {
-//                            if (data.value.isNullOrEmpty()) {
-//                                renderState(State.SearchListState.Empty("По запросу ничего не нашлось"))
-//                            } else {
-//                                renderState(State.SearchListState.Content(data.value))
-//                                Log.d("trackListViewModel", "${renderState(State.SearchListState.Content(data.value))}")
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        )
-
     }
 
     private fun processResult(data: ConsumerData<List<Track>>) {

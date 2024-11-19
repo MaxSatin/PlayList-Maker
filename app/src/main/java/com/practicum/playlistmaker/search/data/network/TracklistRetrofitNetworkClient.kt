@@ -3,14 +3,12 @@ package com.practicum.playlistmaker.search.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import androidx.annotation.RequiresPermission
 import com.practicum.playlistmaker.search.data.dto.NetworkResponse
 import com.practicum.playlistmaker.search.data.dto.TrackListRequest
 import com.practicum.playlistmaker.search.data.repository.TracklistNetworkClient
-import com.practicum.playlistmaker.search.domain.track_model.Resourse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.Response
+
 
 class TracklistRetrofitNetworkClient(
     private val context: Context,
@@ -24,7 +22,6 @@ class TracklistRetrofitNetworkClient(
             is TrackListRequest ->  withContext(Dispatchers.IO) {
                     try {
                         val response = iTunesApi.getSongsList(dto.expression)
-//                val body = response.body() ?: NetworkResponse()
                         response.apply { resultCode = 200 }
                     } catch (ex: Exception) {
                         NetworkResponse().apply { resultCode = 503 }
