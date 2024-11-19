@@ -17,7 +17,7 @@ class TracklistRepositoryImpl(
     override fun getTrackList(expression: String): Flow<Resourse<List<Track>>> = flow {
         val trackListResponse = tracklistNetworkClient.doTrackRequest(TrackListRequest(expression))
         when (trackListResponse.resultCode) {
-            -1 -> emit(Resourse.Error("Проверьте подключение к интернету"))
+            -1 -> emit(Resourse.NoConnection("Проверьте подключение к интернету"))
             200 -> with(trackListResponse as TrackListResponse) {
                 val data = results.map { trackDto ->
                     TrackMapper.map(trackDto)

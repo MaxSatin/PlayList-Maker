@@ -3,20 +3,13 @@ package com.practicum.playlistmaker.search.presentation.view_model
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.gson.Gson
 //import com.practicum.playlistmaker.Creator.Creator
-import com.practicum.playlistmaker.search.domain.consumer.Consumer
 import com.practicum.playlistmaker.search.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.domain.tracks_intr.AddTrackToHistoryUseCase
@@ -27,7 +20,6 @@ import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackListFromSer
 import com.practicum.playlistmaker.search.presentation.state.State
 import com.practicum.playlistmaker.search.presentation.utils.SingleEventLifeData
 import com.practicum.playlistmaker.search.presentation.utils.debounce
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -54,9 +46,18 @@ class SearchViewModel(
         searchTracks(query)
     }
 
-    private var searchJob: Job? = null
+    private val setIsClickAllowed = debounce<Boolean>(
+        CLICK_DEBOUNCE_DELAY,
+        viewModelScope,
+        useLastParam = false
+    )
+    { isAllowed ->
+        isClickAllowed = isAllowed
+    }
 
-    private val trackList = mutableListOf<Track>()
+//    private var searchJob: Job? = null
+//
+//    private val trackList = mutableListOf<Track>()
     private var latestSearchedText: String? = null
 
     private val stateLiveData = MutableLiveData<State.SearchListState>()
@@ -83,12 +84,12 @@ class SearchViewModel(
 
     }
 
-
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            setIsClickAllowed(true)
+//            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
     }
@@ -121,14 +122,12 @@ class SearchViewModel(
 
     private fun updateHistoryList() {
         historyStateLiveData.value = State.HistoryListState.Content(getTracksHistory())
-
     }
 
     fun searchDebounce(changedText: String) {
         if (latestSearchedText == changedText) {
             return
         }
-
         this.latestSearchedText = changedText
         debounceSearch(changedText)
 //        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
@@ -189,7 +188,6 @@ class SearchViewModel(
                     data.message
                 )
             )
-
             is ConsumerData.Data -> {
                 if (data.value.isNullOrEmpty()) {
                     renderState(State.SearchListState.Empty("По запросу ничего не нашлось"))

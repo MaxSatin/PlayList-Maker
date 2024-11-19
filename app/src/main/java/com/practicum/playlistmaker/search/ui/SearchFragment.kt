@@ -15,6 +15,7 @@ import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.databinding.SearchFragmentBinding
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.presentation.state.State
+import com.practicum.playlistmaker.search.presentation.utils.debounce
 import com.practicum.playlistmaker.search.presentation.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,6 +26,7 @@ class SearchFragment : Fragment() {
     }
 
     private val viewModel: SearchViewModel by viewModel()
+
 
     private lateinit var adapter: TrackAdapter
     private lateinit var trackHistoryAdapter: HistoryRVAdapter
@@ -135,7 +137,6 @@ class SearchFragment : Fragment() {
                     binding.searchResults.visibility = View.GONE
                 }
                 textInput = s.toString()
-                Log.d("textInput", "$textInput")
                 viewModel.searchDebounce(textInput)
                 binding.clearIcon.visibility = clearButtonVisibility(s)
             }
