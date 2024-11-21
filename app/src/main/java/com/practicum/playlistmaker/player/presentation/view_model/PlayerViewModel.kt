@@ -1,10 +1,6 @@
 package com.practicum.playlistmaker.player.presentation.view_model
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,8 +23,6 @@ class PlayerViewModel(
     private val gson: Gson,
 ) : AndroidViewModel(application) {
 
-    //    private val handler = Handler(Looper.getMainLooper())
-//    private var runnable: Runnable? = null
     private val trackItem = loadTrackScreen(trackGson)
 
     private val playerStateLiveData = MutableLiveData<PlayerState>()
@@ -92,7 +86,6 @@ class PlayerViewModel(
     }
 
     fun startPlayer() {
-        Log.d("PlayerTimer", "${getCurrentPlayerState()}")
         playerInteractor.playerStart()
         showTimeCountDown()
         val newState = getCurrentPlayerState()
@@ -104,8 +97,6 @@ class PlayerViewModel(
     fun pausePlayer() {
         playerInteractor.playerPause()
         timerJob?.cancel()
-//        if (this.runnable != null)
-//            handler.removeCallbacksAndMessages(TRACK_TIMER_TOKEN)
         val newState = getCurrentPlayerState()
         playerStateLiveData.value = newState.copy(
             playStatus = newState.playStatus.copy(isPlaying = false)
@@ -113,17 +104,6 @@ class PlayerViewModel(
     }
 
     private fun showTimeCountDown() {
-
-//        val newTimerRunnable = object : Runnable {
-//            override fun run() {
-//                val newState = getCurrentPlayerState()
-//                playerStateLiveData.value = newState.copy(
-//                    playStatus = newState.playStatus.copy(
-//                        progress = DateFormatter.timeFormatter.format(playerInteractor.getCurrentPosition()),
-//                        isPlaying = playerInteractor.isPlaying()
-//                    )
-//                )
-
         timerJob = viewModelScope.launch {
             while (playerInteractor.isPlaying()) {
                 delay(TIMER_DELAY)
@@ -137,22 +117,8 @@ class PlayerViewModel(
 
             }
         }
-//                val postTime = SystemClock.uptimeMillis() + TIMER_DELAY
-//                handler.postAtTime(
-//                    this,
-//                    TRACK_TIMER_TOKEN,
-//                    postTime
-//                )
-
-//
-//
-//
-//        this.runnable = newTimerRunnable
-//
-//        handler.postDelayed(newTimerRunnable, TIMER_DELAY)
 
         playerInteractor.setOnCompleteListener {
-//            handler.removeCallbacksAndMessages(TRACK_TIMER_TOKEN)
             timerJob?.cancel()
 
             playerInteractor.seekTo(0)
@@ -173,11 +139,9 @@ class PlayerViewModel(
         }
     }
 
-
     override fun onCleared() {
         super.onCleared()
         playerInteractor.releasePlayer()
-//        handler.removeCallbacksAndMessages(TRACK_TIMER_TOKEN)
     }
 
     companion object {

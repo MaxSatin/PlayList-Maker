@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!--    <style name="MainActivityLayoutStyle">-->
-<!--        <item name="android:layout_width">match_parent</item>-->
-<!--        <item name="android:layout_height">match_parent</item>-->
-<!--        <item name="android:background">@color/yp_black</item>-->
-<!--        <item name="android:orientation">vertical</item>-->
-<!--    </style>-->
-
     <style name="MainActivityLayoutStyle">
         <item name="android:background">@color/yp_black</item>
     </style>
@@ -137,7 +130,7 @@
     </style>
 
     <style name="PlayerTrackBackGround">
-        <item name="backgroundTint">@color/yp_black</item>
+        <item name="android:background">@color/yp_black</item>
     </style>
 
     <style name="PlayerTrackButtonBack">
@@ -150,8 +143,6 @@
     <style name="PlayerTrackButtonPlay">
         <item name="android:background">@drawable/play_button_background_selector_night</item>
         <item name="android:foreground">@drawable/play_button_image_selector_night</item>
-<!--        <item name="iconTint">@color/white</item>-->
-<!--        <item name="android:foreground">?attr/selectableItemBackground</item>-->
     </style>
 
     <style name="PlayerTrackButtonaAddToTrackList">
