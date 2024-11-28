@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.practicum.playlistmaker.player.domain.db_interactor.DatabaseInteractor
 import com.practicum.playlistmaker.player.domain.player_interactor.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.mapper.DateFormatter
 import com.practicum.playlistmaker.player.presentation.mapper.TrackInfoMapper
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 class PlayerViewModel(
     application: Application,
     trackGson: String?,
+    private val databaseInteractor: DatabaseInteractor,
     private val playerInteractor: MediaPlayerInteractor,
     private val gson: Gson,
 ) : AndroidViewModel(application) {
@@ -52,6 +54,12 @@ class PlayerViewModel(
                 isPlaying = false
             )
         )
+    }
+
+    fun saveTrackToFavorites() {
+        viewModelScope.launch {
+            databaseInteractor.saveTrackToDatabase(trackItem)
+        }
     }
 
     fun playerController() {
