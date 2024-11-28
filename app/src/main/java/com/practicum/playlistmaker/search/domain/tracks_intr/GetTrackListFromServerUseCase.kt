@@ -1,24 +1,23 @@
 package com.practicum.playlistmaker.search.domain.tracks_intr
 
-import com.practicum.playlistmaker.search.domain.consumer.Consumer
 import com.practicum.playlistmaker.search.domain.consumer.ConsumerData
 import com.practicum.playlistmaker.search.domain.track_model.Resourse
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.domain.repository.TrackListRepository
-import java.util.concurrent.Executors
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class GetTrackListFromServerUseCase(
     private val tracklistRepository: TrackListRepository
 ) {
 
-    private val executor = Executors.newCachedThreadPool()
+    operator fun invoke(expression: String): Flow<ConsumerData<List<Track>>> {
+            return tracklistRepository.getTrackList(expression).map { result ->
+                when (result) {
+                    is Resourse.Success -> ConsumerData.Data(result.data)
+                    is Resourse.Error -> ConsumerData.Error(result.message)
+                    is Resourse.NoConnection -> ConsumerData.NoConnection(result.message)
 
-    operator fun invoke(expression: String, consumer: Consumer<List<Track>>) {
-            executor.execute {
-                when (val trackListResponse = tracklistRepository.getTrackList(expression)) {
-                    is Resourse.Success -> consumer.consume(ConsumerData.Data(trackListResponse.data))
-                    is Resourse.Error -> consumer.consume(ConsumerData.Error(trackListResponse.message))
-                    is Resourse.NoConnection -> consumer.consume(ConsumerData.NoConnection(trackListResponse.message))
                 }
             }
         }

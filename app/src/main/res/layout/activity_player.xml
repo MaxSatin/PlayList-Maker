@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/PlayerTrackBackGround"
     android:id="@+id/playerActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".player.ui.PlayerActivity"
-    style="PlayerTrackBackGround">
+    tools:context=".player.ui.PlayerActivity">
 
 
     <androidx.constraintlayout.widget.Guideline

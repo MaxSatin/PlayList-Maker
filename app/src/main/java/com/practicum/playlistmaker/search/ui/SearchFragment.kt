@@ -26,6 +26,7 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
 
+
     private lateinit var adapter: TrackAdapter
     private lateinit var trackHistoryAdapter: HistoryRVAdapter
 
@@ -187,7 +188,6 @@ class SearchFragment : Fragment() {
     private fun showPlayer(trackGson: String) {
         PlayerActivity.show(requireContext(), trackGson)
     }
-
 
     private fun showErrorNothingFound(text: String) {
         if (text.isNotEmpty()) {

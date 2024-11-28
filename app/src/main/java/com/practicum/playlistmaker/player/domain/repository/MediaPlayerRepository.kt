@@ -7,6 +7,7 @@ interface MediaPlayerRepository {
     fun playBackControll()
     fun isPlayerPrepared(): Boolean
     fun startPlayer()
+    fun seekTo(msec: Int)
     fun pausePlayer()
     fun releasePlayer()
     fun isPlaying(): Boolean
