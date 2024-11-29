@@ -7,7 +7,7 @@ import com.practicum.playlistmaker.player.data.db.entity.TrackEntity
 
 
 @Dao
-interface TrackDao {
+interface PlayerTrackDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTrack(track: TrackEntity)
 }

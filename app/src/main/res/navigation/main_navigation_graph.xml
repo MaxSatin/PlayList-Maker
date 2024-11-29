@@ -12,7 +12,7 @@
         tools:layout="@layout/activity_player" />
     <fragment
         android:id="@+id/mediaLibraryFragment"
-        android:name="com.practicum.playlistmaker.medialibrary.ui.activity.MediaLibraryFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.ui.root_fragment.MediaLibraryFragment"
         android:label="medialibrary_fragment"
         tools:layout="@layout/medialibrary_fragment" />
     <fragment

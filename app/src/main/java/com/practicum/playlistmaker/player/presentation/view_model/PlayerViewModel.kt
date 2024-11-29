@@ -58,6 +58,7 @@ class PlayerViewModel(
 
     fun saveTrackToFavorites() {
         viewModelScope.launch {
+            trackItem.isInFavorite = true
             databaseInteractor.saveTrackToDatabase(trackItem)
         }
     }

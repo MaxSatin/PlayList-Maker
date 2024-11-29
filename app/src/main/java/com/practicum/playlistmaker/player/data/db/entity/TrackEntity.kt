@@ -17,4 +17,5 @@ data class TrackEntity(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
+    var isInFavorite: Boolean
 )

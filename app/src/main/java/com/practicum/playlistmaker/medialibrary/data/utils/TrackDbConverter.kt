@@ -1,14 +1,13 @@
-package com.practicum.playlistmaker.player.data.utils
+package com.practicum.playlistmaker.medialibrary.data.utils
 
-import com.practicum.playlistmaker.player.data.db.entity.TrackEntity
-import com.practicum.playlistmaker.player.presentation.model.Track
-
+import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
+import com.practicum.playlistmaker.medialibrary.data.db.entity.TrackEntity
 
 class TrackDbConverter {
 
-    fun map(track: Track): TrackEntity {
-        return with(track) {
-            TrackEntity(
+    fun map(trackEntity: TrackEntity): Track {
+        return with(trackEntity){
+            Track(
                 trackId,
                 artistName,
                 trackName,

@@ -15,7 +15,7 @@ class DatabaseRepositoryImpl(
     override suspend fun saveTrackToDatabase(track: Track) {
         withContext(Dispatchers.IO) {
             val trackEntity = converter.map(track)
-            appDatabase.trackDao().insertTrack(trackEntity)
+            appDatabase.playerTrackDao().insertTrack(trackEntity)
         }
     }
 }

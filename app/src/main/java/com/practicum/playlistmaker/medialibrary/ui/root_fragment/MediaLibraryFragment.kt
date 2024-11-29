@@ -1,16 +1,16 @@
-package com.practicum.playlistmaker.medialibrary.ui.activity
+package com.practicum.playlistmaker.medialibrary.ui.root_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.MedialibraryFragmentBinding
 import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.MediaLibraryViewModel
+import com.practicum.playlistmaker.medialibrary.ui.fragment.favorite_tracks_fragment.FavoriteTracksFragment
+import com.practicum.playlistmaker.medialibrary.ui.fragment.PlayListsFragment
 import com.practicum.playlistmaker.medialibrary.ui.viewpager.MediaLibraryViewPagerAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,6 +20,11 @@ class MediaLibraryFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: MediaLibraryViewModel by viewModel()
     private lateinit var tabLayoutMediator: TabLayoutMediator
+
+    private val fragmentList: MutableList<Fragment> = mutableListOf(
+        FavoriteTracksFragment(),
+        PlayListsFragment()
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,10 +38,11 @@ class MediaLibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getMediaLibraryStateLiveData().observe(viewLifecycleOwner) { state ->
+//        viewModel.getMediaLibraryStateLiveData().observe(viewLifecycleOwner) { state ->
             binding.viewPager.adapter = MediaLibraryViewPagerAdapter(
-                state.favoriteTracks,
-                state.playList,
+                fragmentList,
+//                state.favoriteListScreenState,
+//                state.playList,
                 parentFragmentManager,
                 lifecycle = lifecycle
             )
@@ -48,8 +54,10 @@ class MediaLibraryFragment : Fragment() {
                     }
                 }
             tabLayoutMediator.attach()
-        }
+//        }
     }
+
+//    private fun stateProcessor(state: State): Pair<>
 
     override fun onDestroyView() {
         super.onDestroyView()

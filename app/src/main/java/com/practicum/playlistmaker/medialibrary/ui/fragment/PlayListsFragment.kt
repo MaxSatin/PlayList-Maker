@@ -65,14 +65,15 @@ class PlayListsFragment() : Fragment() {
             if (favorites.isNullOrEmpty()) {
                 binding.emptyPlayListsPH.isVisible = true
             }
-        } else {
-            val flatList = arguments?.getParcelableArrayList<Track>(KEY_TRACKS)
-            val favorites = getTrackListList(arguments, flatList)
-            if (favorites.isNullOrEmpty()) {
-                if (favorites.isNullOrEmpty()) {
-                    binding.emptyPlayListsPH.isVisible = true
-                }
-            }
+//        } else {
+//            val flatList = arguments?.getParcelableArrayList<Track>(KEY_TRACKS)
+//            val favorites = getTrackListList(arguments, flatList)
+//            if (favorites.isNullOrEmpty()) {
+//                if (favorites.isNullOrEmpty()) {
+//                    binding.emptyPlayListsPH.isVisible = true
+//                }
+//            }
+//        }
         }
     }
 
