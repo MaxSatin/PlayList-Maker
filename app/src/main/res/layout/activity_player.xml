@@ -99,12 +99,12 @@
         android:layout_height="51dp"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintEnd_toStartOf="@+id/stopPlayerButton"
-        app:layout_constraintTop_toBottomOf="@+id/stopPlayerButton"
-        app:layout_constraintBottom_toTopOf="@+id/stopPlayerButton"/>
+        app:layout_constraintEnd_toStartOf="@+id/playButton"
+        app:layout_constraintTop_toBottomOf="@+id/playButton"
+        app:layout_constraintBottom_toTopOf="@+id/playButton"/>
 
     <ToggleButton
-        android:id="@+id/stopPlayerButton"
+        android:id="@+id/playButton"
         style="@style/PlayerTrackButtonPlay"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -128,18 +128,20 @@
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
         app:layout_constraintTag="timePlayed"
-        app:layout_constraintTop_toBottomOf="@id/stopPlayerButton"
+        app:layout_constraintTop_toBottomOf="@id/playButton"
         tools:text="0:30" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        style="@style/PlayerTrackButtonaAddToFav"
+    <ToggleButton
+        style="@style/PlayerTrackButtonAddToFav"
         android:id="@+id/addToFavorites"
         android:layout_width="51dp"
         android:layout_height="51dp"
-        app:layout_constraintStart_toEndOf="@id/stopPlayerButton"
+        android:textOff=""
+        android:textOn=""
+        app:layout_constraintStart_toEndOf="@id/playButton"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/stopPlayerButton"
-        app:layout_constraintTop_toBottomOf="@id/stopPlayerButton" />
+        app:layout_constraintBottom_toTopOf="@id/playButton"
+        app:layout_constraintTop_toBottomOf="@id/playButton" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/playButtonBarrier"

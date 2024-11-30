@@ -10,4 +10,8 @@ class DatabaseInteractorImpl(
     override suspend fun saveTrackToDatabase(track: Track) {
         databaseRepository.saveTrackToDatabase(track)
     }
+
+    override suspend fun removeFromFavorite(track: Track) {
+        databaseRepository.removeFromFavorite(track)
+    }
 }

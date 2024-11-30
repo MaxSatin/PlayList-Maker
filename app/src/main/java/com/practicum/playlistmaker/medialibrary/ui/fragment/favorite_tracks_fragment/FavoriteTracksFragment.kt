@@ -1,35 +1,28 @@
 package com.practicum.playlistmaker.medialibrary.ui.fragment.favorite_tracks_fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.FavoriteTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.practicum.playlistmaker.databinding.FavoriteTracksFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.FavoriteListScreenState
 import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
+import com.practicum.playlistmaker.player.ui.PlayerActivity
 
 class FavoriteTracksFragment() : Fragment() {
-
-    companion object {
-
-        private const val FAVORITE_TRACKLIST = "favorite_track_list"
-
-        fun newInstance(favoriteListScreenState: FavoriteListScreenState): FavoriteTracksFragment {
-            TODO()
-//            return FavoriteTracksFragment().apply {
-//                arguments = bundleOf(FAVORITE_TRACKLIST to ArrayList(favoriteTracks))
-//                Log.d("favoritesFragmentNewInstance", "$favoriteTracks")
-            }
-        }
 
 
     private val viewModel: FavoriteTracksViewModel by viewModel()
     private var _binding: FavoriteTracksFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var adapter: FavoriteTracksAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,27 +37,26 @@ class FavoriteTracksFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getFavoriteListScreenState().observe(viewLifecycleOwner){ state ->
+        viewModel.loadFavoriteTrackList()
+        adapter = FavoriteTracksAdapter(viewModel::showTrackPlayer)
+
+        binding.favoriteListRV.adapter = adapter
+        binding.favoriteListRV.layoutManager = LinearLayoutManager(requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false)
+
+        viewModel.getFavoriteListScreenState().observe(viewLifecycleOwner) { state ->
             renderState(state)
+            Log.d("FavListState", "${state.toString()}")
         }
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            val favorites =
-//                arguments?.getParcelable(FAVORITE_TRACKLIST, ArrayList::class.java) as List<Track>
-//            if (favorites.isNullOrEmpty()) {
-//                binding.emptyLibraryPH.isVisible = true
-//            }
-//        }
-//        else {
-//            val favorites = arguments?.getParcelableArrayList<Track>(FAVORITE_TRACKLIST)
-//            Log.d("favoritevalue", "$favorites")
-//            if (favorites.isNullOrEmpty()) {
-//                if (favorites.isNullOrEmpty()) {
-//                    binding.emptyLibraryPH.isVisible = true
-//                }
-            }
+
+        viewModel.getShowTrackPlayerTrigger().observe(viewLifecycleOwner) { track ->
+            showTrackPlayer(track)
+        }
+    }
 
     private fun renderState(state: FavoriteListScreenState) {
-        when(state){
+        when (state) {
             is FavoriteListScreenState.Loading -> showLoading()
             is FavoriteListScreenState.Content -> showContent(state.favoriteTrackList)
             is FavoriteListScreenState.Empty -> showEmpty(state.message)
@@ -78,9 +70,9 @@ class FavoriteTracksFragment() : Fragment() {
     }
 
     private fun showContent(favoriteTrackList: List<Track>) {
-
-        binding.progressBar.isVisible = true
-        binding.favoriteListRV.isVisible = false
+        adapter.updateItems(favoriteTrackList)
+        binding.progressBar.isVisible = false
+        binding.favoriteListRV.isVisible = true
         binding.emptyLibraryPH.isVisible = false
     }
 
@@ -90,8 +82,24 @@ class FavoriteTracksFragment() : Fragment() {
         binding.emptyLibraryPH.isVisible = true
     }
 
+    private fun showTrackPlayer(track: String) {
+        PlayerActivity.show(requireContext(), track)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+
+        private const val FAVORITE_TRACKLIST = "favorite_track_list"
+
+        fun newInstance(favoriteListScreenState: FavoriteListScreenState): FavoriteTracksFragment {
+            TODO()
+//            return FavoriteTracksFragment().apply {
+//                arguments = bundleOf(FAVORITE_TRACKLIST to ArrayList(favoriteTracks))
+//                Log.d("favoritesFragmentNewInstance", "$favoriteTracks")
+        }
     }
 }

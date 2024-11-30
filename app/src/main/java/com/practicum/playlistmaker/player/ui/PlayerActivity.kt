@@ -42,7 +42,7 @@ class PlayerActivity : AppCompatActivity() {
 
         val trackGson = intent.getStringExtra(TRACK_ITEM_KEY)
         viewModel = getViewModel { parametersOf(trackGson) }
-        binding.stopPlayerButton.isEnabled = false
+        binding.playButton.isEnabled = false
 
         binding.playerButtonBack.setOnClickListener {
             finish()
@@ -52,7 +52,7 @@ class PlayerActivity : AppCompatActivity() {
             render(playerState)
 
             if (playerState.playStatus.isPrepared) {
-                binding.stopPlayerButton.isEnabled = true
+                binding.playButton.isEnabled = true
                 this.isPrepared = true
             }
 
@@ -63,9 +63,14 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        binding.stopPlayerButton.setOnClickListener {
+        binding.playButton.setOnClickListener {
             viewModel.playerController()
         }
+
+        binding.addToFavorites.setOnClickListener {
+            viewModel.controlFavoriteState()
+        }
+
     }
 
     private fun render(state: PlayerState) {
@@ -77,9 +82,13 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun changePlayButtonStyle(isPlaying: Boolean) {
         when (isPlaying) {
-            true -> binding.stopPlayerButton.isChecked = true
-            false -> binding.stopPlayerButton.isChecked = false
+            true -> binding.playButton.isChecked = true
+            false -> binding.playButton.isChecked = false
         }
+    }
+
+    private fun handleIsFavoriteStatus(isInFavorite: Boolean) {
+        binding.addToFavorites.isChecked = isInFavorite
     }
 
     private fun showLoading() {
@@ -99,6 +108,7 @@ class PlayerActivity : AppCompatActivity() {
         binding.albumYear.text = trackItem.releaseDate
         binding.trackGenre.text = trackItem.primaryGenreName
         binding.trackCountry.text = trackItem.country
+        handleIsFavoriteStatus(trackItem.isInFavorite)
         isPreloaded = true
     }
 
@@ -113,7 +123,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        binding.stopPlayerButton.isChecked = false
+        binding.playButton.isChecked = false
         viewModel.pausePlayer()
 
     }

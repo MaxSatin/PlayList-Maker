@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.medialibrary.di
 
+import com.google.gson.Gson
 import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.FavoriteTracksViewModel
 import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.MediaLibraryViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -11,6 +12,8 @@ val mediaLibraryViewModelModule = module {
     }
 
     viewModel {
-        FavoriteTracksViewModel(get())
+        FavoriteTracksViewModel(get(), get())
     }
+
+    single { Gson() }
 }

@@ -4,4 +4,5 @@ import com.practicum.playlistmaker.player.presentation.model.Track
 
 interface DatabaseInteractor {
     suspend fun saveTrackToDatabase(track: Track)
+    suspend fun removeFromFavorite(track: Track)
 }

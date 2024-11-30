@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.presentation.utils
+package com.practicum.playlistmaker.player.presentation.utils
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -17,7 +17,7 @@ fun <T> debounce(
             debounceJob?.cancel()
         }
         if (debounceJob?.isCompleted != false || useLastParam) {
-            debounceJob = coroutineScope.launch {
+            coroutineScope.launch {
                 delay(delayMillis)
                 action(param)
             }

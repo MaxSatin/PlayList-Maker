@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.player.data.repository
 
 import com.practicum.playlistmaker.AppDatabase
+import com.practicum.playlistmaker.player.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.player.data.utils.TrackDbConverter
 import com.practicum.playlistmaker.player.domain.repository.DatabaseRepository
 import com.practicum.playlistmaker.player.presentation.model.Track
@@ -16,6 +17,13 @@ class DatabaseRepositoryImpl(
         withContext(Dispatchers.IO) {
             val trackEntity = converter.map(track)
             appDatabase.playerTrackDao().insertTrack(trackEntity)
+        }
+    }
+
+    override suspend fun removeFromFavorite(track: Track) {
+        withContext(Dispatchers.IO) {
+            val trackEntity = converter.map(track)
+            appDatabase.playerTrackDao().removeFromFavorite(trackEntity)
         }
     }
 }

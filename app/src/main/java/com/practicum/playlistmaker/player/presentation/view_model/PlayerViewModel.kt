@@ -13,6 +13,7 @@ import com.practicum.playlistmaker.player.presentation.mapper.TrackInfoMapper
 import com.practicum.playlistmaker.player.presentation.model.Track
 import com.practicum.playlistmaker.player.presentation.state.PlayStatus
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
+import com.practicum.playlistmaker.search.presentation.utils.debounce
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -30,6 +31,16 @@ class PlayerViewModel(
     private val playerStateLiveData = MutableLiveData<PlayerState>()
 
     private var timerJob: Job? = null
+
+    private var isClickAllowed: Boolean = true
+
+    private val setIsClickAllowed = debounce<Boolean>(
+        CLICK_DEBOUNCE_DELAY,
+        viewModelScope,
+        false
+    ) { isAllowed ->
+        isClickAllowed = isAllowed
+    }
 
     init {
         showLoading()
@@ -56,13 +67,40 @@ class PlayerViewModel(
         )
     }
 
-    fun saveTrackToFavorites() {
-        viewModelScope.launch {
-            trackItem.isInFavorite = true
-            databaseInteractor.saveTrackToDatabase(trackItem)
+    private fun clickDebounce(): Boolean{
+        val current = isClickAllowed
+        if (isClickAllowed){
+            isClickAllowed = false
+            setIsClickAllowed(true)
+        }
+        return current
+    }
+
+    fun controlFavoriteState(){
+        if(trackItem.isInFavorite){
+            removeFromFavorite()
+        } else {
+            saveTrackToFavorites()
         }
     }
 
+    private fun saveTrackToFavorites() {
+        if (clickDebounce()) {
+            viewModelScope.launch {
+                trackItem.isInFavorite = true
+                databaseInteractor.saveTrackToDatabase(trackItem)
+            }
+        }
+    }
+
+    private fun removeFromFavorite() {
+        if (clickDebounce()) {
+            viewModelScope.launch {
+                trackItem.isInFavorite = false
+                databaseInteractor.removeFromFavorite(trackItem)
+            }
+        }
+    }
     fun playerController() {
         if (playerInteractor.isPlaying()) {
             pausePlayer()
@@ -153,7 +191,8 @@ class PlayerViewModel(
         playerInteractor.releasePlayer()
     }
 
-    companion object {
+    private companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 50L
         private const val TIMER_DELAY = 50L
         private val TRACK_TIMER_TOKEN = Any()
 

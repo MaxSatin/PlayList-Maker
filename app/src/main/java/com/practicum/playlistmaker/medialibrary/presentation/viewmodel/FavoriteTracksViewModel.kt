@@ -1,10 +1,12 @@
 package com.practicum.playlistmaker.medialibrary.presentation.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.FavoriteListScreenState
 import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryInteractor
 import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
@@ -14,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class FavoriteTracksViewModel(
     private val mediaLibraryInteractor: MediaLibraryInteractor,
+    private val gson: Gson
 ) : ViewModel() {
 
     private val favoriteScreenState = MutableLiveData<FavoriteListScreenState>()
@@ -21,6 +24,9 @@ class FavoriteTracksViewModel(
 
     private val showToast = SingleLineEvent<String>()
     fun observeToast(): LiveData<String> = showToast
+
+    private val showTrackPlayerTrigger = SingleLineEvent<String>()
+    fun getShowTrackPlayerTrigger(): LiveData<String> = showTrackPlayerTrigger
 
     private var isClickAllowed = true
     private val setIsClickAllowed = debounce<Boolean>(
@@ -31,11 +37,11 @@ class FavoriteTracksViewModel(
         isClickAllowed = isAllowed
     }
 
-    init {
-        loadFavoriteTrackList()
-    }
+//    init {
+//        loadFavoriteTrackList()
+//    }
 
-    private fun loadFavoriteTrackList() {
+    fun loadFavoriteTrackList() {
         render(
             FavoriteListScreenState.Loading
         )
@@ -44,6 +50,7 @@ class FavoriteTracksViewModel(
             mediaLibraryInteractor.getFavoriteTrackList()
                 .collect { trackList ->
                     processResult(trackList)
+                    Log.d("FavoriteList", "${processResult(trackList)}")
                 }
         }
     }
@@ -58,7 +65,8 @@ class FavoriteTracksViewModel(
     }
 
     fun showTrackPlayer(track: Track) {
-
+        val trackGson = gson.toJson(track)
+        showTrackPlayerTrigger.value = trackGson
     }
 
     private fun processResult(trackList: List<Track>) {
