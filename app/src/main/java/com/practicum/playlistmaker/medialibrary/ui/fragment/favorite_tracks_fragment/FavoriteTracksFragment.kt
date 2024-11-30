@@ -45,8 +45,7 @@ class FavoriteTracksFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getFavoriteListScreenState().observe(viewLifecycleOwner){ state ->
-
-
+            renderState(state)
         }
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 //            val favorites =
@@ -66,7 +65,9 @@ class FavoriteTracksFragment() : Fragment() {
 
     private fun renderState(state: FavoriteListScreenState) {
         when(state){
-            is FavoriteListScreenState.Loading ->
+            is FavoriteListScreenState.Loading -> showLoading()
+            is FavoriteListScreenState.Content -> showContent(state.favoriteTrackList)
+            is FavoriteListScreenState.Empty -> showEmpty(state.message)
         }
     }
 
@@ -83,7 +84,11 @@ class FavoriteTracksFragment() : Fragment() {
         binding.emptyLibraryPH.isVisible = false
     }
 
-
+    private fun showEmpty(message: String) {
+        binding.progressBar.isVisible = false
+        binding.favoriteListRV.isVisible = false
+        binding.emptyLibraryPH.isVisible = true
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

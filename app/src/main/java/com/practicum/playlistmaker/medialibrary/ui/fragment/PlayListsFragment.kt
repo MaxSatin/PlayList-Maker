@@ -56,6 +56,7 @@ class PlayListsFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.emptyPlayListsPH.isVisible = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // получаем flatList отедельно и передаем в параметр getTrackList, чтобы использовать
             // соответствующие методы для соответствующих версий Android

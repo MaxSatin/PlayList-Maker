@@ -43,7 +43,7 @@ class MediaLibraryFragment : Fragment() {
                 fragmentList,
 //                state.favoriteListScreenState,
 //                state.playList,
-                parentFragmentManager,
+                childFragmentManager,
                 lifecycle = lifecycle
             )
             tabLayoutMediator =
