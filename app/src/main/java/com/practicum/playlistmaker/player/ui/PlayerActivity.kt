@@ -92,13 +92,14 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
+        binding.poster.isVisible = false
         binding.loadingOverlay.isVisible = true
     }
 
     private fun showTrackDetails(trackItem: TrackInfoModel) {
         binding.loadingOverlay.isVisible = false
-        binding.poster.isVisible = true
         binding.progressbar.isVisible = false
+        binding.poster.isVisible = true
         loadPoster(trackItem)
         binding.songName.text = trackItem.trackName
         binding.bandName.text = trackItem.artistName
