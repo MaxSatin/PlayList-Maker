@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.search.di
 
+import com.practicum.playlistmaker.search.domain.database_interactor.DatabaseInteractor
+import com.practicum.playlistmaker.search.domain.database_interactor.DatabaseInteractorImpl
 import com.practicum.playlistmaker.search.domain.tracks_intr.AddTrackToHistoryUseCase
 import com.practicum.playlistmaker.search.domain.tracks_intr.CheckIsHistoryEmptyUseCase
 import com.practicum.playlistmaker.search.domain.tracks_intr.ClearHistoryUseCase
@@ -27,5 +29,9 @@ val interactorModule = module {
 
     factory {
         GetTrackListFromServerUseCase(get())
+    }
+
+    factory <DatabaseInteractor> {
+        DatabaseInteractorImpl(get())
     }
 }

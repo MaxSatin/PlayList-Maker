@@ -10,6 +10,6 @@ import kotlinx.coroutines.flow.Flow
 interface MediaLibraryTrackDao {
 
     @Query("SELECT * FROM favorite_tracks_table")
-    suspend fun getFavoriteTrackList(): List<TrackEntity>
+    fun getFavoriteTrackList(): Flow<List<TrackEntity>>
 
 }

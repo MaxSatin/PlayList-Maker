@@ -50,7 +50,7 @@ class FavoriteTracksViewModel(
             mediaLibraryInteractor.getFavoriteTrackList()
                 .collect { trackList ->
                     processResult(trackList)
-                    Log.d("FavoriteList", "${processResult(trackList)}")
+                    Log.d("FavoriteList", "${trackList}")
                 }
         }
     }

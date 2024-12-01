@@ -4,7 +4,9 @@ import android.content.Context
 import com.google.gson.Gson
 import com.practicum.playlistmaker.search.data.network.ItunesAPI
 import com.practicum.playlistmaker.search.data.network.TracklistRetrofitNetworkClient
+//import com.practicum.playlistmaker.search.data.repository.DatabaseRepositoryImpl
 import com.practicum.playlistmaker.search.data.repository.TracklistNetworkClient
+import com.practicum.playlistmaker.search.domain.repository.DatabaseRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -32,5 +34,9 @@ val dataModule = module {
     single<TracklistNetworkClient> {
         TracklistRetrofitNetworkClient(androidContext(),get())
     }
+
+//    single <DatabaseRepository> {
+//        DatabaseRepositoryImpl(get())
+//    }
 
 }

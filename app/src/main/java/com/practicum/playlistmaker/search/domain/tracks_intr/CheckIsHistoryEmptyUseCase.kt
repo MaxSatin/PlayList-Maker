@@ -5,7 +5,7 @@ import com.practicum.playlistmaker.search.domain.repository.TracksHistoryReposit
 class CheckIsHistoryEmptyUseCase(
     private val tracksHistoryRepository: TracksHistoryRepository
 ) {
-    operator fun invoke(): Boolean {
-        return tracksHistoryRepository.isHistoryEmpty()
-    }
+//    operator fun invoke(): Boolean {
+//        return tracksHistoryRepository.isHistoryEmpty()
+//    }
 }

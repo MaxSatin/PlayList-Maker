@@ -77,7 +77,7 @@ class PlayerViewModel(
     }
 
     fun controlFavoriteState(){
-        if(trackItem.isInFavorite){
+        if(trackItem.isFavorite){
             removeFromFavorite()
         } else {
             saveTrackToFavorites()
@@ -87,7 +87,7 @@ class PlayerViewModel(
     private fun saveTrackToFavorites() {
         if (clickDebounce()) {
             viewModelScope.launch {
-                trackItem.isInFavorite = true
+                trackItem.isFavorite = true
                 databaseInteractor.saveTrackToDatabase(trackItem)
             }
         }
@@ -96,7 +96,7 @@ class PlayerViewModel(
     private fun removeFromFavorite() {
         if (clickDebounce()) {
             viewModelScope.launch {
-                trackItem.isInFavorite = false
+                trackItem.isFavorite = false
                 databaseInteractor.removeFromFavorite(trackItem)
             }
         }

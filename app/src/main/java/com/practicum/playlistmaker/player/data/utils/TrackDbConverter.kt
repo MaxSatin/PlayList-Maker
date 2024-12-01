@@ -20,7 +20,7 @@ class TrackDbConverter {
                 releaseDate,
                 primaryGenreName,
                 country,
-                isInFavorite
+                isFavorite
             )
         }
     }

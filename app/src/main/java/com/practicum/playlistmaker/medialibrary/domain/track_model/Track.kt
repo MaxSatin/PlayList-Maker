@@ -1,8 +1,5 @@
 package com.practicum.playlistmaker.medialibrary.domain.track_model
 
-import android.os.Parcel
-import android.os.Parcelable
-
 data class Track(
     val trackId: String,
     val artistName: String,
@@ -15,7 +12,7 @@ data class Track(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    var isInFavorite:Boolean
+    var isFavorite:Boolean
 ){
     fun getCoverArtWork(): String{
         return artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")

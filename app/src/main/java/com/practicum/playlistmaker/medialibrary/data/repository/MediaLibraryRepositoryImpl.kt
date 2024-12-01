@@ -23,9 +23,12 @@ class MediaLibraryRepositoryImpl(
 ):MediaLibraryRepository {
 
     override fun getFavoriteTrackList(): Flow<List<Track>> = flow {
-        val favoriteTrackList = appDatabase.mediaLibraryTrackDao().getFavoriteTrackList()
-        emit(convertFromTrackEntity(favoriteTrackList))
-    }.flowOn(Dispatchers.IO)
+        val favoriteTrackListFlow = appDatabase.mediaLibraryTrackDao().getFavoriteTrackList()
+        favoriteTrackListFlow.collect { favoriteTrackList ->
+            val reversedTrackList = favoriteTrackList.reversed()
+            emit(convertFromTrackEntity(reversedTrackList))
+        }
+    }
 
 
     private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> {

@@ -20,7 +20,7 @@ object TrackInfoMapper {
             releaseDate = DateFormatter.yearFormatter.format(track.trackTimeMillis),
             primaryGenreName = track.primaryGenreName,
             country = track.country,
-            isInFavorite = track.isInFavorite
+            isInFavorite = track.isFavorite
         )
     }
 }
