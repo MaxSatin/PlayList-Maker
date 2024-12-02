@@ -7,5 +7,4 @@ interface TracksHistoryRepository {
     fun saveTracksHistoryToLocalStorage(data: List<Track>)
     fun getTracks(): Flow<List<Track>>
     fun clearStorage()
-//    fun isHistoryEmpty(): Boolean
 }

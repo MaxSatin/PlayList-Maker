@@ -30,22 +30,16 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-
     private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> {
         return tracks.map { trackEntity ->
             converter.map(trackEntity)
         }
     }
-    //
-//    override fun getFavoriteTrackList(): List<Track> {
-//        val favoriteTrackList = getFavoriteTrackListFromStorage()
-//        return if (favoriteTrackList.isNullOrEmpty()){
-//            emptyList<Track>()
-//        } else {
-//            favoriteTrackList
-//        }
-//    }
-//
+
+    /**
+     Методы getPlaylists() и getPlaylistFromStorage() имитируют загрузку плейлистов из базы.
+     Позднее они будут заменены на актуальные
+     **/
     override fun getPlaylists(): List<List<Track>> {
         val playlists = getPlaylistsFromStorage()
         return if (playlists.isNullOrEmpty()){
@@ -54,15 +48,7 @@ class MediaLibraryRepositoryImpl(
             playlists
         }
     }
-//
-//    private fun getFavoriteTrackListFromStorage(): List<Track>? {
-//        val favoriteTrackListGson: String? = sharedPrefs.getString(FAVORITE_TRACK_LIST_KEY, null)
-//        return favoriteTrackListGson?.let{
-//            val itemType = object : TypeToken<List<Track>> () {}.type
-//            gson.fromJson(it, itemType)
-//        }
-//    }
-//
+
     private fun getPlaylistsFromStorage(): List<List<Track>>? {
         val playlistsGson: String? = sharedPrefs.getString(PLAYLIST_KEY, null)
         return playlistsGson?.let {
@@ -72,9 +58,7 @@ class MediaLibraryRepositoryImpl(
     }
 
     companion object {
-        private const val FAVORITE_TRACK_LIST_KEY = "favorite_track_list_key"
-        private const val FAVORITE_SHARED_PREFS_KEY = "favorite_track_list_shared_prefs"
         private const val PLAYLIST_KEY = "playlist_key"
-        private const val PLAYLIST_SHARED_PREFS_KEY = "playlist_shared_prefs"
+
     }
 }

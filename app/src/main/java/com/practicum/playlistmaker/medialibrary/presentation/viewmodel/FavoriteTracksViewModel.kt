@@ -37,9 +37,6 @@ class FavoriteTracksViewModel(
         isClickAllowed = isAllowed
     }
 
-//    init {
-//        loadFavoriteTrackList()
-//    }
 
     fun loadFavoriteTrackList() {
         render(
@@ -65,8 +62,10 @@ class FavoriteTracksViewModel(
     }
 
     fun showTrackPlayer(track: Track) {
-        val trackGson = gson.toJson(track)
-        showTrackPlayerTrigger.value = trackGson
+        if (clickDebounce()) {
+            val trackGson = gson.toJson(track)
+            showTrackPlayerTrigger.value = trackGson
+        }
     }
 
     private fun processResult(trackList: List<Track>) {

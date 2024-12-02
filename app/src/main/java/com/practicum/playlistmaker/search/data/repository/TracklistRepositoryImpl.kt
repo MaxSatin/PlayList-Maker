@@ -26,7 +26,6 @@ class TracklistRepositoryImpl(
             when (trackListResponse.resultCode) {
                 -1 -> emit(Resourse.NoConnection("Проверьте подключение к интернету"))
                 200 -> with(trackListResponse as TrackListResponse) {
-//                    val favoriteIds = appDatabase.searchTrackDao().getFavoriteTracksId()
                     val data = results.map { trackDto ->
                         val track = TrackMapper.map(trackDto)
                         track.isFavorite = favoriteIds.contains(track.trackId)

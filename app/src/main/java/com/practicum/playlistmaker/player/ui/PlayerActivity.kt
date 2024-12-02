@@ -91,6 +91,8 @@ class PlayerActivity : AppCompatActivity() {
         binding.addToFavorites.isChecked = isInFavorite
     }
 
+    // Скрываем poster, т.к. к расположению poster подвязаны остальные элементы дизайна.
+    // Скрывая poster - скрываем и остальные элементы. (наверно, кривое решение. буду очень рад комметариям!))
     private fun showLoading() {
         binding.poster.isVisible = false
         binding.loadingOverlay.isVisible = true

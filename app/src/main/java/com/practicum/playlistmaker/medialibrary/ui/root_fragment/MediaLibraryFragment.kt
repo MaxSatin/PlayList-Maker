@@ -21,6 +21,7 @@ class MediaLibraryFragment : Fragment() {
     private val viewModel: MediaLibraryViewModel by viewModel()
     private lateinit var tabLayoutMediator: TabLayoutMediator
 
+    // Не совсем уверен, что так правильно создавать список фрагментов. Буду рад любым комментариям!)
     private val fragmentList: MutableList<Fragment> = mutableListOf(
         FavoriteTracksFragment(),
         PlayListsFragment()
@@ -38,11 +39,8 @@ class MediaLibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        viewModel.getMediaLibraryStateLiveData().observe(viewLifecycleOwner) { state ->
             binding.viewPager.adapter = MediaLibraryViewPagerAdapter(
                 fragmentList,
-//                state.favoriteListScreenState,
-//                state.playList,
                 childFragmentManager,
                 lifecycle = lifecycle
             )
@@ -54,10 +52,8 @@ class MediaLibraryFragment : Fragment() {
                     }
                 }
             tabLayoutMediator.attach()
-//        }
     }
 
-//    private fun stateProcessor(state: State): Pair<>
 
     override fun onDestroyView() {
         super.onDestroyView()

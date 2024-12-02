@@ -46,10 +46,6 @@ class TracksHistoryRepositoryImpl(
         }
     }
 
-//    override fun isHistoryEmpty(): Boolean {
-//        return getTracks().isNullOrEmpty()
-//    }
-
     private fun getTrackFromLocalStorage(): List<Track>? {
         val tracksFromGson: String? = sharedPrefsHistory.getString(KEY_HISTORY_TRACK_LIST, null)
         return tracksFromGson?.let {

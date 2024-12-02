@@ -16,9 +16,6 @@ class MediaLibraryViewModel(
     private val mediaLibraryInteractor: MediaLibraryInteractor
 ) : ViewModel() {
 
-//    private val favoriteScreenState = MutableLiveData<FavoriteListScreenState>()
-//    fun getFavoriteListScreenState(): LiveData<FavoriteListScreenState> = favoriteScreenState
-
     private val mediaLibraryStateLiveData = MutableLiveData<State>()
     fun getMediaLibraryStateLiveData(): LiveData<State> = mediaLibraryStateLiveData
 
@@ -33,9 +30,6 @@ class MediaLibraryViewModel(
         mediaLibraryStateLiveData.value = getCurrentMediaLibraryState().copy(
             favoriteListScreenState = FavoriteListScreenState.Loading
         )
-//        render(
-//            FavoriteListScreenState.Loading
-//        )
 
         viewModelScope.launch {
             mediaLibraryInteractor.getFavoriteTrackList()
@@ -50,25 +44,12 @@ class MediaLibraryViewModel(
             mediaLibraryStateLiveData.value = getCurrentMediaLibraryState().copy(
                 favoriteListScreenState = FavoriteListScreenState.Empty("Список треков пуст!")
             )
-//            render(FavoriteListScreenState.Empty("Список треков пуст!"))
         } else {
             mediaLibraryStateLiveData.value = getCurrentMediaLibraryState().copy(
                 favoriteListScreenState = FavoriteListScreenState.Content(trackList)
             )
-//            render(FavoriteListScreenState.Content(trackList))
         }
     }
-//    private fun render(state: FavoriteListScreenState){
-//        favoriteScreenState.postValue(state)
-//    }
-
-
-//    private val mediaLibraryStateLiveData = MutableLiveData<State>()
-//    fun getMediaLibraryStateLiveData(): LiveData<State> = mediaLibraryStateLiveData
-
-//    init{
-//        showContent()
-//    }
 
     private fun getCurrentMediaLibraryState(): State {
         return mediaLibraryStateLiveData.value ?: State(
@@ -78,11 +59,5 @@ class MediaLibraryViewModel(
     }
 }
 
-
-//    private fun showContent() {
-//        mediaLibraryStateLiveData.value = getCurrentMediaLibraryState().copy(
-//            favoriteTracks = mediaLibraryInteractor.getFavoriteTrackList(),
-//            playList = mediaLibraryInteractor.getPlaylists()
-//        )
 
 
