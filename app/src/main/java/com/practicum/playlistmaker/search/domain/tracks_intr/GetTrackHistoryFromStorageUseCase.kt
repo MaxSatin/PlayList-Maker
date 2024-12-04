@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class GetTrackHistoryFromStorageUseCase(
     private val tracksHistoryRepository: TracksHistoryRepository
 ) {
-    operator fun invoke(): Flow<List<Track>> {
+    operator fun invoke(): List<Track> {
         return tracksHistoryRepository.getTracks()
     }
 }

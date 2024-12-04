@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface DatabaseRepository {
 
-    fun checkIsFavorite(trackId: String): Flow<Boolean>
+    fun getFavoriteTracksId(): Flow<List<String>>
 }

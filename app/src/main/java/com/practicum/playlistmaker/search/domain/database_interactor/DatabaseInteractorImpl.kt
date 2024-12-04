@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 class DatabaseInteractorImpl(
     private val databaseRepository: DatabaseRepository
 ): DatabaseInteractor {
-    override fun checkIsFavorite(trackId: String): Flow<Boolean> {
-        return databaseRepository.checkIsFavorite(trackId)
+    override fun getFavoriteTracksId(): Flow<List<String>> {
+        return databaseRepository.getFavoriteTracksId()
     }
 }
