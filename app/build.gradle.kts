@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -68,6 +69,14 @@ dependencies {
     implementation("com.google.android.material:material:1.8.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.0")
+
+
+    val room_version = "2.6.0-alpha03"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
 
 
 }

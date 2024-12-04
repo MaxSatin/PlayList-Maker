@@ -8,7 +8,7 @@ import org.koin.dsl.module
 val playerViewModelModule = module {
     viewModel { (track: String) ->
             PlayerViewModel(
-                androidApplication(), track, get(), get()
+                androidApplication(), track, get(), get(), get()
             )
     }
 }

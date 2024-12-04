@@ -157,9 +157,9 @@
         <item name="android:backgroundTint">@android:color/transparent</item>
     </style>
 
-    <style name="PlayerTrackButtonaAddToFav">
-        <item name="android:src">@drawable/vector_add_to_favorites</item>
-        <item name="android:backgroundTint">@android:color/transparent</item>
+    <style name="PlayerTrackButtonAddToFav">
+        <item name="android:background">@drawable/add_to_favorites_background_selector</item>
+        <item name="android:foreground">@drawable/add_to_favorites_image_selector_night</item>
     </style>
 
     <style name="PlayerTrackText">

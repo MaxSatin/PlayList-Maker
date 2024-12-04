@@ -27,8 +27,8 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by viewModel()
 
 
-    private lateinit var adapter: TrackAdapter
-    private lateinit var trackHistoryAdapter: HistoryRVAdapter
+    private var adapter: TrackAdapter? = null
+    private var trackHistoryAdapter: HistoryRVAdapter? = null
 
     private var isHistoryEmpty: Boolean = false
 
@@ -45,7 +45,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = SearchFragmentBinding.inflate(inflater, container, false)
-
+        viewModel.getHistoryTracks()
         return binding.root
     }
 
@@ -58,6 +58,8 @@ class SearchFragment : Fragment() {
 
         binding.recyclerSearch.adapter = adapter
         binding.trackHistoryRV?.adapter = trackHistoryAdapter
+        Log.d("historyAdapter", "${trackHistoryAdapter.toString()}")
+        viewModel.getHistoryTracks()
 
         viewModel.observeTrackSearchState().observe(viewLifecycleOwner) { trackListState ->
             render(trackListState)
@@ -65,6 +67,7 @@ class SearchFragment : Fragment() {
         }
 
         viewModel.observeHistoryState().observe(viewLifecycleOwner) { historyListState ->
+            Log.d("historyListState", "$historyListState")
 
             when (historyListState) {
                 is State.HistoryListState.Empty -> {
@@ -72,6 +75,7 @@ class SearchFragment : Fragment() {
                     hideHistory()
                 }
                 is State.HistoryListState.Content -> {
+                    Log.d("historyContent", "${historyListState.tracks} ")
                     isHistoryEmpty = false
                     render(historyListState)
                 }
@@ -160,7 +164,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun showHistory(tracks: List<Track>) {
-        trackHistoryAdapter.updateItems(tracks)
+        trackHistoryAdapter?.updateItems(tracks)
+        binding.trackHistory.visibility = View.VISIBLE
 
     }
 
@@ -177,7 +182,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showTracks(trackList: List<Track>) {
-        adapter.updateItems(trackList)
+        adapter?.updateItems(trackList)
         binding.recyclerSearch?.visibility = View.VISIBLE
         binding.progressBar?.visibility = View.GONE
         binding.trackHistory?.visibility = View.GONE
@@ -230,6 +235,13 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         editTextWatcher?.let { binding.editTextwatcher.removeTextChangedListener(it) }
         _binding = null
+        trackHistoryAdapter = null
+        adapter = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getHistoryTracks()
     }
 
 }

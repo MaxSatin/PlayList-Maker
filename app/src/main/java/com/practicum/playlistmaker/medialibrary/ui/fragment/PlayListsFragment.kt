@@ -56,22 +56,13 @@ class PlayListsFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.emptyPlayListsPH.isVisible = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // получаем flatList отедельно и передаем в параметр getTrackList, чтобы использовать
             // соответствующие методы для соответствующих версий Android
-            val flatList =
-                arguments?.getParcelable(KEY_TRACKS, ArrayList::class.java) as ArrayList<Track>
-            val favorites = getTrackListList(arguments, flatList)
+            val favorites = emptyList<List<Track>>()
             if (favorites.isNullOrEmpty()) {
                 binding.emptyPlayListsPH.isVisible = true
-            }
-        } else {
-            val flatList = arguments?.getParcelableArrayList<Track>(KEY_TRACKS)
-            val favorites = getTrackListList(arguments, flatList)
-            if (favorites.isNullOrEmpty()) {
-                if (favorites.isNullOrEmpty()) {
-                    binding.emptyPlayListsPH.isVisible = true
-                }
             }
         }
     }
