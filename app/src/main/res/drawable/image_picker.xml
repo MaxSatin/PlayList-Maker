@@ -9,8 +9,8 @@
         <shape android:shape="rectangle">
             <stroke android:width="@dimen/padding_1"
                 android:color="@color/grey"
-                android:dashGap="@dimen/padding_54"
-                android:dashWidth="@dimen/padding_54">
+                android:dashGap="@dimen/padding_24"
+                android:dashWidth="@dimen/padding_32">
             </stroke>
             <corners android:radius="@dimen/padding_8"/>
         </shape>
