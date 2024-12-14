@@ -35,7 +35,8 @@ class App : Application() {
                 playerViewModelModule, playerRepositoryModule, playerInteractorModule,
                 themeDataModule, themeRepositoryModule, themeInteractorModule, settingsViewModelModule,
                 actionRepositoryModule, actionInteractorModule, mediaLibraryViewModelModule, mediaLibraryInteractorModule,
-                mediaLibraryDataModule)
+                mediaLibraryDataModule
+            )
         }
         appThemeInteractor.setAppTheme()
     }

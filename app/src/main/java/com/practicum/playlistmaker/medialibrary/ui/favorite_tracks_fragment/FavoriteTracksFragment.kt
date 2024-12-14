@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.ui.fragment.favorite_tracks_fragment
+package com.practicum.playlistmaker.medialibrary.ui.favorite_tracks_fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.FavoriteTracksViewModel
+import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.viewmodel.FavoriteTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.practicum.playlistmaker.databinding.FavoriteTracksFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.FavoriteListScreenState

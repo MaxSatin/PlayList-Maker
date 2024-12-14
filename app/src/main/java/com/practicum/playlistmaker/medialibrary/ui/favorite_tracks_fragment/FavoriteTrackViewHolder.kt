@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.ui.fragment.favorite_tracks_fragment
+package com.practicum.playlistmaker.medialibrary.ui.favorite_tracks_fragment
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide

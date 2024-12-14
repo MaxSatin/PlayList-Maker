@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.ui.fragment.favorite_tracks_fragment
+package com.practicum.playlistmaker.medialibrary.ui.favorite_tracks_fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

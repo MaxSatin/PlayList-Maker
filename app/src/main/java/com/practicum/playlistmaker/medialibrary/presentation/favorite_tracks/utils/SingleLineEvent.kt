@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.presentation.utils
+package com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

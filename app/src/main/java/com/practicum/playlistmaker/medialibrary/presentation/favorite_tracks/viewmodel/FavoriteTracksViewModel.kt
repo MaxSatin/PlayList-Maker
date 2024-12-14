@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.presentation.viewmodel
+package com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.viewmodel
 
 
 import android.util.Log
@@ -10,7 +10,7 @@ import com.google.gson.Gson
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.FavoriteListScreenState
 import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryInteractor
 import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
-import com.practicum.playlistmaker.medialibrary.presentation.utils.SingleLineEvent
+import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.SingleLineEvent
 import com.practicum.playlistmaker.search.presentation.utils.debounce
 import kotlinx.coroutines.launch
 

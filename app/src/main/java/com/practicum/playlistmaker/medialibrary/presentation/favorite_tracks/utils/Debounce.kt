@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.presentation.utils
+package com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.ui.viewpager
+package com.practicum.playlistmaker.medialibrary.ui.root_fragment
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

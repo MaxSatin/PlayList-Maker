@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.presentation.viewmodel
+package com.practicum.playlistmaker.medialibrary.presentation.root.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryIn
 import com.practicum.playlistmaker.medialibrary.domain.track_model.State
 
 import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
-import com.practicum.playlistmaker.medialibrary.presentation.utils.SingleLineEvent
+import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.SingleLineEvent
 import kotlinx.coroutines.launch
 
 class MediaLibraryViewModel(

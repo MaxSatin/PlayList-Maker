@@ -20,7 +20,7 @@ class MediaLibraryRepositoryImpl(
     private val gson: Gson,
     private val sharedPrefs: SharedPreferences
 
-):MediaLibraryRepository {
+): MediaLibraryRepository {
 
     override fun getFavoriteTrackList(): Flow<List<Track>> = flow {
         val favoriteTrackListFlow = appDatabase.mediaLibraryTrackDao().getFavoriteTrackList()
