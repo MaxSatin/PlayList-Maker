@@ -36,13 +36,13 @@ class PlayerActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.playerActivity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
 
         val trackGson = intent.getStringExtra(TRACK_ITEM_KEY)
         viewModel = getViewModel { parametersOf(trackGson) }
-        binding.stopPlayerButton.isEnabled = false
+        binding.playButton.isEnabled = false
 
         binding.playerButtonBack.setOnClickListener {
             finish()
@@ -52,7 +52,7 @@ class PlayerActivity : AppCompatActivity() {
             render(playerState)
 
             if (playerState.playStatus.isPrepared) {
-                binding.stopPlayerButton.isEnabled = true
+                binding.playButton.isEnabled = true
                 this.isPrepared = true
             }
 
@@ -63,9 +63,14 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        binding.stopPlayerButton.setOnClickListener {
+        binding.playButton.setOnClickListener {
             viewModel.playerController()
         }
+
+        binding.addToFavorites.setOnClickListener {
+            viewModel.controlFavoriteState()
+        }
+
     }
 
     private fun render(state: PlayerState) {
@@ -77,19 +82,26 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun changePlayButtonStyle(isPlaying: Boolean) {
         when (isPlaying) {
-            true -> binding.stopPlayerButton.isChecked = true
-            false -> binding.stopPlayerButton.isChecked = false
+            true -> binding.playButton.isChecked = true
+            false -> binding.playButton.isChecked = false
         }
     }
 
+    private fun handleIsFavoriteStatus(isInFavorite: Boolean) {
+        binding.addToFavorites.isChecked = isInFavorite
+    }
+
+    // Скрываем poster, т.к. к расположению poster подвязаны остальные элементы дизайна.
+    // Скрывая poster - скрываем и остальные элементы. (наверно, кривое решение. буду очень рад комметариям!))
     private fun showLoading() {
+        binding.poster.isVisible = false
         binding.loadingOverlay.isVisible = true
     }
 
     private fun showTrackDetails(trackItem: TrackInfoModel) {
         binding.loadingOverlay.isVisible = false
-        binding.poster.isVisible = true
         binding.progressbar.isVisible = false
+        binding.poster.isVisible = true
         loadPoster(trackItem)
         binding.songName.text = trackItem.trackName
         binding.bandName.text = trackItem.artistName
@@ -99,6 +111,7 @@ class PlayerActivity : AppCompatActivity() {
         binding.albumYear.text = trackItem.releaseDate
         binding.trackGenre.text = trackItem.primaryGenreName
         binding.trackCountry.text = trackItem.country
+        handleIsFavoriteStatus(trackItem.isInFavorite)
         isPreloaded = true
     }
 
@@ -113,7 +126,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        binding.stopPlayerButton.isChecked = false
+        binding.playButton.isChecked = false
         viewModel.pausePlayer()
 
     }

@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.search.domain.repository.TracksHistoryReposit
 
 class TracksHistoryRepositoryImpl(
     private val gson: Gson,
-    private val sharedPrefsHistory: SharedPreferences
+    private val sharedPrefsHistory: SharedPreferences,
 ) : TracksHistoryRepository {
 
     override fun saveTracksHistoryToLocalStorage(data: List<Track>) {
@@ -22,7 +22,7 @@ class TracksHistoryRepositoryImpl(
 
     override fun clearStorage() {
         sharedPrefsHistory.edit()
-            .putString(KEY_HISTORY_TRACK_LIST, "")
+            .remove(KEY_HISTORY_TRACK_LIST)
             .apply()
     }
 
@@ -34,10 +34,6 @@ class TracksHistoryRepositoryImpl(
             val emptyTrackList = emptyList<Track>()
             emptyTrackList
         }
-    }
-
-    override fun isHistoryEmpty(): Boolean {
-        return getTracks().isNullOrEmpty()
     }
 
     private fun getTrackFromLocalStorage(): List<Track>? {

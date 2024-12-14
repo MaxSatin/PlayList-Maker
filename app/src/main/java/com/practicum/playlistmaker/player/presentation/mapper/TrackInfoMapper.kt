@@ -19,7 +19,8 @@ object TrackInfoMapper {
             collectionName = track.collectionName,
             releaseDate = DateFormatter.yearFormatter.format(track.trackTimeMillis),
             primaryGenreName = track.primaryGenreName,
-            country = track.country
+            country = track.country,
+            isInFavorite = track.isFavorite
         )
     }
 }

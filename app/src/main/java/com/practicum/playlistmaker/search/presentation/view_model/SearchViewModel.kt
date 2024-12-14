@@ -10,15 +10,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.practicum.playlistmaker.search.domain.consumer.ConsumerData
+import com.practicum.playlistmaker.search.domain.database_interactor.DatabaseInteractor
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.domain.tracks_intr.AddTrackToHistoryUseCase
-import com.practicum.playlistmaker.search.domain.tracks_intr.CheckIsHistoryEmptyUseCase
 import com.practicum.playlistmaker.search.domain.tracks_intr.ClearHistoryUseCase
 import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackHistoryFromStorageUseCase
 import com.practicum.playlistmaker.search.domain.tracks_intr.GetTrackListFromServerUseCase
 import com.practicum.playlistmaker.search.presentation.state.State
 import com.practicum.playlistmaker.search.presentation.utils.SingleEventLifeData
 import com.practicum.playlistmaker.search.presentation.utils.debounce
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -27,7 +28,7 @@ class SearchViewModel(
     private val addTrackToHistory: AddTrackToHistoryUseCase,
     private val clearHistory: ClearHistoryUseCase,
     private val getTracksHistory: GetTrackHistoryFromStorageUseCase,
-    private val checkIsHistoryEmpty: CheckIsHistoryEmptyUseCase,
+    private val databaseInteractor: DatabaseInteractor,
     private val gson: Gson,
 ) : AndroidViewModel(application) {
 
@@ -65,19 +66,27 @@ class SearchViewModel(
     fun observeTrackSearchState(): LiveData<State.SearchListState> = stateLiveData
     fun getShowTrackPlayerTrigger(): LiveData<String> = showTrackPlayerTrigger
 
-    init {
-        getHistoryTracks()
-    }
+//    init {
+//        getHistoryTracks()
+//    }
+
 
     fun getHistoryTracks() {
 
-        val getTracksHistory = getTracksHistory()
-        if (getTracksHistory.isNullOrEmpty()) {
+        val tracksHistory = getTracksHistory().toMutableList()
+        if (tracksHistory.isNullOrEmpty()) {
             renderHistoryState(State.HistoryListState.Empty("Список пуст"))
         } else {
-            renderHistoryState(State.HistoryListState.Content(getTracksHistory))
+            viewModelScope.launch {
+                databaseInteractor.getFavoriteTracksId()
+                    .collect { favoriteIdsList ->
+                    tracksHistory.map { track: Track ->
+                        track.isFavorite = favoriteIdsList.contains(track.trackId)
+                    }
+                    renderHistoryState(State.HistoryListState.Content(tracksHistory))
+                }
+            }
         }
-
     }
 
     private fun clickDebounce(): Boolean {
@@ -99,7 +108,7 @@ class SearchViewModel(
 
     fun clearHistoryList() {
         clearHistory()
-        updateHistoryList()
+        renderHistoryState(State.HistoryListState.Empty("Список пуст"))
     }
 
     fun clearSearchList() {
@@ -149,6 +158,7 @@ class SearchViewModel(
                     data.message
                 )
             )
+
             is ConsumerData.Data -> {
                 if (data.value.isNullOrEmpty()) {
                     renderState(State.SearchListState.Empty("По запросу ничего не нашлось"))
