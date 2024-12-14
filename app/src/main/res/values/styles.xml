@@ -220,4 +220,12 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <style name="ys_display_regular_text_12" >
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
+
     </resources>

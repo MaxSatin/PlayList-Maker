@@ -9,6 +9,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId = "com.practicum.playlistmaker"
         minSdk = 29
         targetSdk = 34

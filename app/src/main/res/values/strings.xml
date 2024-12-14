@@ -21,6 +21,7 @@
     <string name="refresh">Обновить</string>
     <string name="you_searched">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
+    <string name="create_playlist">Создать</string>
 
     <string name="library_is_empty">Ваша медиатека пуста</string>
     <string name="playlists_are_empty">Вы не создали\n ни одного плейлиста</string>
@@ -29,7 +30,8 @@
     <string name="favorite_tracks">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
 
-
     <string name="search_hint">Поиск</string>
+
+
 
 </resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:width="300dp"
+        android:height="300dp"
+        android:gravity="center">
+
+        <shape android:shape="rectangle">
+            <stroke android:width="@dimen/padding_1"
+                android:color="@color/grey"
+                android:dashGap="@dimen/padding_54"
+                android:dashWidth="@dimen/padding_54">
+            </stroke>
+            <corners android:radius="@dimen/padding_8"/>
+        </shape>
+    </item>
+
+    <item android:gravity="center">
+        <bitmap
+            android:src="@drawable/image_picker_png"
+            android:gravity="center" />
+    </item>
+
+
+
+</layer-list>
