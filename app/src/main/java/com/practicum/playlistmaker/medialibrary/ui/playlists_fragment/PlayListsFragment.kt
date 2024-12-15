@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistsFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.viewmodel.PlayListsViewModel
@@ -63,6 +65,12 @@ class PlayListsFragment() : Fragment() {
             if (favorites.isNullOrEmpty()) {
                 binding.emptyPlayListsPH.isVisible = true
             }
+        }
+
+        binding.createPlayListButton.setOnClickListener{
+            findNavController().navigate(
+                R.id.action_mediaLibraryFragment_to_createPlayListsFragment
+            )
         }
     }
 
