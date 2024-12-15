@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MediaLibraryTrackDao {
 
-    @Query("SELECT * FROM favorite_tracks_table")
+    @Query("SELECT * FROM tracks_table WHERE isFavorite = 1")
     fun getFavoriteTrackList(): Flow<List<TrackEntity>>
 
 }
