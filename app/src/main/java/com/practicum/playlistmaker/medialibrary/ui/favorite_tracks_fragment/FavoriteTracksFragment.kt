@@ -12,7 +12,7 @@ import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.vie
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.practicum.playlistmaker.databinding.FavoriteTracksFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.FavoriteListScreenState
-import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
+import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 
 class FavoriteTracksFragment() : Fragment() {

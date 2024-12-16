@@ -4,14 +4,16 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.AppDatabase
+import com.practicum.playlistmaker.medialibrary.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.medialibrary.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.medialibrary.data.utils.TrackDbConverter
+import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.repository.MediaLibraryRepository
-import com.practicum.playlistmaker.medialibrary.domain.track_model.Track
+import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 
 
 class MediaLibraryRepositoryImpl(
@@ -23,7 +25,7 @@ class MediaLibraryRepositoryImpl(
 ): MediaLibraryRepository {
 
     override fun getFavoriteTrackList(): Flow<List<Track>> = flow {
-        val favoriteTrackListFlow = appDatabase.mediaLibraryTrackDao().getFavoriteTrackList()
+        val favoriteTrackListFlow = appDatabase.favoriteTracklistDao().getFavoriteTrackList()
         favoriteTrackListFlow.collect { favoriteTrackList ->
             val reversedTrackList = favoriteTrackList.reversed()
             emit(convertFromTrackEntity(reversedTrackList))
@@ -36,16 +38,52 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-    /**
-     Методы getPlaylists() и getPlaylistFromStorage() имитируют загрузку плейлистов из базы.
-     Позднее они будут заменены на актуальные
-     **/
-    override fun getPlaylists(): List<List<Track>> {
-        val playlists = getPlaylistsFromStorage()
-        return if (playlists.isNullOrEmpty()){
-            emptyList<List<Track>>()
-        } else {
-            playlists
+    private fun convertFromPlaylistEntity(playlistEntitie: List<PlaylistEntity>): List<Playlist> {
+        return playlistEntitie.map { playlistEntity ->
+            converter.map(playlistEntity)
+        }
+    }
+
+    override fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>> = flow {
+        val trackListFlow = appDatabase.playlistDao().getAllTracksFromPlaylist(playlistName)
+        trackListFlow.collect { trackList ->
+            val reversedTracklist = trackList.reversed()
+            emit(convertFromTrackEntity(reversedTracklist))
+        }
+    }
+
+    override fun getPlaylists(): Flow<List<Playlist>> = flow {
+        val playListFlow = appDatabase.playlistDao().getPlaylists()
+        playListFlow.collect { playList ->
+            val reversedPlaylist = playList.reversed()
+            emit(convertFromPlaylistEntity(reversedPlaylist))
+        }
+//        val playlists = getPlaylistsFromStorage()
+//        return if (playlists.isNullOrEmpty()){
+//            emptyList<List<Track>>()
+//        } else {
+//            playlists
+//        }
+    }
+
+    override suspend fun addPlaylistWithReplace(playlist: Playlist) {
+        withContext(Dispatchers.IO){
+            val playlistEntity = converter.map(playlist)
+            appDatabase.playlistDao().addPlaylistWithReplace(playlistEntity)
+        }
+    }
+
+    override suspend fun addPlaylist(playlist: Playlist) {
+        withContext(Dispatchers.IO){
+            val playlistEntity = converter.map(playlist)
+            appDatabase.playlistDao().addPlaylist(playlistEntity)
+        }
+    }
+
+    override suspend fun deletePlaylist(playlist: Playlist) {
+        withContext(Dispatchers.IO){
+            val playlistEntity = converter.map(playlist)
+            appDatabase.playlistDao().deletePlaylist(playlistEntity)
         }
     }
 
