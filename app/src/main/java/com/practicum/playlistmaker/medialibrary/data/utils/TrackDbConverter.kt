@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.medialibrary.data.utils
 
+import android.net.Uri
 import com.practicum.playlistmaker.medialibrary.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import com.practicum.playlistmaker.medialibrary.data.db.entity.TrackEntity
@@ -32,7 +33,7 @@ class TrackDbConverter {
             Playlist(
                 name,
                 description,
-                coverUri
+                toUriConverter(coverUri)
             )
         }
     }
@@ -42,8 +43,16 @@ class TrackDbConverter {
             PlaylistEntity(
                 name,
                 description,
-                coverUri
+                fromUriConverter(coverUri)
             )
         }
+    }
+
+    private fun fromUriConverter(uri: Uri?): String {
+        return uri.toString()
+    }
+
+    private fun toUriConverter(uriString: String?): Uri {
+        return Uri.parse(uriString)
     }
 }

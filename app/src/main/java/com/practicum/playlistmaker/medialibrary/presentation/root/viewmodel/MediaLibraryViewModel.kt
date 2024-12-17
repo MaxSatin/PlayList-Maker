@@ -9,6 +9,7 @@ import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryIn
 import com.practicum.playlistmaker.medialibrary.domain.model.state.State
 
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlayListsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.SingleLineEvent
 import kotlinx.coroutines.launch
 
@@ -54,7 +55,7 @@ class MediaLibraryViewModel(
     private fun getCurrentMediaLibraryState(): State {
         return mediaLibraryStateLiveData.value ?: State(
             favoriteListScreenState = FavoriteListScreenState.Empty("Список треков пуст!"),
-            playList = emptyList()
+            PlayListsScreenState.Empty("Список плейлистов пуст!")
         )
     }
 }

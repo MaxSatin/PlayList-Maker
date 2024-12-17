@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.app.Application
+import com.markodevcic.peko.PermissionRequester
 import com.practicum.playlistmaker.medialibrary.di.mediaLibraryDataModule
 import com.practicum.playlistmaker.medialibrary.di.mediaLibraryInteractorModule
 import com.practicum.playlistmaker.medialibrary.di.mediaLibraryViewModelModule
@@ -28,7 +29,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
+        PermissionRequester.initialize(applicationContext)
         startKoin {
             androidContext(this@App)
             modules(dataModule, repositoryModule, interactorModule, viewModelModule,
