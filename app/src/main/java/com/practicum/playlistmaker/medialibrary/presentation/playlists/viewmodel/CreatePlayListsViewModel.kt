@@ -19,8 +19,9 @@ class CreatePlayListsViewModel(
 
     private var isCopyNeeded = false
 
-    private val permissionState = MutableLiveData<CreatePlaylistState>()
-    fun permissionStateLiveData(): LiveData<CreatePlaylistState> = permissionState
+
+    private val playlistsState = MutableLiveData<CreatePlaylistState>()
+    fun permissionStateLiveData(): LiveData<CreatePlaylistState> = playlistsState
 
     private var isClickAllowed = true
     private val setIsClickAllowed = debounce<Boolean>(
@@ -37,46 +38,48 @@ class CreatePlayListsViewModel(
         viewModelScope,
         false
     ) { playlist ->
-        checkCurrentPlaylists(playlist)
+//        checkCurrentPlaylists(playlist)
     }
 
     init {
         isCopyNeeded = false
     }
 
-    fun checkPlaylistDebounce(playlist: Playlist){
-        if (latestCheckedPlayList == playlist){
+    fun checkPlaylistDebounce(playlist: Playlist) {
+        if (latestCheckedPlayList == playlist) {
             return
         }
-            this.latestCheckedPlayList = playlist
-            checkPlaylistDebounce(playlist)
+        this.latestCheckedPlayList = playlist
+        checkPlaylistDebounce(playlist)
     }
 
-    private fun checkCurrentPlaylists(playlist: Playlist) {
-        if (clickDebounce()) {
-            viewModelScope.launch {
-                mediaLibraryInteractor.getPlaylists()
-                    .collect { playlists ->
-                        Log.d("ViewmodelPlaylist", "$playlists")
-                        val filteredPlaylist = playlists.filter { it.name == playlist.name }
-                        if (filteredPlaylist.isNotEmpty()) {
-                            renderState(
-                                CreatePlaylistState.CopyExists
-                            )
-                        } else {
-                            renderState(
-                                CreatePlaylistState.NoCopyExists
-                            )
-                        }
+    fun checkCurrentPlaylists() {
+        viewModelScope.launch {
+            mediaLibraryInteractor.getPlaylists()
+                .collect { playlists ->
+                    renderState(CreatePlaylistState.Content(playlists))
+//                    var playlistst = playlists
+//                    val filteredPlaylist = playlistst.find {
+//                        it.name.trim().equals(playlist.name.trim(), ignoreCase = true)
+//                    }
+//                    Log.d("ViewmodelPlaylistR", "$filteredPlaylist")
+//                    if (filteredPlaylist?.name.isNullOrEmpty()) {
+//                        renderState(
+//                            CreatePlaylistState.NoCopyExists
+//                        )
+//                    }
+//                    renderState(
+//                        CreatePlaylistState.CopyExists
+//                    )
+                }
 //                        if (isCopyNeeded) {
 //                            addPlaylist(playlist)
 //                        } else {
 //                            addPlaylistWithReplace(playlist)
 //                        }
-                    }
-            }
         }
     }
+
 
     private fun onPermissionGranted() {
         isCopyNeeded = true
@@ -96,7 +99,7 @@ class CreatePlayListsViewModel(
     }
 
     private fun renderState(state: CreatePlaylistState) {
-        permissionState.postValue(state)
+        playlistsState.postValue(state)
     }
 
 

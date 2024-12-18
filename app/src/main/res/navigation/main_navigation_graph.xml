@@ -40,5 +40,9 @@
         android:id="@+id/createPlayListsFragment"
         android:name="com.practicum.playlistmaker.medialibrary.ui.playlists_fragment.CreatePlayListsFragment"
         android:label="create_playlist_fragment"
-        tools:layout="@layout/create_playlist_fragment" />
+        tools:layout="@layout/create_playlist_fragment" >
+        <action
+            android:id="@+id/action_createPlayListsFragment_to_mediaLibraryFragment"
+            app:destination="@id/mediaLibraryFragment" />
+    </fragment>
 </navigation>

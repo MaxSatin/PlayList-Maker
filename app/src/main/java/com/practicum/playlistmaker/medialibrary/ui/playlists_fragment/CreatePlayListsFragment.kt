@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.markodevcic.peko.PermissionRequester
 import com.practicum.playlistmaker.R
@@ -41,10 +42,10 @@ class CreatePlayListsFragment : Fragment() {
 
     private lateinit var playlist: Playlist
 
-    //    private var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>? = null
     private var confirmDialog: MaterialAlertDialogBuilder? = null
 
     private val viewModel: CreatePlayListsViewModel by viewModel()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,19 +68,66 @@ class CreatePlayListsFragment : Fragment() {
                 }
             }
 
-        viewModel.checkPlaylistDebounce(
-            Playlist(
-                playListName,
-                playListDescription,
-                coverUri
-            )
-        )
+
+//        binding.createPlayListButton.setOnClickListener {
+////                processState(state)
+//            Log.d("Playlistvalue", "$playListName $playListDescription $coverUri")
+//            val playlist = Playlist(
+//                playListName,
+//                playListDescription,
+//                coverUri
+//            )
+//            viewModel.addPlaylistWithReplace(playlist)
+//        }
+
+
+//            val playlist = Playlist(
+////                playListName,
+////                playListDescription,
+////                coverUri
+////            )
+////            viewModel.checkCurrentPlaylists(playlist)
+////            Log.d("PlaylistOnClick", "$playlist")
+//
+//        val playlist = Playlist(
+//            playListName,
+//            playListDescription,
+//            coverUri
+//        )
+        viewModel.checkCurrentPlaylists()
+
         viewModel.permissionStateLiveData().observe(viewLifecycleOwner) { state ->
-            Log.d("PlaylistState", "ghbdtn")
+            Log.d("PlaylistState", "$state")
             binding.createPlayListButton.setOnClickListener {
                 processState(state)
+
             }
+//                val playlist = Playlist(
+//                    playListName,
+//                    playListDescription,
+//                    coverUri
+//                )
+//                viewModel.checkCurrentPlaylists(playlist)
+//                Log.d("PlaylistOnClick", "$playlist")
+
+////                val playlist = Playlist(
+////                    playListName,
+////                    playListDescription,
+////                    coverUri
+////                )
+////                viewModel.checkCurrentPlaylists(playlist)
+//            }
+//                Log.d("PlaylistOnClick", "$playlist")
+//                processState(state)
+//                Log.d("Playlistvalue", "$playListName $playListDescription $coverUri")
+//                val playlist = Playlist(
+//                    playListName,
+//                    playListDescription,
+//                    coverUri
+//                )
+//                viewModel.addPlaylistWithReplace(playlist)
         }
+
 
         binding.imagepickArea.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -91,7 +139,9 @@ class CreatePlayListsFragment : Fragment() {
 
             }
             .setPositiveButton("Да") { dialog, which ->
-                viewModel.addPlaylist(playlist)
+                val playlistCopy = playlist.copy(name = playListName.addSuffix("_copy"))
+                viewModel.addPlaylist(playlistCopy)
+                findNavController().navigateUp()
             }
 
         val playlistNameTextWatcher = object : TextWatcher {
@@ -120,20 +170,35 @@ class CreatePlayListsFragment : Fragment() {
             }
         }
         binding.playlistNameEditText.addTextChangedListener(playlistNameTextWatcher)
-        binding.playlistDescription.addTextChangedListener(playlistDescriptionTextWatcher)
+        binding.playlistDescriptionEditText.addTextChangedListener(playlistDescriptionTextWatcher)
     }
 
     private fun processState(state: CreatePlaylistState) {
         when (state) {
             is CreatePlaylistState.CopyExists -> confirmDialog?.show()
             is CreatePlaylistState.NoCopyExists -> {
-                val playlist = Playlist(
+                playlist = Playlist(
                     playListName,
                     playListDescription,
                     coverUri
                 )
                 viewModel.addPlaylistWithReplace(playlist)
-                Log.d("Playlist", "${playlist}")
+
+            }
+
+            is CreatePlaylistState.Content -> {
+                playlist = Playlist(playListName, playListDescription, coverUri)
+                val filteredPlaylist = state.playLists.find { it.name == playlist.name }
+                Log.d("ViewmodelPlaylist", "$filteredPlaylist")
+                if (filteredPlaylist == null) {
+                    viewModel.addPlaylistWithReplace(playlist)
+                    findNavController().navigateUp()
+
+                } else {
+                    confirmDialog?.show()
+                }
+//                confirmDialog?.show()
+                Log.d("Playlists", "${state.playLists}")
             }
         }
     }
