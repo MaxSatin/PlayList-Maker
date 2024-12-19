@@ -23,7 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.practicum.playlistmaker.databinding.CreatePlaylistFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.CreatePlaylistState
-import com.practicum.playlistmaker.medialibrary.presentation.playlists.viewmodel.CreatePlayListsViewModel
+import com.practicum.playlistmaker.medialibrary.presentation.playlists.createplaylists.viewmodel.CreatePlayListsViewModel
 import okhttp3.Request
 import java.io.File
 import java.io.FileInputStream
@@ -136,7 +136,6 @@ class CreatePlayListsFragment : Fragment() {
         confirmDialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(requireContext().getString(R.string.create_playlist_dialog_hint))
             .setNegativeButton("Нет") { dialog, which ->
-
             }
             .setPositiveButton("Да") { dialog, which ->
                 val playlistCopy = playlist.copy(name = playListName.addSuffix("_copy"))

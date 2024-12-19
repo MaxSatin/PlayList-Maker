@@ -33,6 +33,8 @@
             android:id="@+id/playlistsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/padding_16"
+            android:layout_marginHorizontal="@dimen/padding_16"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             app:layout_constraintTop_toBottomOf="@id/createPlayListButton"

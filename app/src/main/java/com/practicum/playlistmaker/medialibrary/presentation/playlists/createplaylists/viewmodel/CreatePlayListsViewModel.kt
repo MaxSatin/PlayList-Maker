@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.presentation.playlists.viewmodel
+package com.practicum.playlistmaker.medialibrary.presentation.playlists.createplaylists.viewmodel
 
 
 import android.util.Log

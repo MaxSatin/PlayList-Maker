@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistsFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
-import com.practicum.playlistmaker.medialibrary.presentation.playlists.viewmodel.CreatePlayListsViewModel
+import com.practicum.playlistmaker.medialibrary.presentation.playlists.createplaylists.viewmodel.CreatePlayListsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayListsFragment() : Fragment() {
