@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class Playlist(
     val name: String,
     val description: String,
-    val coverUri: Uri?
+    val coverUri: Uri?,
+    val tracksNumber: Int
 )

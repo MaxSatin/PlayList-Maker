@@ -33,7 +33,8 @@ class TrackDbConverter {
             Playlist(
                 name,
                 description,
-                toUriConverter(coverUri)
+                toUriConverter(coverUri),
+                0
             )
         }
     }

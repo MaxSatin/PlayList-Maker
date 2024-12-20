@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@null"
-    card_view:cardElevation="@dimen/elevation_10">
+    card_view:cardElevation="2dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -31,16 +31,19 @@
             android:id="@+id/playlistName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/yp_black"
             android:maxLines="1"
             android:ellipsize="end"
             app:layout_constraintStart_toStartOf="@id/playlistCover"
             app:layout_constraintTop_toBottomOf="@id/playlistCover"
             tools:text="Summer party" />
+
         <TextView
             style="@style/ys_display_regular_text_12"
             android:id="@+id/tracksNumbers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/yp_black"
             android:maxLines="1"
             android:ellipsize="end"
             app:layout_constraintStart_toStartOf="@id/playlistCover"

@@ -7,7 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryInteractor
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlayListsScreenState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PlaylistViewModel(
     private val mediaLibraryInteractor: MediaLibraryInteractor,
@@ -18,10 +22,17 @@ class PlaylistViewModel(
 
     fun getPlaylists() {
         viewModelScope.launch {
-            mediaLibraryInteractor.getPlaylists()
-                .collect { playlists ->
-                    processResult(playlists)
-                }
+            withContext(Dispatchers.IO) {
+                mediaLibraryInteractor.getPlaylists()
+                    .flatMapConcat { playlists ->
+                        mediaLibraryInteractor.getAllTracksFromPlaylist(playlists.)
+
+
+                    }
+                    .collect { playlists ->
+                        processResult(playlists)
+                    }
+            }
         }
     }
 

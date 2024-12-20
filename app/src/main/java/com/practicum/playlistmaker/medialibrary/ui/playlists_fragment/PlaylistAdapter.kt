@@ -4,6 +4,7 @@ import com.practicum.playlistmaker.databinding.PlaylistItemBinding
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 
@@ -33,5 +34,27 @@ class PlaylistAdapter(
         playlists.getOrNull(position)?.let { playlist ->
             holder.bind(playlist)
         }
+    }
+
+    fun updateItems(playlists: List<Playlist>) {
+        val oldItems = this.playlists
+        val newItems = playlists
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = oldItems.size
+
+            override fun getNewListSize(): Int = newItems.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldItems[oldItemPosition].name == newItems[newItemPosition].name
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldItems[oldItemPosition].description == newItems[newItemPosition].description
+            }
+
+        })
+
+        this.playlists = playlists
+        diffResult.dispatchUpdatesTo(this)
     }
 }
