@@ -9,7 +9,6 @@ import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Play
 
 class PlaylistViewHolder(
     private val binding: PlaylistItemBinding,
-    private val trackNumber: Int,
     private val onPlaylistClicked: (position: Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -23,7 +22,7 @@ class PlaylistViewHolder(
 
         with(binding) {
             playlistName.text = playlist.name
-            tracksNumbers.text = trackNumber.toString()
+            tracksNumbers.text = playlist.tracksNumber.toString()
 
             Glide.with(binding.root.context)
                 .load(playlist.coverUri)

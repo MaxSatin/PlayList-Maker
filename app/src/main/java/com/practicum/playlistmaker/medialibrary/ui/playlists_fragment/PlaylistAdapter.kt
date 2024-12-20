@@ -19,7 +19,7 @@ class PlaylistAdapter(
             parent,
             false
         )
-        return PlaylistViewHolder(binding, playlists.size) { position: Int ->
+        return PlaylistViewHolder(binding) { position: Int ->
             if (position != RecyclerView.NO_POSITION) {
                 playlists.getOrNull(position)?.let { playlist: Playlist ->
                     onPlaylistClick(playlist)
