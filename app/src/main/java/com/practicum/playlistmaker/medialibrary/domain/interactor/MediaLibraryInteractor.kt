@@ -9,7 +9,7 @@ interface MediaLibraryInteractor {
 ////    fun getFavoriteTrackList(): List<Track>
 //    fun getPlaylists(): List<List<Track>>
 
-    fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>>
+    suspend fun getAllTracksFromPlaylist(playlistName: String): List<Track>
 
     fun getPlaylists(): Flow<List<Playlist>>
 

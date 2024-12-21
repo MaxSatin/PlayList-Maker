@@ -24,7 +24,7 @@ interface PlaylistDao {
                 "INNER JOIN playlistcrossref_table j ON t.trackId = j.trackId " +
                 "WHERE j.playlistName = :playlistName"
     )
-    fun getAllTracksFromPlaylist(playlistName: String): Flow<List<TrackEntity>>
+    suspend fun getAllTracksFromPlaylist(playlistName: String): List<TrackEntity>
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPlaylistWithReplace(playlist: PlaylistEntity)

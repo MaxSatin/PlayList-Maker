@@ -44,12 +44,10 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-    override fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>> = flow {
-        val trackListFlow = appDatabase.playlistDao().getAllTracksFromPlaylist(playlistName)
-        trackListFlow.collect { trackList ->
+    override suspend fun getAllTracksFromPlaylist(playlistName: String): List<Track> {
+        val trackList = appDatabase.playlistDao().getAllTracksFromPlaylist(playlistName)
             val reversedTracklist = trackList.reversed()
-            emit(convertFromTrackEntity(reversedTracklist))
-        }
+            return convertFromTrackEntity(reversedTracklist)
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> = flow {

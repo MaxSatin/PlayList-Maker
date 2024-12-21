@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface MediaLibraryRepository {
     //    fun getFavoriteTrackList(): List<Track>
-    fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>>
+    suspend fun getAllTracksFromPlaylist(playlistName: String): List<Track>
 
     fun getPlaylists(): Flow<List<Playlist>>
 

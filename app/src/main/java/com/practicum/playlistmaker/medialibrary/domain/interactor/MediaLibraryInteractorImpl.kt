@@ -14,7 +14,7 @@ class MediaLibraryInteractorImpl(
 
     }
 
-    override fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>> {
+    override suspend fun getAllTracksFromPlaylist(playlistName: String): List<Track> {
         return mediaLibraryRepository.getAllTracksFromPlaylist(playlistName)
     }
 
