@@ -83,10 +83,10 @@ class PlayerViewModel(
         }
     }
 
-    fun addTrackToPlayList(playlist: Playlist, track: Track){
+    fun addTrackToPlayList(playlist: Playlist){
         viewModelScope.launch {
-            databaseInteractor.saveTrackToDatabase(track)
-            databaseInteractor.insertPlayListTrackCrossRef(playlist.name, track.trackId)
+            databaseInteractor.saveTrackToDatabase(trackItem)
+            databaseInteractor.insertPlayListTrackCrossRef(playlist.name, trackItem.trackId)
         }
     }
 

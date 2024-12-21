@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlayerFragmentBinding
+import com.practicum.playlistmaker.player.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.player.domain.model.track_model.TrackInfoModel
 import com.practicum.playlistmaker.player.presentation.state.PlayListsScreenState
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
@@ -30,6 +32,10 @@ class PlayerFragment : Fragment() {
     private var isPreloaded: Boolean = false
 
 
+    private val playlistAdapter = BottomSheetPlaylistAdapter { playlist: Playlist ->
+        viewModel.addTrackToPlayList(playlist)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,11 +50,15 @@ class PlayerFragment : Fragment() {
 //        val trackGson = intent.getStringExtra(TRACK_ITEM_KEY)
         val trackGson = requireArguments().getString(TRACK_ITEM_KEY)
         viewModel = getViewModel { parametersOf(trackGson) }
+        viewModel.getPlaylists()
+
+        binding.playlistsRV.adapter = playlistAdapter
         binding.playButton.isEnabled = false
 
         binding.playerButtonBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
 
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer).apply {
@@ -59,11 +69,13 @@ class PlayerFragment : Fragment() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-//        viewModel.getPlaylistStateLiveData().observe(viewLifecycleOwner) { state ->
-//
-//        }
+        viewModel.getPlaylistStateLiveData().observe(viewLifecycleOwner) { state ->
+            renderPlaylistState(state)
+        }
+
         viewModel.getPlayerStateLiveData().observe(viewLifecycleOwner) { playerState ->
             renderPlayerState(playerState)
+
 
             if (playerState.playStatus.isPrepared) {
                 binding.playButton.isEnabled = true
@@ -87,11 +99,28 @@ class PlayerFragment : Fragment() {
 
     }
 
-//    private fun renderPlaylistState(state: PlayListsScreenState) {
-//        when (state){
-//            is PlayListsScreenState.Content -> binding.playlistsRV
-//        }
-//    }
+    private fun renderPlaylistState(state: PlayListsScreenState) {
+        when (state){
+            is PlayListsScreenState.Content -> showPlayList(state.playlists)
+            is PlayListsScreenState.Empty -> showEmpty(state.message)
+            else -> Toast.makeText(requireContext(), "Загрузка", Toast.LENGTH_LONG)
+
+        }
+    }
+
+
+
+    private fun showPlayList(playList: List<Playlist>){
+        playlistAdapter.updateItems(playList)
+        binding.playlistsRV.isVisible = true
+        binding.emptyPlaylistsPH.isVisible = false
+    }
+
+    private fun showEmpty(message: String){
+        binding.emptyPlaylistsPH.isVisible = true
+        binding.playlistsRV.isVisible = false
+        Toast.makeText(requireContext(), "$message", Toast.LENGTH_LONG)
+    }
 
     private fun renderPlayerState(state: PlayerState) {
         when {
