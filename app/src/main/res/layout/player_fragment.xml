@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".player.ui.PlayerFragment">
+    
+<androidx.constraintlayout.widget.ConstraintLayout
     style="@style/PlayerTrackBackGround"
     android:id="@+id/playerActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".player.ui.PlayerFragment">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder"
@@ -327,6 +334,83 @@
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <LinearLayout
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/padding_16"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="240dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounder"/>
+        
+        <TextView
+            style="@style/ys_display_medium_text_19"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_30"
+            android:text="@string/add_to_playlist"
+            android:gravity="center_horizontal"
+            android:textColor="@color/yp_black"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/createPlayListButton"
+            style="@style/RefreshButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_28"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/new_playlist"
+            android:textSize="@dimen/text_size_14sp"
+            app:cornerRadius="@dimen/padding_54"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/playlistsRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/playlist_player_fragment_item"
+            android:visibility="visible"/>
+
+
+        <LinearLayout
+            android:id="@+id/emptyPlaylistsPH"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                style="@style/SearchActivityNothingFoundImagePH"
+                android:id="@+id/emptyLibraryImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_16"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                style="@style/LibraryNothingFoundTextPH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_16"
+                android:text="@string/playlists_are_empty"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 
