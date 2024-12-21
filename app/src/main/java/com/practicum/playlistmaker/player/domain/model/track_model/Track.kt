@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.player.presentation.model
+package com.practicum.playlistmaker.player.domain.model.track_model
 
 data class Track(
     val trackId: String,
@@ -12,7 +12,8 @@ data class Track(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    var isFavorite: Boolean
+    var isFavorite: Boolean,
+    val playListName: String?
 ) {
     fun getCoverArtWork(): String{
         return artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")

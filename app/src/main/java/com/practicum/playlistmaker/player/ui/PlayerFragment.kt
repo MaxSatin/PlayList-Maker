@@ -10,29 +10,32 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.player.presentation.model.TrackInfoModel
+import com.practicum.playlistmaker.databinding.PlayerFragmentBinding
+import com.practicum.playlistmaker.player.domain.model.track_model.TrackInfoModel
+import com.practicum.playlistmaker.player.presentation.state.PlayListsScreenState
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
 import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
 
-class PlayerFragment: Fragment() {
+class PlayerFragment : Fragment() {
 
-    private var _binding: ActivityPlayerBinding? = null
-    private val binding: ActivityPlayerBinding get() = _binding!!
+    private var _binding: PlayerFragmentBinding? = null
+    private val binding: PlayerFragmentBinding get() = _binding!!
 
     private lateinit var viewModel: PlayerViewModel
     private var isPrepared: Boolean = false
     private var isPreloaded: Boolean = false
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
-        _binding = ActivityPlayerBinding.inflate(layoutInflater)
+        _binding = PlayerFragmentBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -46,10 +49,21 @@ class PlayerFragment: Fragment() {
         binding.playerButtonBack.setOnClickListener {
             findNavController().navigateUp()
         }
-//            finish()
 
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer).apply {
+            state =BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        binding.addToTrackList.setOnClickListener{
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+//        viewModel.getPlaylistStateLiveData().observe(viewLifecycleOwner) { state ->
+//
+//        }
         viewModel.getPlayerStateLiveData().observe(viewLifecycleOwner) { playerState ->
-            render(playerState)
+            renderPlayerState(playerState)
 
             if (playerState.playStatus.isPrepared) {
                 binding.playButton.isEnabled = true
@@ -73,7 +87,13 @@ class PlayerFragment: Fragment() {
 
     }
 
-    private fun render(state: PlayerState) {
+//    private fun renderPlaylistState(state: PlayListsScreenState) {
+//        when (state){
+//            is PlayListsScreenState.Content -> binding.playlistsRV
+//        }
+//    }
+
+    private fun renderPlayerState(state: PlayerState) {
         when {
             state.isLoading -> showLoading()
             !isPreloaded -> showTrackDetails(state.track)

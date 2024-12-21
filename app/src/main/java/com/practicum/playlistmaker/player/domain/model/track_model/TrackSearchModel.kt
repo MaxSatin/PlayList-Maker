@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.player.presentation.model
+package com.practicum.playlistmaker.player.domain.model.track_model
 
 
 // Этой модели не нашел применение( Буду очень рад любым комментариям!

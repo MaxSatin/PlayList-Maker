@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.player.presentation.model.TrackInfoModel
+import com.practicum.playlistmaker.player.domain.model.track_model.TrackInfoModel
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
 import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel

@@ -336,7 +336,7 @@
 </androidx.constraintlayout.widget.ConstraintLayout>
     
     <LinearLayout
-        android:id="@+id/bottomSheet"
+        android:id="@+id/bottomSheetContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"

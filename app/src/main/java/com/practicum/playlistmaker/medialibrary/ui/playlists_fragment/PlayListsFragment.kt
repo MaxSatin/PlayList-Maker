@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlists_fragment
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,6 @@ import com.practicum.playlistmaker.databinding.PlaylistsFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlayListsScreenState
-import com.practicum.playlistmaker.medialibrary.presentation.playlists.createplaylists.viewmodel.CreatePlayListsViewModel
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlists.viewmodel.PlaylistViewModel
 import com.practicum.playlistmaker.medialibrary.ui.decorations.GridLayoutItemDecorations
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -74,7 +72,7 @@ class PlayListsFragment() : Fragment() {
 
     private fun processState(state: PlayListsScreenState) {
         when (state) {
-            is PlayListsScreenState.Content -> showContent(state.favoriteTrackList)
+            is PlayListsScreenState.Content -> showContent(state.playlists)
             else -> showEmptyPH()
         }
     }

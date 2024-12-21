@@ -7,15 +7,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.practicum.playlistmaker.player.domain.db_interactor.DatabaseInteractor
+import com.practicum.playlistmaker.player.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.player.domain.player_interactor.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.mapper.DateFormatter
 import com.practicum.playlistmaker.player.presentation.mapper.TrackInfoMapper
-import com.practicum.playlistmaker.player.presentation.model.Track
+import com.practicum.playlistmaker.player.domain.model.track_model.Track
+import com.practicum.playlistmaker.player.presentation.state.PlayListsScreenState
 import com.practicum.playlistmaker.player.presentation.state.PlayStatus
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
 import com.practicum.playlistmaker.search.presentation.utils.debounce
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
@@ -28,7 +35,6 @@ class PlayerViewModel(
 
     private val trackItem = loadTrackScreen(trackGson)
 
-    private val playerStateLiveData = MutableLiveData<PlayerState>()
 
     private var timerJob: Job? = null
 
@@ -42,13 +48,63 @@ class PlayerViewModel(
         isClickAllowed = isAllowed
     }
 
+    private val playerStateLiveData = MutableLiveData<PlayerState>()
+    fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
+
+    private val playlistStateLiveData = MutableLiveData<PlayListsScreenState>()
+    fun getPlaylistStateLiveData() = playlistStateLiveData
+
     init {
         showLoading()
         loadContent()
         preparePlayer()
     }
 
-    fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
+    fun getPlaylists() {
+        viewModelScope.launch {
+            databaseInteractor.getPlaylists()
+                .map { playlist ->
+                    playlist.map { playlist ->
+                        async(Dispatchers.IO) {
+                            val trackList = databaseInteractor
+                                .getAllTracksFromPlaylist(playlist.name)
+
+                            if (trackList.contains(trackItem)) {
+                                playlist.copy(tracksNumber = trackList.size, containsTrack = true)
+                            } else {
+                                playlist.copy(tracksNumber = trackList.size, containsTrack = false)
+                            }
+                        }
+                    }.awaitAll()
+                }
+                .collect { updatedPlaylists ->
+                    processResult(updatedPlaylists)
+                }
+        }
+    }
+
+    fun addTrackToPlayList(playlist: Playlist, track: Track){
+        viewModelScope.launch {
+            databaseInteractor.saveTrackToDatabase(track)
+            databaseInteractor.insertPlayListTrackCrossRef(playlist.name, track.trackId)
+        }
+    }
+
+    private fun processResult(playLists: List<Playlist>) {
+        if (playLists.isEmpty()) {
+            renderState(
+                PlayListsScreenState.Empty("Список плейлистов пуст!")
+            )
+        } else {
+            renderState(
+                PlayListsScreenState.Content(playLists)
+            )
+        }
+    }
+
+    private fun renderState(state: PlayListsScreenState) {
+        playlistStateLiveData.postValue(state)
+    }
 
     private fun loadTrackScreen(track: String?): Track {
         val trackItem = gson.fromJson<Track>(track, Track::class.java)
@@ -67,17 +123,17 @@ class PlayerViewModel(
         )
     }
 
-    private fun clickDebounce(): Boolean{
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
-        if (isClickAllowed){
+        if (isClickAllowed) {
             isClickAllowed = false
             setIsClickAllowed(true)
         }
         return current
     }
 
-    fun controlFavoriteState(){
-        if(trackItem.isFavorite){
+    fun controlFavoriteState() {
+        if (trackItem.isFavorite) {
             removeFromFavorite()
         } else {
             saveTrackToFavorites()
@@ -101,6 +157,7 @@ class PlayerViewModel(
             }
         }
     }
+
     fun playerController() {
         if (playerInteractor.isPlaying()) {
             pausePlayer()
@@ -186,7 +243,7 @@ class PlayerViewModel(
         }
     }
 
-    fun releasePlayer(){
+    fun releasePlayer() {
         playerInteractor.releasePlayer()
     }
 
