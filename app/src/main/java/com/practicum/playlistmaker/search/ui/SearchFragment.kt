@@ -11,8 +11,11 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.databinding.SearchFragmentBinding
+import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.search.domain.track_model.Track
 import com.practicum.playlistmaker.search.presentation.state.State
 import com.practicum.playlistmaker.search.presentation.view_model.SearchViewModel
@@ -191,7 +194,12 @@ class SearchFragment : Fragment() {
     }
 
     private fun showPlayer(trackGson: String) {
-        PlayerActivity.show(requireContext(), trackGson)
+//        PlayerActivity.show(requireContext(), trackGson)
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playerFragment,
+            PlayerFragment.createArgs(trackGson)
+        )
+
     }
 
     private fun showErrorNothingFound(text: String) {

@@ -186,6 +186,10 @@ class PlayerViewModel(
         }
     }
 
+    fun releasePlayer(){
+        playerInteractor.releasePlayer()
+    }
+
     override fun onCleared() {
         super.onCleared()
         playerInteractor.releasePlayer()

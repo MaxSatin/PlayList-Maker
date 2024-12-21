@@ -7,13 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.viewmodel.FavoriteTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.practicum.playlistmaker.databinding.FavoriteTracksFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.FavoriteListScreenState
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.player.ui.PlayerFragment
 
 class FavoriteTracksFragment() : Fragment() {
 
@@ -83,7 +86,11 @@ class FavoriteTracksFragment() : Fragment() {
     }
 
     private fun showTrackPlayer(track: String) {
-        PlayerActivity.show(requireContext(), track)
+//        PlayerActivity.show(requireContext(), track)
+        findNavController().navigate(
+            R.id.action_mediaLibraryFragment_to_playerFragment,
+            PlayerFragment.createArgs(track)
+        )
     }
 
     override fun onDestroyView() {

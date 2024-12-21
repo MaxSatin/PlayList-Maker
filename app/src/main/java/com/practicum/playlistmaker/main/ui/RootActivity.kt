@@ -38,6 +38,14 @@ class RootActivity : AppCompatActivity() {
         val bottomNavigationView = binding.bottomNavigationView
         bottomNavigationView.setupWithNavController(navHostController)
 
+        navHostController.addOnDestinationChangedListener{ _, destination, _ ->
+            when(destination.id){
+                R.id.playerFragment -> binding.bottomNavigationView.isVisible = false
+                else -> binding.bottomNavigationView.isVisible = true
+            }
+
+        }
+
     }
 }
 

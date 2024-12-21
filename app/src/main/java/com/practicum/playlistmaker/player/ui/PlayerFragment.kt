@@ -1,6 +1,146 @@
 package com.practicum.playlistmaker.player.ui
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
+import com.practicum.playlistmaker.player.presentation.model.TrackInfoModel
+import com.practicum.playlistmaker.player.presentation.state.PlayerState
+import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
 
 class PlayerFragment: Fragment() {
+
+    private var _binding: ActivityPlayerBinding? = null
+    private val binding: ActivityPlayerBinding get() = _binding!!
+
+    private lateinit var viewModel: PlayerViewModel
+    private var isPrepared: Boolean = false
+    private var isPreloaded: Boolean = false
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = ActivityPlayerBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+//        val trackGson = intent.getStringExtra(TRACK_ITEM_KEY)
+        val trackGson = requireArguments().getString(TRACK_ITEM_KEY)
+        viewModel = getViewModel { parametersOf(trackGson) }
+        binding.playButton.isEnabled = false
+
+        binding.playerButtonBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+//            finish()
+
+        viewModel.getPlayerStateLiveData().observe(viewLifecycleOwner) { playerState ->
+            render(playerState)
+
+            if (playerState.playStatus.isPrepared) {
+                binding.playButton.isEnabled = true
+                this.isPrepared = true
+            }
+
+            changePlayButtonStyle(playerState.playStatus.isPlaying)
+
+            if (playerState.playStatus.isPlaying) {
+                binding.timePlayed.text = playerState.playStatus.progress
+            }
+        }
+
+        binding.playButton.setOnClickListener {
+            viewModel.playerController()
+        }
+
+        binding.addToFavorites.setOnClickListener {
+            viewModel.controlFavoriteState()
+        }
+
+    }
+
+    private fun render(state: PlayerState) {
+        when {
+            state.isLoading -> showLoading()
+            !isPreloaded -> showTrackDetails(state.track)
+        }
+    }
+
+    private fun changePlayButtonStyle(isPlaying: Boolean) {
+        when (isPlaying) {
+            true -> binding.playButton.isChecked = true
+            false -> binding.playButton.isChecked = false
+        }
+    }
+
+    private fun handleIsFavoriteStatus(isInFavorite: Boolean) {
+        binding.addToFavorites.isChecked = isInFavorite
+    }
+
+    // Скрываем poster, т.к. к расположению poster подвязаны остальные элементы дизайна.
+    // Скрывая poster - скрываем и остальные элементы. (наверно, кривое решение. буду очень рад комметариям!))
+    private fun showLoading() {
+        binding.poster.isVisible = false
+        binding.loadingOverlay.isVisible = true
+    }
+
+    private fun showTrackDetails(trackItem: TrackInfoModel) {
+        binding.loadingOverlay.isVisible = false
+        binding.progressbar.isVisible = false
+        binding.poster.isVisible = true
+        loadPoster(trackItem)
+        binding.songName.text = trackItem.trackName
+        binding.bandName.text = trackItem.artistName
+        binding.timePlayed.text = "00:30"
+        binding.tracklengthTime.text = trackItem.trackTimeMillis
+        binding.albumTitle.text = trackItem.collectionName
+        binding.albumYear.text = trackItem.releaseDate
+        binding.trackGenre.text = trackItem.primaryGenreName
+        binding.trackCountry.text = trackItem.country
+        handleIsFavoriteStatus(trackItem.isInFavorite)
+        isPreloaded = true
+    }
+
+    private fun loadPoster(trackItem: TrackInfoModel) {
+        Glide.with(binding.root.context)
+            .load(trackItem.getCoverArtWork())
+            .placeholder(R.drawable.vector_empty_album_placeholder)
+            .fitCenter()
+            .transform(RoundedCorners(binding.root.resources.getDimensionPixelSize(R.dimen.small_corner_radius)))
+            .into(binding.poster)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.playButton.isChecked = false
+        viewModel.pausePlayer()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        viewModel.releasePlayer()
+    }
+
+    companion object {
+        private const val TRACK_ITEM_KEY = "trackItem"
+
+        fun createArgs(trackGson: String): Bundle = bundleOf(TRACK_ITEM_KEY to trackGson)
+
+    }
 }

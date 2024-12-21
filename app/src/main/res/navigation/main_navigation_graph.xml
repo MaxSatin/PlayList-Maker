@@ -16,11 +16,11 @@
         android:label="medialibrary_fragment"
         tools:layout="@layout/medialibrary_fragment" >
         <action
-            android:id="@+id/action_mediaLibraryFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
-        <action
             android:id="@+id/action_mediaLibraryFragment_to_createPlayListsFragment"
             app:destination="@id/createPlayListsFragment" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -28,8 +28,8 @@
         android:label="search_fragment"
         tools:layout="@layout/search_fragment" >
         <action
-            android:id="@+id/action_searchFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
+            android:id="@+id/action_searchFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -45,4 +45,9 @@
             android:id="@+id/action_createPlayListsFragment_to_mediaLibraryFragment"
             app:destination="@id/mediaLibraryFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="com.practicum.playlistmaker.player.ui.PlayerFragment"
+        android:label="player_fragment"
+        tools:layout="@layout/player_fragment" />
 </navigation>
