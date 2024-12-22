@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.player.data.repository
 
+import android.util.Log
 import com.practicum.playlistmaker.AppDatabase
 import com.practicum.playlistmaker.player.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.player.data.db.entity.PlaylistTrackCrossRef
@@ -47,8 +48,27 @@ class DatabaseRepositoryImpl(
         }
     }
 
-    override suspend fun insertPlayListTrackCrossRef(playlistName: String, trackId: String) {
-        appDatabase.playerTrackDao().insertPlayListTrackCrossRef(PlaylistTrackCrossRef(playlistName, trackId))
+    override fun getPlaylistsWithTrackCount(): Flow<List<Playlist>> = flow {
+        val playListsFlow = appDatabase.playerTrackDao().getPlaylistsWithTrackCount()
+        playListsFlow.collect { playlist ->
+            val reversedPlaylist = playlist.reversed()
+            emit(convertFromPlaylistEntity(reversedPlaylist))
+        }
+    }
+
+    override suspend fun insertPlayListTrackCrossRef(playlistName: String, track: Track) {
+        if (appDatabase.playerTrackDao().isTrackInDataBase(track.trackId)) {
+            appDatabase.playerTrackDao()
+                .insertPlayListTrackCrossRef(PlaylistTrackCrossRef(playlistName, track.trackId))
+        } else {
+            appDatabase.playerTrackDao().insertTrack(converter.map(track))
+            appDatabase.playerTrackDao()
+                .insertPlayListTrackCrossRef(PlaylistTrackCrossRef(playlistName, track.trackId))
+        }
+    }
+
+    override suspend fun checkPlaylistHasTrack(trackId: String, playlistName: String): Boolean {
+        return appDatabase.playerTrackDao().checkPlaylistHasTrack(trackId, playlistName)
     }
 
 

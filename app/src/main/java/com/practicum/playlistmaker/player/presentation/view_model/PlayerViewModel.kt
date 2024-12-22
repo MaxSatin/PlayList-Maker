@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.player.presentation.view_model
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,10 +21,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PlayerViewModel(
     application: Application,
@@ -58,35 +60,57 @@ class PlayerViewModel(
         showLoading()
         loadContent()
         preparePlayer()
+        getPlaylists()
     }
 
     fun getPlaylists() {
         viewModelScope.launch {
-            databaseInteractor.getPlaylists()
-                .map { playlist ->
-                    playlist.map { playlist ->
-                        async(Dispatchers.IO) {
-                            val trackList = databaseInteractor
-                                .getAllTracksFromPlaylist(playlist.name)
+            databaseInteractor.getPlaylistsWithTrackCount()
+                .collect { playlist ->
+                    processResult(playlist)
+                }
+        }
+//            databaseInteractor.getPlaylists()
+//                .map { playlist ->
+//                    playlist.map { playlist ->
+//                        async(Dispatchers.IO) {
+//                            val trackList = databaseInteractor
+//                                .getAllTracksFromPlaylist(playlist.name)
+//
+//                            if (trackList.contains(trackItem)) {
+//                                playlist.copy(tracksCount = trackList.size, containsTrack = true)
+//                            } else {
+//                                playlist.copy(tracksCount = trackList.size, containsTrack = false)
+//                            }
+//                        }
+//                    }.awaitAll()
+//                }
+//
+//                .collect { updatedPlaylists ->
+//                    processResult(updatedPlaylists)
+//                }
+//        }
+    }
 
-                            if (trackList.contains(trackItem)) {
-                                playlist.copy(tracksNumber = trackList.size, containsTrack = true)
-                            } else {
-                                playlist.copy(tracksNumber = trackList.size, containsTrack = false)
-                            }
-                        }
-                    }.awaitAll()
-                }
-                .collect { updatedPlaylists ->
-                    processResult(updatedPlaylists)
-                }
+    fun addTrackPlayListCrossRef(playlistName: String) {
+        viewModelScope.launch {
+            databaseInteractor.insertPlayListTrackCrossRef(playlistName, trackItem)
         }
     }
 
-    fun addTrackToPlayList(playlist: Playlist){
+//    private suspend fun checkTrack(playlist: Playlist, trackList: List<Track>): Playlist {
+//        return if (trackList.contains(trackItem)) {
+//            playlist.copy(trackCount = trackList.size, containsCurrentTrack = true)
+//
+//        } else {
+//            playlist.copy(trackCount = trackList.size, containsCurrentTrack = false)
+//
+//        }
+//    }
+
+    fun addTrackToPlayList(playlist: Playlist) {
         viewModelScope.launch {
-            databaseInteractor.saveTrackToDatabase(trackItem)
-            databaseInteractor.insertPlayListTrackCrossRef(playlist.name, trackItem.trackId)
+            databaseInteractor.insertPlayListTrackCrossRef(playlist.name, trackItem)
         }
     }
 
@@ -96,9 +120,23 @@ class PlayerViewModel(
                 PlayListsScreenState.Empty("Список плейлистов пуст!")
             )
         } else {
-            renderState(
-                PlayListsScreenState.Content(playLists)
-            )
+            viewModelScope.launch {
+                val updatedPlayList = withContext(Dispatchers.IO) {
+                    playLists.map { playlist ->
+                        async {
+                            playlist.copy(
+                                containsCurrentTrack = databaseInteractor.checkPlaylistHasTrack(
+                                    trackItem.trackId,
+                                    playlist.name
+                                )
+                            )
+                        }
+                    }.awaitAll()
+                }
+                renderState(
+                    PlayListsScreenState.Content(updatedPlayList)
+                )
+            }
         }
     }
 

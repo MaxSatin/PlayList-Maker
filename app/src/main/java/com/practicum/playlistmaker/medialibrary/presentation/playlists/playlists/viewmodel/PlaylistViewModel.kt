@@ -26,21 +26,28 @@ class PlaylistViewModel(
     fun getPlaylists() {
         viewModelScope.launch {
             mediaLibraryInteractor.getPlaylists()
-                .map { playlists ->
-                    playlists.map { playlist ->
-                        async(Dispatchers.IO) {
-                            val trackCount = mediaLibraryInteractor
-                                .getAllTracksFromPlaylist(playlist.name)
-                                .count()
-                            playlist.copy(tracksNumber = trackCount)
-                        }
-                    }.awaitAll()
-                }
-                .collect { updatedPlaylists ->
-                    processResult(updatedPlaylists)
+                .collect { playLists ->
+                    processResult(playLists)
                 }
         }
     }
+//        viewModelScope.launch {
+//            mediaLibraryInteractor.getPlaylists()
+//                .map { playlists ->
+//                    playlists.map { playlist ->
+//                        async(Dispatchers.IO) {
+//                            val trackCount = mediaLibraryInteractor
+//                                .getAllTracksFromPlaylist(playlist.name)
+//                                .count()
+//                            playlist.copy(trackCount = trackCount)
+//                        }
+//                    }.awaitAll()
+//                }
+//                .collect { updatedPlaylists ->
+//                    processResult(updatedPlaylists)
+//                }
+//        }
+//    }
 //    fun getPlaylists() {
 //        viewModelScope.launch(Dispatchers.IO) {
 //            mediaLibraryInteractor.getPlaylists()

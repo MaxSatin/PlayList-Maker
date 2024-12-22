@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlists_fragment
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -19,10 +20,10 @@ class PlaylistViewHolder(
     }
 
     fun bind(playlist: Playlist) {
-
+    Log.d("PlaylistVH","${playlist.coverUri}")
         with(binding) {
             playlistName.text = playlist.name
-            tracksNumbers.text = playlist.tracksNumber.toString()
+            tracksNumbers.text = playlist.trackCount.toString()
 
             Glide.with(binding.root.context)
                 .load(playlist.coverUri)

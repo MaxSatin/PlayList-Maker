@@ -50,7 +50,7 @@ class BottomSheetPlaylistAdapter(
             }
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return oldItems[oldItemPosition].description == newItems[newItemPosition].description
+                return oldItems[oldItemPosition].containsCurrentTrack == newItems[newItemPosition].containsCurrentTrack
             }
 
         })

@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.player.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,9 +32,8 @@ class PlayerFragment : Fragment() {
     private var isPrepared: Boolean = false
     private var isPreloaded: Boolean = false
 
-
     private val playlistAdapter = BottomSheetPlaylistAdapter { playlist: Playlist ->
-        viewModel.addTrackToPlayList(playlist)
+        viewModel.addTrackPlayListCrossRef(playlist.name)
     }
 
     override fun onCreateView(
@@ -59,10 +59,8 @@ class PlayerFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-
-
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer).apply {
-            state =BottomSheetBehavior.STATE_HIDDEN
+            state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         binding.addToTrackList.setOnClickListener{
@@ -101,7 +99,9 @@ class PlayerFragment : Fragment() {
 
     private fun renderPlaylistState(state: PlayListsScreenState) {
         when (state){
-            is PlayListsScreenState.Content -> showPlayList(state.playlists)
+            is PlayListsScreenState.Content -> {
+                showPlayList(state.playlists)
+            }
             is PlayListsScreenState.Empty -> showEmpty(state.message)
             else -> Toast.makeText(requireContext(), "Загрузка", Toast.LENGTH_LONG)
 

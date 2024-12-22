@@ -180,14 +180,15 @@ class CreatePlayListsFragment : Fragment() {
                     playListName,
                     playListDescription,
                     coverUri,
-                    0
+                    0,
+                    false
                 )
                 viewModel.addPlaylistWithReplace(playlist)
 
             }
 
             is CreatePlaylistState.Content -> {
-                playlist = Playlist(playListName, playListDescription, coverUri,0)
+                playlist = Playlist(playListName, playListDescription, coverUri,0, false)
                 val filteredPlaylist = state.playLists.find { it.name == playlist.name }
                 Log.d("ViewmodelPlaylist", "$filteredPlaylist")
                 if (filteredPlaylist == null) {

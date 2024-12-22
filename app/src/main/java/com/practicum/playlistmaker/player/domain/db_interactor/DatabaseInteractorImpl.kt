@@ -21,12 +21,20 @@ class DatabaseInteractorImpl(
         return databaseRepository.getAllTracksFromPlaylist(playlistName)
     }
 
-    override suspend fun insertPlayListTrackCrossRef(playlistName: String, trackId: String) {
-        databaseRepository.insertPlayListTrackCrossRef(playlistName, trackId)
+    override suspend fun insertPlayListTrackCrossRef(playlistName: String, track: Track) {
+        databaseRepository.insertPlayListTrackCrossRef(playlistName, track)
+    }
+
+    override suspend fun checkPlaylistHasTrack(trackId: String, playlistName: String): Boolean {
+        return databaseRepository.checkPlaylistHasTrack(trackId, playlistName)
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> {
         return databaseRepository.getPlaylists()
+    }
+
+    override fun getPlaylistsWithTrackCount(): Flow<List<Playlist>> {
+        return databaseRepository.getPlaylistsWithTrackCount()
     }
 
 

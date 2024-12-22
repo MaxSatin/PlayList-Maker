@@ -9,5 +9,7 @@ data class PlaylistEntity(
     @PrimaryKey @ColumnInfo(name = "playlistName")
     val name: String,
     val description: String,
-    val coverUri: String
+    val coverUri: String,
+    val trackCount: Int,
+    val containsCurrentTrack: Boolean
 )

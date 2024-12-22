@@ -34,7 +34,8 @@ class TrackDbConverter {
                 name,
                 description,
                 toUriConverter(coverUri),
-                0
+                trackCount,
+                containsCurrentTrack
             )
         }
     }
@@ -44,7 +45,9 @@ class TrackDbConverter {
             PlaylistEntity(
                 name,
                 description,
-                fromUriConverter(coverUri)
+                fromUriConverter(coverUri),
+                trackCount,
+                containsCurrentTrack
             )
         }
     }

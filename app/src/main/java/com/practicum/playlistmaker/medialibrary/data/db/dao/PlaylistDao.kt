@@ -14,8 +14,20 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlaylistDao {
 
-    @Transaction
-    @Query("SELECT * FROM playlist_table")
+    @Query(
+        """
+    SELECT 
+        p.playlistName AS playlistName,
+        p.description AS description,
+        p.coverUri AS coverUri,
+        COUNT(crossRef.trackId) AS trackCount,
+        p.containsCurrentTrack AS containsCurrentTrack
+    FROM playlist_table AS p
+    LEFT JOIN playlistcrossref_table AS crossRef 
+        ON p.playlistName = crossRef.playlistName
+    GROUP BY p.playlistName
+"""
+    )
     fun getPlaylists(): Flow<List<PlaylistEntity>>
 
     @Transaction
