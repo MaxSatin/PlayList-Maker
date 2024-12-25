@@ -38,7 +38,7 @@ interface PlayerTrackDao {
     suspend fun getAllTracksFromPlaylist(playlistName: String): List<TrackEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlayListTrackCrossRef(crossRef: PlaylistTrackCrossRef)
+    suspend fun insertPlayListTrackCrossRef(crossRef: PlaylistTrackCrossRef):Long
 
     @Query(
         """

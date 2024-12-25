@@ -56,8 +56,8 @@ class DatabaseRepositoryImpl(
         }
     }
 
-    override suspend fun insertPlayListTrackCrossRef(playlistName: String, track: Track) {
-        if (appDatabase.playerTrackDao().isTrackInDataBase(track.trackId)) {
+    override suspend fun insertPlayListTrackCrossRef(playlistName: String, track: Track): Long {
+        return if (appDatabase.playerTrackDao().isTrackInDataBase(track.trackId)) {
             appDatabase.playerTrackDao()
                 .insertPlayListTrackCrossRef(PlaylistTrackCrossRef(playlistName, track.trackId))
         } else {

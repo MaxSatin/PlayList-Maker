@@ -17,12 +17,13 @@ import com.practicum.playlistmaker.databinding.RootActivityBinding
 
 class RootActivity : AppCompatActivity() {
 
-    private lateinit var binding: RootActivityBinding
+    private var _binding: RootActivityBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = RootActivityBinding.inflate(layoutInflater)
+        _binding = RootActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -45,6 +46,12 @@ class RootActivity : AppCompatActivity() {
             }
 
         }
+
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
 
     }
 }

@@ -1,17 +1,22 @@
 package com.practicum.playlistmaker.player.ui
 
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.os.trace
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import android.view.animation.AnimationUtils
+import androidx.activity.OnBackPressedCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlayerFragmentBinding
@@ -32,6 +37,12 @@ class PlayerFragment : Fragment() {
     private lateinit var viewModel: PlayerViewModel
     private var isPrepared: Boolean = false
     private var isPreloaded: Boolean = false
+
+    private lateinit var trackAddedNotificationFadeIn:Animation
+    private lateinit var trackAddedNotificationFadeOut:Animation
+
+    private val handler = Handler(Looper.getMainLooper())
+
 
     private val playlistAdapter = BottomSheetPlaylistAdapter { playlist: Playlist ->
 //        viewModel.addTrackPlayListCrossRef(playlist.name)
@@ -54,16 +65,51 @@ class PlayerFragment : Fragment() {
         viewModel = getViewModel { parametersOf(trackGson) }
         viewModel.getPlaylists()
 
+        trackAddedNotificationFadeIn = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        trackAddedNotificationFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+
         binding.playlistsRV.adapter = playlistAdapter
         binding.playButton.isEnabled = false
 
-        binding.playerButtonBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
+
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
+
+        binding.createPlayListButton.setOnClickListener{
+            findNavController().navigate(
+                R.id.action_playerFragment_to_createPlayListsFragment
+            )
+        }
+
+        var currentAction = 0
+        binding.playerButtonBack.setOnClickListener {
+            if(bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN){
+                when(currentAction){
+                    0 -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    1 -> findNavController().navigateUp()
+                }
+            } else if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+                findNavController().navigateUp()
+            }
+            currentAction = (currentAction + 1) % 2
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if(bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN){
+                    when(currentAction){
+                        0 -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                        1 -> findNavController().navigateUp()
+                    }
+                } else if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+                    findNavController().navigateUp()
+                }
+                currentAction = (currentAction + 1) % 2
+            }
+        })
+
 
         binding.addToTrackList.setOnClickListener{
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -116,11 +162,47 @@ class PlayerFragment : Fragment() {
 
     private fun renderTrackState(state: TrackState){
         when (state){
-            is TrackState.CurrentPlaylistStatus -> Toast.makeText(requireContext(),"Трек уже есть в плейлисте!", Toast.LENGTH_LONG).show()
+            is TrackState.TrackInfo -> processTrackState(state)
         }
     }
 
+    private fun processTrackState(state: TrackState.TrackInfo) {
+        when {
+            state.isAlreadyInPlaylist -> showTrackAddInPlaylistNotification(
+                "Трек ${state.trackName} уже добавлен в плейлист ${state.playListName}"
+            )
+//                Toast.makeText(requireContext(),
+//                "Трек уже есть в плейлисте!",
+//                Toast.LENGTH_LONG).show()
+            state.transactionId == -1L -> showTrackAddInPlaylistNotification(
+                "Не удалось добавить трек ${state.trackName} в плейлист"
+            )
+//            Toast.makeText(requireContext(),
+//                "Не удалось добавить трек в плейлист",
+//                Toast.LENGTH_LONG).show()
+            else ->
+                showTrackAddInPlaylistNotification(
+                    "Добавлено в плейлист ${state.playListName}"
+                )
+//                Toast.makeText(requireContext(),
+//                "Трек добавлен в ${state.playListName} плейлист!",
+//                Toast.LENGTH_LONG).show()
+        }
+    }
 
+    private fun showTrackAddInPlaylistNotification(message:String) {
+        binding.trackStateNotification.text = message
+        binding.trackStateNotification.isVisible = true
+        binding.trackStateNotification.startAnimation(trackAddedNotificationFadeIn)
+        handler.postDelayed(
+            {
+                binding.trackStateNotification.startAnimation(trackAddedNotificationFadeOut)
+                binding.trackStateNotification.isVisible = false
+            },
+            ANIMATION_DELAY
+            )
+
+    }
 
     private fun showPlayList(playList: List<Playlist>){
         playlistAdapter.updateItems(playList)
@@ -200,6 +282,7 @@ class PlayerFragment : Fragment() {
 
     companion object {
         private const val TRACK_ITEM_KEY = "trackItem"
+        private const val ANIMATION_DELAY = 1_500L
 
         fun createArgs(trackGson: String): Bundle = bundleOf(TRACK_ITEM_KEY to trackGson)
 

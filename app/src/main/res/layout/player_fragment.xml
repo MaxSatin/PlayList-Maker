@@ -410,6 +410,20 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/trackStateNotification"
+        style="@style/ys_display_regular_text_14"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:layout_marginHorizontal="@dimen/padding_8"
+        android:layout_marginBottom="@dimen/padding_16"
+        android:layout_gravity="bottom"
+        android:background="@color/yp_black"
+        android:textColor="@color/white"
+        tools:text="Плейлист BeSt SoNg EvEr! создан"
+        android:visibility="gone"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

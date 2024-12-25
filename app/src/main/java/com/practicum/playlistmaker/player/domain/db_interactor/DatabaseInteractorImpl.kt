@@ -21,8 +21,8 @@ class DatabaseInteractorImpl(
         return databaseRepository.getAllTracksFromPlaylist(playlistName)
     }
 
-    override suspend fun insertPlayListTrackCrossRef(playlistName: String, track: Track) {
-        databaseRepository.insertPlayListTrackCrossRef(playlistName, track)
+    override suspend fun insertPlayListTrackCrossRef(playlistName: String, track: Track): Long {
+        return databaseRepository.insertPlayListTrackCrossRef(playlistName, track)
     }
 
     override suspend fun checkPlaylistHasTrack(trackId: String, playlistName: String): Boolean {
