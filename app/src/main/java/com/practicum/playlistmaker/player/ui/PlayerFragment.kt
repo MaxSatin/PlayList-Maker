@@ -19,6 +19,7 @@ import com.practicum.playlistmaker.player.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.player.domain.model.track_model.TrackInfoModel
 import com.practicum.playlistmaker.player.presentation.state.PlayListsScreenState
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
+import com.practicum.playlistmaker.player.presentation.state.TrackState
 import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -33,7 +34,8 @@ class PlayerFragment : Fragment() {
     private var isPreloaded: Boolean = false
 
     private val playlistAdapter = BottomSheetPlaylistAdapter { playlist: Playlist ->
-        viewModel.addTrackPlayListCrossRef(playlist.name)
+//        viewModel.addTrackPlayListCrossRef(playlist.name)
+        viewModel.addTrackToPlayList(playlist)
     }
 
     override fun onCreateView(
@@ -65,6 +67,10 @@ class PlayerFragment : Fragment() {
 
         binding.addToTrackList.setOnClickListener{
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        viewModel.getCheckTrackBelongsToPlaylistLiveData().observe(viewLifecycleOwner){ state ->
+            renderTrackState(state)
         }
 
         viewModel.getPlaylistStateLiveData().observe(viewLifecycleOwner) { state ->
@@ -103,8 +109,14 @@ class PlayerFragment : Fragment() {
                 showPlayList(state.playlists)
             }
             is PlayListsScreenState.Empty -> showEmpty(state.message)
-            else -> Toast.makeText(requireContext(), "Загрузка", Toast.LENGTH_LONG)
+            else -> Toast.makeText(requireContext(), "Загрузка", Toast.LENGTH_LONG).show()
 
+        }
+    }
+
+    private fun renderTrackState(state: TrackState){
+        when (state){
+            is TrackState.CurrentPlaylistStatus -> Toast.makeText(requireContext(),"Трек уже есть в плейлисте!", Toast.LENGTH_LONG).show()
         }
     }
 

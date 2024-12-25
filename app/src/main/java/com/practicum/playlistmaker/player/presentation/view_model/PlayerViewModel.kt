@@ -16,6 +16,7 @@ import com.practicum.playlistmaker.player.domain.model.track_model.Track
 import com.practicum.playlistmaker.player.presentation.state.PlayListsScreenState
 import com.practicum.playlistmaker.player.presentation.state.PlayStatus
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
+import com.practicum.playlistmaker.player.presentation.state.TrackState
 import com.practicum.playlistmaker.search.presentation.utils.debounce
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -55,6 +56,9 @@ class PlayerViewModel(
 
     private val playlistStateLiveData = MutableLiveData<PlayListsScreenState>()
     fun getPlaylistStateLiveData() = playlistStateLiveData
+
+    private val checkTrackBelongsToPlaylistLiveData = MutableLiveData<TrackState>()
+    fun getCheckTrackBelongsToPlaylistLiveData() = checkTrackBelongsToPlaylistLiveData
 
     init {
         showLoading()
@@ -110,9 +114,20 @@ class PlayerViewModel(
 
     fun addTrackToPlayList(playlist: Playlist) {
         viewModelScope.launch {
-            databaseInteractor.insertPlayListTrackCrossRef(playlist.name, trackItem)
+            val isAlreadyInPlayList = async(Dispatchers.IO) {
+                databaseInteractor.checkPlaylistHasTrack(trackItem.trackId, playlist.name)
+            }.await()
+            if (isAlreadyInPlayList) {
+                renderState(TrackState.CurrentPlaylistStatus(true))
+            } else {
+                addTrackPlayListCrossRef(playlist.name)
+            }
         }
     }
+//        viewModelScope.launch {
+//            databaseInteractor.insertPlayListTrackCrossRef(playlist.name, trackItem)
+//        }
+
 
     private fun processResult(playLists: List<Playlist>) {
         if (playLists.isEmpty()) {
@@ -140,8 +155,11 @@ class PlayerViewModel(
         }
     }
 
-    private fun renderState(state: PlayListsScreenState) {
-        playlistStateLiveData.postValue(state)
+    private fun renderState(state: Any) {
+        when(state){
+            is PlayListsScreenState -> playlistStateLiveData.postValue(state)
+            is TrackState -> checkTrackBelongsToPlaylistLiveData.postValue(state)
+        }
     }
 
     private fun loadTrackScreen(track: String?): Track {
