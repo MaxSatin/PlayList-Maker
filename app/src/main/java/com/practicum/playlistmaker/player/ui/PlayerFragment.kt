@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.player.ui
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,11 +39,10 @@ class PlayerFragment : Fragment() {
     private var isPrepared: Boolean = false
     private var isPreloaded: Boolean = false
 
-    private lateinit var trackAddedNotificationFadeIn:Animation
-    private lateinit var trackAddedNotificationFadeOut:Animation
+    private lateinit var trackAddedNotificationFadeIn: Animation
+    private lateinit var trackAddedNotificationFadeOut: Animation
 
     private val handler = Handler(Looper.getMainLooper())
-
 
     private val playlistAdapter = BottomSheetPlaylistAdapter { playlist: Playlist ->
 //        viewModel.addTrackPlayListCrossRef(playlist.name)
@@ -63,30 +63,33 @@ class PlayerFragment : Fragment() {
 //        val trackGson = intent.getStringExtra(TRACK_ITEM_KEY)
         val trackGson = requireArguments().getString(TRACK_ITEM_KEY)
         viewModel = getViewModel { parametersOf(trackGson) }
-        viewModel.getPlaylists()
 
-        trackAddedNotificationFadeIn = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
-        trackAddedNotificationFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
-
+        trackAddedNotificationFadeIn =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        trackAddedNotificationFadeOut =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+        viewModel.preparePlayer()
         binding.playlistsRV.adapter = playlistAdapter
         binding.playButton.isEnabled = false
-
-
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
-        binding.createPlayListButton.setOnClickListener{
-            findNavController().navigate(
-                R.id.action_playerFragment_to_createPlayListsFragment
+        binding.createPlayListButton.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            handler.postDelayed(
+                {
+                    findNavController().navigate(R.id.action_playerFragment_to_createPlayListsFragment)
+                },
+                300
             )
         }
 
         var currentAction = 0
         binding.playerButtonBack.setOnClickListener {
-            if(bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN){
-                when(currentAction){
+            if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+                when (currentAction) {
                     0 -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                     1 -> findNavController().navigateUp()
                 }
@@ -96,26 +99,28 @@ class PlayerFragment : Fragment() {
             currentAction = (currentAction + 1) % 2
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                if(bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN){
-                    when(currentAction){
-                        0 -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                        1 -> findNavController().navigateUp()
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+                        when (currentAction) {
+                            0 -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                            1 -> findNavController().navigateUp()
+                        }
+                    } else if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+                        findNavController().navigateUp()
                     }
-                } else if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
-                    findNavController().navigateUp()
+                    currentAction = (currentAction + 1) % 2
                 }
-                currentAction = (currentAction + 1) % 2
-            }
-        })
+            })
 
 
-        binding.addToTrackList.setOnClickListener{
+        binding.addToTrackList.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-        viewModel.getCheckTrackBelongsToPlaylistLiveData().observe(viewLifecycleOwner){ state ->
+        viewModel.getCheckTrackBelongsToPlaylistLiveData().observe(viewLifecycleOwner) { state ->
             renderTrackState(state)
         }
 
@@ -124,9 +129,10 @@ class PlayerFragment : Fragment() {
         }
 
         viewModel.getPlayerStateLiveData().observe(viewLifecycleOwner) { playerState ->
+            Log.d("PlayerState", "playerState: $playerState")
             renderPlayerState(playerState)
 
-
+            Log.d("PlayerState", "is prepared: $isPrepared, ispreloaded: $isPreloaded")
             if (playerState.playStatus.isPrepared) {
                 binding.playButton.isEnabled = true
                 this.isPrepared = true
@@ -150,18 +156,19 @@ class PlayerFragment : Fragment() {
     }
 
     private fun renderPlaylistState(state: PlayListsScreenState) {
-        when (state){
+        when (state) {
             is PlayListsScreenState.Content -> {
                 showPlayList(state.playlists)
             }
+
             is PlayListsScreenState.Empty -> showEmpty(state.message)
             else -> Toast.makeText(requireContext(), "Загрузка", Toast.LENGTH_LONG).show()
 
         }
     }
 
-    private fun renderTrackState(state: TrackState){
-        when (state){
+    private fun renderTrackState(state: TrackState) {
+        when (state) {
             is TrackState.TrackInfo -> processTrackState(state)
         }
     }
@@ -190,7 +197,7 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    private fun showTrackAddInPlaylistNotification(message:String) {
+    private fun showTrackAddInPlaylistNotification(message: String) {
         binding.trackStateNotification.text = message
         binding.trackStateNotification.isVisible = true
         binding.trackStateNotification.startAnimation(trackAddedNotificationFadeIn)
@@ -200,17 +207,17 @@ class PlayerFragment : Fragment() {
                 binding.trackStateNotification.isVisible = false
             },
             ANIMATION_DELAY
-            )
+        )
 
     }
 
-    private fun showPlayList(playList: List<Playlist>){
+    private fun showPlayList(playList: List<Playlist>) {
         playlistAdapter.updateItems(playList)
         binding.playlistsRV.isVisible = true
         binding.emptyPlaylistsPH.isVisible = false
     }
 
-    private fun showEmpty(message: String){
+    private fun showEmpty(message: String) {
         binding.emptyPlaylistsPH.isVisible = true
         binding.playlistsRV.isVisible = false
         Toast.makeText(requireContext(), "$message", Toast.LENGTH_LONG)
@@ -219,7 +226,7 @@ class PlayerFragment : Fragment() {
     private fun renderPlayerState(state: PlayerState) {
         when {
             state.isLoading -> showLoading()
-            !isPreloaded -> showTrackDetails(state.track)
+            !isPreloaded -> showTrackDetails(state)
         }
     }
 
@@ -241,21 +248,23 @@ class PlayerFragment : Fragment() {
         binding.loadingOverlay.isVisible = true
     }
 
-    private fun showTrackDetails(trackItem: TrackInfoModel) {
-        binding.loadingOverlay.isVisible = false
-        binding.progressbar.isVisible = false
-        binding.poster.isVisible = true
-        loadPoster(trackItem)
-        binding.songName.text = trackItem.trackName
-        binding.bandName.text = trackItem.artistName
-        binding.timePlayed.text = "00:30"
-        binding.tracklengthTime.text = trackItem.trackTimeMillis
-        binding.albumTitle.text = trackItem.collectionName
-        binding.albumYear.text = trackItem.releaseDate
-        binding.trackGenre.text = trackItem.primaryGenreName
-        binding.trackCountry.text = trackItem.country
-        handleIsFavoriteStatus(trackItem.isInFavorite)
-        isPreloaded = true
+    private fun showTrackDetails(playerState: PlayerState) {
+        with(playerState) {
+            binding.loadingOverlay.isVisible = false
+            binding.progressbar.isVisible = false
+            binding.poster.isVisible = true
+            loadPoster(track)
+            binding.songName.text = track.trackName
+            binding.bandName.text = track.artistName
+            binding.timePlayed.text = playStatus.progress
+            binding.tracklengthTime.text = track.trackTimeMillis
+            binding.albumTitle.text = track.collectionName
+            binding.albumYear.text = track.releaseDate
+            binding.trackGenre.text = track.primaryGenreName
+            binding.trackCountry.text = track.country
+            handleIsFavoriteStatus(track.isInFavorite)
+            isPreloaded = true
+        }
     }
 
     private fun loadPoster(trackItem: TrackInfoModel) {
@@ -271,12 +280,21 @@ class PlayerFragment : Fragment() {
         super.onPause()
         binding.playButton.isChecked = false
         viewModel.pausePlayer()
+    }
 
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        isPreloaded = false
+        isPrepared = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         viewModel.releasePlayer()
     }
 

@@ -60,8 +60,12 @@ class PlayerViewModel(
     init {
         showLoading()
         loadContent()
-        preparePlayer()
+
         getPlaylists()
+    }
+
+    fun refreshPlayerState(){
+        playerStateLiveData.value = getCurrentPlayerState()
     }
 
     fun getPlaylists() {
