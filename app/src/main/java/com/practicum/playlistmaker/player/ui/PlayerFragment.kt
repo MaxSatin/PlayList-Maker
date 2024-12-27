@@ -68,7 +68,9 @@ class PlayerFragment : Fragment() {
             AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
         trackAddedNotificationFadeOut =
             AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+
         viewModel.preparePlayer()
+
         binding.playlistsRV.adapter = playlistAdapter
         binding.playButton.isEnabled = false
 
@@ -82,6 +84,7 @@ class PlayerFragment : Fragment() {
                 {
                     findNavController().navigate(R.id.action_playerFragment_to_createPlayListsFragment)
                 },
+                keyObject,
                 300
             )
         }
@@ -206,6 +209,7 @@ class PlayerFragment : Fragment() {
                 binding.trackStateNotification.startAnimation(trackAddedNotificationFadeOut)
                 binding.trackStateNotification.isVisible = false
             },
+            keyObject,
             ANIMATION_DELAY
         )
 
@@ -287,6 +291,7 @@ class PlayerFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        handler.removeCallbacksAndMessages(keyObject)
         super.onDestroyView()
         _binding = null
         isPreloaded = false
@@ -299,6 +304,7 @@ class PlayerFragment : Fragment() {
     }
 
     companion object {
+        private val keyObject: Any = Unit
         private const val TRACK_ITEM_KEY = "trackItem"
         private const val ANIMATION_DELAY = 1_500L
 
