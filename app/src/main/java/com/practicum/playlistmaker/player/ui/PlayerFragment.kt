@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.core.os.trace
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -36,6 +35,7 @@ class PlayerFragment : Fragment() {
     private val binding: PlayerFragmentBinding get() = _binding!!
 
     private lateinit var viewModel: PlayerViewModel
+    private var isPreparedForTheFirstTime: Boolean = false
     private var isPrepared: Boolean = false
     private var isPreloaded: Boolean = false
 
@@ -69,7 +69,10 @@ class PlayerFragment : Fragment() {
         trackAddedNotificationFadeOut =
             AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
 
-        viewModel.preparePlayer()
+        if (!isPreparedForTheFirstTime) {
+            viewModel.preparePlayer()
+            isPreparedForTheFirstTime = true
+        }
 
         binding.playlistsRV.adapter = playlistAdapter
         binding.playButton.isEnabled = false
@@ -80,6 +83,7 @@ class PlayerFragment : Fragment() {
 
         binding.createPlayListButton.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
             handler.postDelayed(
                 {
                     findNavController().navigate(R.id.action_playerFragment_to_createPlayListsFragment)
@@ -178,20 +182,20 @@ class PlayerFragment : Fragment() {
 
     private fun processTrackState(state: TrackState.TrackInfo) {
         when {
-            state.isAlreadyInPlaylist -> showTrackAddInPlaylistNotification(
+            state.isAlreadyInPlaylist -> showAddedInPlaylistNotification(
                 "Трек ${state.trackName} уже добавлен в плейлист ${state.playListName}"
             )
 //                Toast.makeText(requireContext(),
 //                "Трек уже есть в плейлисте!",
 //                Toast.LENGTH_LONG).show()
-            state.transactionId == -1L -> showTrackAddInPlaylistNotification(
+            state.transactionId == -1L -> showAddedInPlaylistNotification(
                 "Не удалось добавить трек ${state.trackName} в плейлист"
             )
 //            Toast.makeText(requireContext(),
 //                "Не удалось добавить трек в плейлист",
 //                Toast.LENGTH_LONG).show()
             else ->
-                showTrackAddInPlaylistNotification(
+                showAddedInPlaylistNotification(
                     "Добавлено в плейлист ${state.playListName}"
                 )
 //                Toast.makeText(requireContext(),
@@ -200,7 +204,7 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    private fun showTrackAddInPlaylistNotification(message: String) {
+    private fun showAddedInPlaylistNotification(message: String) {
         binding.trackStateNotification.text = message
         binding.trackStateNotification.isVisible = true
         binding.trackStateNotification.startAnimation(trackAddedNotificationFadeIn)
@@ -286,9 +290,6 @@ class PlayerFragment : Fragment() {
         viewModel.pausePlayer()
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
 
     override fun onDestroyView() {
         handler.removeCallbacksAndMessages(keyObject)
@@ -299,8 +300,9 @@ class PlayerFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        isPreparedForTheFirstTime = false
         viewModel.releasePlayer()
+        super.onDestroy()
     }
 
     companion object {

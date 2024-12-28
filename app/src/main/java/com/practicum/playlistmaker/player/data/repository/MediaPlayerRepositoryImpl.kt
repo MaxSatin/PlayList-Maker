@@ -81,4 +81,8 @@ class MediaPlayerRepositoryImpl(
     override fun releasePlayer() {
         player.release()
     }
+
+    override fun resetPlayer() {
+        player.reset()
+    }
 }

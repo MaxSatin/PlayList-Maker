@@ -51,5 +51,8 @@ class MediaPlayerInteractorImpl(
         return mediaPlayerRepository.getPlayerCurrentPosition()
     }
 
+    override fun resetPlayer() {
+        mediaPlayerRepository.resetPlayer()
+    }
 
 }
