@@ -35,7 +35,7 @@ class PlayerFragment : Fragment() {
     private val binding: PlayerFragmentBinding get() = _binding!!
 
     private lateinit var viewModel: PlayerViewModel
-    private var isPreparedForTheFirstTime: Boolean = false
+    private var isPlayerStarted: Boolean = false
     private var isPrepared: Boolean = false
     private var isPreloaded: Boolean = false
 
@@ -69,9 +69,8 @@ class PlayerFragment : Fragment() {
         trackAddedNotificationFadeOut =
             AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
 
-        if (!isPreparedForTheFirstTime) {
+        if (!isPlayerStarted) {
             viewModel.preparePlayer()
-            isPreparedForTheFirstTime = true
         }
 
         binding.playlistsRV.adapter = playlistAdapter
@@ -153,6 +152,7 @@ class PlayerFragment : Fragment() {
         }
 
         binding.playButton.setOnClickListener {
+            isPlayerStarted = true
             viewModel.playerController()
         }
 
@@ -252,13 +252,15 @@ class PlayerFragment : Fragment() {
     // Скрываем poster, т.к. к расположению poster подвязаны остальные элементы дизайна.
     // Скрывая poster - скрываем и остальные элементы. (наверно, кривое решение. буду очень рад комметариям!))
     private fun showLoading() {
-        binding.poster.isVisible = false
-        binding.loadingOverlay.isVisible = true
+        binding.poster.isVisible = true
+//        binding.loadingOverlay.isVisible = true
+        binding.progressbar.isVisible = true
     }
 
     private fun showTrackDetails(playerState: PlayerState) {
         with(playerState) {
-            binding.loadingOverlay.isVisible = false
+//            binding.loadingOverlay.isVisible = false
+            binding.progressbar.isVisible = false
             binding.progressbar.isVisible = false
             binding.poster.isVisible = true
             loadPoster(track)
@@ -300,7 +302,6 @@ class PlayerFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        isPreparedForTheFirstTime = false
         viewModel.releasePlayer()
         super.onDestroy()
     }

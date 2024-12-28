@@ -9,6 +9,7 @@
     card_view:cardElevation="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/SearchActivityTrackColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -28,11 +29,10 @@
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <TextView
-            style="@style/ys_display_regular_text_12"
+            style="@style/ClassicAttributes"
             android:id="@+id/playlistName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/yp_black"
             android:maxLines="1"
             android:ellipsize="end"
             app:layout_constraintStart_toStartOf="@id/playlistCover"
@@ -40,11 +40,10 @@
             tools:text="Summer party" />
 
         <TextView
-            style="@style/ys_display_regular_text_12"
+            style="@style/ClassicAttributes"
             android:id="@+id/tracksNumbers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/yp_black"
             android:maxLines="1"
             android:ellipsize="end"
             app:layout_constraintStart_toStartOf="@id/playlistCover"

@@ -108,6 +108,15 @@
         app:layout_constraintEnd_toStartOf="@+id/playButton"
         app:layout_constraintTop_toBottomOf="@+id/playButton"
         app:layout_constraintBottom_toTopOf="@+id/playButton"/>
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        app:layout_constraintStart_toStartOf="@id/playButton"
+        app:layout_constraintEnd_toEndOf="@id/playButton"
+        app:layout_constraintTop_toTopOf="@id/playButton"
+        app:layout_constraintBottom_toBottomOf="@id/playButton"
+        android:visibility="visible" />
 
     <ToggleButton
         android:id="@+id/playButton"
@@ -121,6 +130,7 @@
         app:layout_constraintStart_toEndOf="@id/addToTrackList"
         app:layout_constraintTag="stopPlayerButton"
         app:layout_constraintTop_toBottomOf="@id/bandNameBarrier" />
+
 
     <TextView
         android:id="@+id/timePlayed"
@@ -312,42 +322,44 @@
         tools:text="Великобритания"/>
 
 
-    <FrameLayout
-        style="@style/loadingOverlayStyle"
-        android:id="@+id/loadingOverlay"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:visibility="gone">
+<!--    <FrameLayout-->
+<!--        style="@style/loadingOverlayStyle"-->
+<!--        android:id="@+id/loadingOverlay"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        android:visibility="gone">-->
 
-        <ProgressBar
-            android:id="@+id/progressbar"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:visibility="visible" />
-    </FrameLayout>
+<!--&lt;!&ndash;        <ProgressBar&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/progressbar"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:visibility="visible" />&ndash;&gt;-->
+<!--    </FrameLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
     
+
     <LinearLayout
+        style="@style/ClassicAttributes"
         android:id="@+id/bottomSheetContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/padding_16"
         app:behavior_hideable="true"
         app:behavior_peekHeight="240dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:visibility="visible">
 
         <View
+            style="@style/ClassicAttributes"
             android:layout_width="50dp"
             android:layout_height="4dp"
             android:layout_gravity="center"
@@ -412,15 +424,13 @@
 
     <TextView
         android:id="@+id/trackStateNotification"
-        style="@style/ys_display_regular_text_14"
+        style="@style/PlaylistNotificationStyle"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:gravity="center"
         android:layout_marginHorizontal="@dimen/padding_8"
         android:layout_marginBottom="@dimen/padding_16"
         android:layout_gravity="bottom"
-        android:background="@color/yp_black"
-        android:textColor="@color/white"
         tools:text="Плейлист BeSt SoNg EvEr! создан"
         android:visibility="gone"/>
 

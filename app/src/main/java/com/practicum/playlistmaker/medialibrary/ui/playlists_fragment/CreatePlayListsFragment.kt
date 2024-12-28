@@ -68,6 +68,7 @@ class CreatePlayListsFragment : Fragment() {
                 }
             }
 
+        binding.createPlayListButton.isEnabled = false
 
 //        binding.createPlayListButton.setOnClickListener {
 ////                processState(state)
@@ -148,7 +149,12 @@ class CreatePlayListsFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                playListName = s.toString()
+                if(!s.isNullOrEmpty()) {
+                    binding.createPlayListButton.isEnabled = true
+                    playListName = s.toString()
+                } else {
+                    binding.createPlayListButton.isEnabled = false
+                }
                 Log.d("Playlistname", "$playListName")
             }
 
@@ -161,15 +167,15 @@ class CreatePlayListsFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                playListDescription = s.toString()
+                    playListDescription = s.toString()
                 Log.d("Playlistdescription", "$playListDescription")
             }
 
             override fun afterTextChanged(s: Editable?) {
             }
         }
-        binding.playlistNameEditText.addTextChangedListener(playlistNameTextWatcher)
-        binding.playlistDescriptionEditText.addTextChangedListener(playlistDescriptionTextWatcher)
+        binding.playlistNameInputEditText.addTextChangedListener(playlistNameTextWatcher)
+        binding.playlistDescriptionInputEditText.addTextChangedListener(playlistDescriptionTextWatcher)
     }
 
     private fun processState(state: CreatePlaylistState) {

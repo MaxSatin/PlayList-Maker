@@ -20,8 +20,11 @@
     <dimen name="corner_radius_400">400dp</dimen>
     <dimen name="small_corner_radius">2dp</dimen>
 
+    <dimen name="stroke_1dp">1dp</dimen>
     <dimen name="stroke_2dp">2dp</dimen>
 
+
+    <dimen name="radius_2">2dp</dimen>
     <dimen name="radius_8">8dp</dimen>
     <dimen name="radius_44">44dp</dimen>
 
