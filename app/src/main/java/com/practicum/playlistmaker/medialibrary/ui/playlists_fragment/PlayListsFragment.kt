@@ -1,10 +1,14 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlists_fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -12,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistsFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
-import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlayListsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlists.viewmodel.PlaylistViewModel
 import com.practicum.playlistmaker.medialibrary.ui.decorations.GridLayoutItemDecorations
@@ -24,6 +27,10 @@ class PlayListsFragment() : Fragment() {
     private val viewModel: PlaylistViewModel by viewModel()
     private var _binding: PlaylistsFragmentBinding? = null
     private val binding get() = _binding!!
+    private val handler = Handler(Looper.getMainLooper())
+
+    private lateinit var playlistAddedNotificationFadeIn: Animation
+    private lateinit var playlistAddedNotificationFadeOut: Animation
 
     private val playlistAdapter = PlaylistAdapter {
         Log.d("Openplaylists", "playlist is open!")
@@ -42,15 +49,27 @@ class PlayListsFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        playlistAddedNotificationFadeIn =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        playlistAddedNotificationFadeOut =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+
         viewModel.getPlaylists()
 
         with(binding.playlistsRecyclerView) {
             adapter = playlistAdapter
-            addItemDecoration(GridLayoutItemDecorations(2, 8, false))
+            addItemDecoration(GridLayoutItemDecorations(2, 8, true))
         }
 
         viewModel.getPlayListScreenState().observe(viewLifecycleOwner) { playlistScreenState ->
+            Log.d("PlaylistState", "$playlistScreenState")
             processState(playlistScreenState)
+        }
+
+        if (!arguments?.getString(PLAYLIST_CREATED).isNullOrEmpty()) {
+            var playlistName: String? = arguments?.getString(PLAYLIST_CREATED)
+            Log.d("PlaylistArgs", "${arguments?.getString(PLAYLIST_CREATED)}")
+            showAddedInPlaylistNotification("Плейлист $playlistName создан!")
         }
 
 
@@ -78,6 +97,10 @@ class PlayListsFragment() : Fragment() {
     }
 
     private fun showContent(playlists: List<Playlist>) {
+        val playlist = playlists.firstOrNull()
+        if (playlist != null) {
+            showAddedInPlaylistNotification(playlist.name)
+        }
         playlistAdapter.updateItems(playlists)
         binding.playlistsRecyclerView.isVisible = true
     }
@@ -85,6 +108,21 @@ class PlayListsFragment() : Fragment() {
     private fun showEmptyPH() {
         binding.emptyPlayListsPH.isVisible = true
         binding.playlistsRecyclerView.isVisible = false
+    }
+
+    private fun showAddedInPlaylistNotification(playlistName: String) {
+        binding.playlistCreatedNotification.text = playlistName
+        binding.playlistCreatedNotification.isVisible = true
+        binding.playlistCreatedNotification.startAnimation(playlistAddedNotificationFadeIn)
+        handler.postDelayed(
+            {
+                binding.playlistCreatedNotification.startAnimation(playlistAddedNotificationFadeOut)
+                binding.playlistCreatedNotification.isVisible = false
+            },
+            keyObject,
+            ANIMATION_DELAY
+        )
+
     }
 
 //    private fun getTrackListList(
@@ -107,33 +145,41 @@ class PlayListsFragment() : Fragment() {
 //    }
 
     override fun onDestroyView() {
+        handler.removeCallbacksAndMessages(keyObject)
         super.onDestroyView()
         _binding = null
     }
 
     companion object {
 
-        private const val PLAY_LIST = "playlist"
-        private const val KEY_TRACKS = "key_tracks"
-        private const val KEY_SIZES = "key_sizes"
+        private const val PLAYLIST_CREATED = "playlist"
+        private val keyObject: Any = Unit
+        private const val ANIMATION_DELAY = 1_500L
 
 
-        fun newInstance(favoriteTracks: List<List<Track>>?): PlayListsFragment {
-            val flatList = ArrayList<Track>()
-            val sizes = ArrayList<Int>()
-
-            favoriteTracks?.forEach { trackList ->
-                sizes.add(trackList.size)
-
-                flatList.addAll(trackList)
-            }
-            return PlayListsFragment().apply {
-                arguments = bundleOf(
-                    KEY_TRACKS to ArrayList(flatList),
-                    KEY_SIZES to ArrayList(sizes)
-                )
-            }
-        }
+        fun createArgs(playlistName: String): Bundle = bundleOf(
+            PLAYLIST_CREATED to playlistName,
+        )
     }
 }
+
+
+//        fun newInstance(favoriteTracks: List<List<Track>>?): PlayListsFragment {
+//            val flatList = ArrayList<Track>()
+//            val sizes = ArrayList<Int>()
+//
+//            favoriteTracks?.forEach { trackList ->
+//                sizes.add(trackList.size)
+//
+//                flatList.addAll(trackList)
+//            }
+//            return PlayListsFragment().apply {
+//                arguments = bundleOf(
+//                    KEY_TRACKS to ArrayList(flatList),
+//                    KEY_SIZES to ArrayList(sizes)
+//                )
+//            }
+//        }
+//    }
+
 

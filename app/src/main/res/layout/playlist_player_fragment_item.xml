@@ -12,6 +12,7 @@
         android:id="@+id/playlistCover"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:scaleType="centerCrop"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"

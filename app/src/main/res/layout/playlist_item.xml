@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@null"
-    card_view:cardElevation="1dp">
+    card_view:cardElevation="1dp"
+    card_view:cardCornerRadius="@dimen/padding_8">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/SearchActivityTrackColor"
@@ -24,8 +25,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            android:clipToOutline="true"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <TextView

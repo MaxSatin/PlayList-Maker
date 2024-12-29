@@ -33,6 +33,7 @@
     <string name="playlists">Плейлисты</string>
     <string name="playlistTracklist">Список треков</string>
     <string name="create_playlist_dialog_hint">Плейлист уже существует. Создать копию?</string>
+    <string name="is_playlistfinished_dialog_hint">Завершить создание плейлиста? Все несохраненные данные будут потеряны</string>
     <string name="add_to_playlist">Добавить в плейлист</string>
 
     <string name="search_hint">Поиск</string>

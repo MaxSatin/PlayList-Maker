@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistPlayerFragmentItemBinding
@@ -38,7 +39,8 @@ class BottomSheetPlaylistVH(
                 .load(playlist.coverUri)
                 .placeholder(R.drawable.vector_empty_album_placeholder)
                 .fitCenter()
-                .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.radius_8)))
+                .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.small_corner_radius)))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(playlistCover)
 
             if (playlist.containsCurrentTrack) {

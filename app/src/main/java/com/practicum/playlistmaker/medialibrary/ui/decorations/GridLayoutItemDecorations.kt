@@ -26,14 +26,14 @@ class GridLayoutItemDecorations(
             if (position < spanCount) {
                 outRect.top = spacing
             }
-            outRect.bottom = spacing
+            outRect.bottom = spacing * 2
         } else {
             outRect.left = column * spacing / spanCount
             outRect.right = spacing - (column + 1) * spacing / spanCount
             if (position >= spanCount) {
                 outRect.top = spacing
             }
-            outRect.bottom = spacing
+            outRect.bottom = spacing * 2
         }
 
     }

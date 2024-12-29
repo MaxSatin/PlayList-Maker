@@ -1,32 +1,35 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlists_fragment
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.markodevcic.peko.PermissionRequester
+import com.markodevcic.peko.PermissionResult
 import com.practicum.playlistmaker.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.practicum.playlistmaker.databinding.CreatePlaylistFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.CreatePlaylistState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.createplaylists.viewmodel.CreatePlayListsViewModel
-import okhttp3.Request
+import kotlinx.coroutines.launch
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 
 class CreatePlayListsFragment : Fragment() {
@@ -34,7 +37,8 @@ class CreatePlayListsFragment : Fragment() {
     private var _binding: CreatePlaylistFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val requesterInstance = PermissionRequester.instance()
+    private val requester = PermissionRequester.instance()
+
 
     private var playListName: String = ""
     private var playListDescription: String = ""
@@ -42,7 +46,8 @@ class CreatePlayListsFragment : Fragment() {
 
     private lateinit var playlist: Playlist
 
-    private var confirmDialog: MaterialAlertDialogBuilder? = null
+    private var confirmDialogPlaylistExists: MaterialAlertDialogBuilder? = null
+    private var confirmDialogIsPlaylistFinished: MaterialAlertDialogBuilder? = null
 
     private val viewModel: CreatePlayListsViewModel by viewModel()
 
@@ -58,10 +63,10 @@ class CreatePlayListsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 uri?.let {
+                    grantPersistableUriPermission(it)
                     coverUri = uri
                     binding.imagepickArea.setImageURI(uri)
                     saveImageToPrivateStorage(uri)
@@ -69,6 +74,15 @@ class CreatePlayListsFragment : Fragment() {
             }
 
         binding.createPlayListButton.isEnabled = false
+
+        binding.toolbar.setOnClickListener{
+            when {
+                playListName.isNotEmpty() -> confirmDialogIsPlaylistFinished?.show()
+                coverUri != null && playListName.isNotEmpty() -> confirmDialogIsPlaylistFinished?.show()
+                playListDescription.isNotEmpty() && playListName.isNotEmpty() -> confirmDialogIsPlaylistFinished?.show()
+                else -> {}
+            }
+        }
 
 //        binding.createPlayListButton.setOnClickListener {
 ////                processState(state)
@@ -131,10 +145,50 @@ class CreatePlayListsFragment : Fragment() {
 
 
         binding.imagepickArea.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            lifecycleScope.launch {
+                requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE).collect{ result ->
+                    when(result) {
+                        is PermissionResult.Granted -> {
+                            pickMedia.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly
+                            )
+                        )
+                        }
+                        is PermissionResult.Denied.DeniedPermanently -> {
+                            val intent = Intent(Settings.ACTION_APPLICATION_SETTINGS).apply {
+                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                data = Uri.fromParts("package", context?.packageName, null)
+                            }
+                            context?.startActivity(intent)
+                        }
+                        is PermissionResult.Denied.NeedsRationale -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "Разрешение требуется для загрузки обложки плейлистов",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        is PermissionResult.Cancelled -> {
+                            return@collect
+                        }
+                    }
+                }
+            }
+
         }
 
-        confirmDialog = MaterialAlertDialogBuilder(requireContext())
+        confirmDialogIsPlaylistFinished = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(requireContext().getString(R.string.is_playlistfinished_dialog_hint))
+            .setNegativeButton("Завершить") { dialog, which ->
+                PlayListsFragment.createArgs(playListName)
+
+                findNavController().navigateUp()
+            }
+            .setPositiveButton("Отмена") { dialog, which ->
+            }
+
+        confirmDialogPlaylistExists = MaterialAlertDialogBuilder(requireContext())
             .setTitle(requireContext().getString(R.string.create_playlist_dialog_hint))
             .setNegativeButton("Нет") { dialog, which ->
             }
@@ -151,7 +205,7 @@ class CreatePlayListsFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(!s.isNullOrEmpty()) {
                     binding.createPlayListButton.isEnabled = true
-                    playListName = s.toString()
+                    playListName = s.toString().trim()
                 } else {
                     binding.createPlayListButton.isEnabled = false
                 }
@@ -167,7 +221,7 @@ class CreatePlayListsFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    playListDescription = s.toString()
+                    playListDescription = s.toString().trim()
                 Log.d("Playlistdescription", "$playListDescription")
             }
 
@@ -180,7 +234,7 @@ class CreatePlayListsFragment : Fragment() {
 
     private fun processState(state: CreatePlaylistState) {
         when (state) {
-            is CreatePlaylistState.CopyExists -> confirmDialog?.show()
+            is CreatePlaylistState.CopyExists -> confirmDialogPlaylistExists?.show()
             is CreatePlaylistState.NoCopyExists -> {
                 playlist = Playlist(
                     playListName,
@@ -202,7 +256,7 @@ class CreatePlayListsFragment : Fragment() {
                     findNavController().navigateUp()
 
                 } else {
-                    confirmDialog?.show()
+                    confirmDialogPlaylistExists?.show()
                 }
 //                confirmDialog?.show()
                 Log.d("Playlists", "${state.playLists}")
@@ -236,5 +290,23 @@ class CreatePlayListsFragment : Fragment() {
 
     private fun String.addSuffix(suffix: String): String {
         return this + suffix
+    }
+
+    private fun grantPersistableUriPermission(uri: Uri) {
+        try {
+            val contentResolver = requireActivity().contentResolver
+            val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            contentResolver.takePersistableUriPermission(uri, flags)
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        coverUri = null
+        confirmDialogPlaylistExists = null
+        confirmDialogIsPlaylistFinished = null
+        super.onDestroyView()
     }
 }
