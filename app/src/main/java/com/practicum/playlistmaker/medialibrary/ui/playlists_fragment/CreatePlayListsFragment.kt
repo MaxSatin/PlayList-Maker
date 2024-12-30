@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,9 +15,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -28,6 +34,7 @@ import com.practicum.playlistmaker.databinding.CreatePlaylistFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.CreatePlaylistState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.createplaylists.viewmodel.CreatePlayListsViewModel
+import com.practicum.playlistmaker.player.presentation.utils.debounce
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -45,11 +52,25 @@ class CreatePlayListsFragment : Fragment() {
     private var coverUri: Uri? = null
 
     private lateinit var playlist: Playlist
+    private var playLists = emptyList<Playlist>()
 
     private var confirmDialogPlaylistExists: MaterialAlertDialogBuilder? = null
-    private var confirmDialogIsPlaylistFinished: MaterialAlertDialogBuilder? = null
+
+    private lateinit var notificationFadeIn: Animation
+    private lateinit var notificationFadeOut: Animation
+
+    private val handler = Handler(Looper.getMainLooper())
 
     private val viewModel: CreatePlayListsViewModel by viewModel()
+
+    private var isClickAllowed: Boolean = true
+    private val setClickTrueDebounce = debounce<Boolean>(
+        DEBOUNCE_DELAY_MILLIS,
+        lifecycleScope,
+        true
+    ) { isAllowed ->
+        isClickAllowed = isAllowed
+    }
 
 
     override fun onCreateView(
@@ -63,6 +84,12 @@ class CreatePlayListsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        notificationFadeIn =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        notificationFadeOut =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 uri?.let {
@@ -75,14 +102,45 @@ class CreatePlayListsFragment : Fragment() {
 
         binding.createPlayListButton.isEnabled = false
 
-        binding.toolbar.setOnClickListener{
-            when {
-                playListName.isNotEmpty() -> confirmDialogIsPlaylistFinished?.show()
-                coverUri != null && playListName.isNotEmpty() -> confirmDialogIsPlaylistFinished?.show()
-                playListDescription.isNotEmpty() && playListName.isNotEmpty() -> confirmDialogIsPlaylistFinished?.show()
-                else -> {}
+        binding.toolbar.setOnClickListener {
+            if (clickDebounce()) {
+                when {
+                    playListName.isNotEmpty() -> notificationFadeIn()
+                    coverUri != null && playListName.isNotEmpty() -> notificationFadeIn()
+                    playListDescription.isNotEmpty() && playListName.isNotEmpty() -> notificationFadeIn()
+                    else -> {
+                        findNavController().navigateUp()
+                    }
+                }
             }
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (clickDebounce()) {
+                        when {
+                            playListName.isNotEmpty() -> notificationFadeIn()
+                            coverUri != null && playListName.isNotEmpty() -> notificationFadeIn()
+                            playListDescription.isNotEmpty() && playListName.isNotEmpty() -> notificationFadeIn()
+                            else -> {
+                                findNavController().navigateUp()
+                            }
+                        }
+                    }
+                }
+            })
+
+
+        binding.endCreatingButton.setOnClickListener {
+            endEditing()
+        }
+        binding.cancel.setOnClickListener {
+            onCancelButtonPressed()
+            isClickAllowed = true
+        }
+
 
 //        binding.createPlayListButton.setOnClickListener {
 ////                processState(state)
@@ -112,6 +170,9 @@ class CreatePlayListsFragment : Fragment() {
         viewModel.checkCurrentPlaylists()
 
         viewModel.permissionStateLiveData().observe(viewLifecycleOwner) { state ->
+            if (state is CreatePlaylistState.Content) {
+                this.playLists = state.playLists
+            }
             Log.d("PlaylistState", "$state")
             binding.createPlayListButton.setOnClickListener {
                 processState(state)
@@ -146,47 +207,41 @@ class CreatePlayListsFragment : Fragment() {
 
         binding.imagepickArea.setOnClickListener {
             lifecycleScope.launch {
-                requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE).collect{ result ->
-                    when(result) {
-                        is PermissionResult.Granted -> {
-                            pickMedia.launch(
-                            PickVisualMediaRequest(
-                                ActivityResultContracts.PickVisualMedia.ImageOnly
-                            )
-                        )
-                        }
-                        is PermissionResult.Denied.DeniedPermanently -> {
-                            val intent = Intent(Settings.ACTION_APPLICATION_SETTINGS).apply {
-                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                data = Uri.fromParts("package", context?.packageName, null)
+                requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    .collect { result ->
+                        when (result) {
+                            is PermissionResult.Granted -> {
+                                pickMedia.launch(
+                                    PickVisualMediaRequest(
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
+                                )
                             }
-                            context?.startActivity(intent)
-                        }
-                        is PermissionResult.Denied.NeedsRationale -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "Разрешение требуется для загрузки обложки плейлистов",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                        is PermissionResult.Cancelled -> {
-                            return@collect
+
+                            is PermissionResult.Denied.DeniedPermanently -> {
+                                val intent = Intent(Settings.ACTION_APPLICATION_SETTINGS).apply {
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    data = Uri.fromParts("package", context?.packageName, null)
+                                }
+                                context?.startActivity(intent)
+                            }
+
+                            is PermissionResult.Denied.NeedsRationale -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Разрешение требуется для загрузки обложки плейлистов",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
+                            is PermissionResult.Cancelled -> {
+                                return@collect
+                            }
                         }
                     }
-                }
             }
 
         }
-
-        confirmDialogIsPlaylistFinished = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(requireContext().getString(R.string.is_playlistfinished_dialog_hint))
-            .setNegativeButton("Завершить") { dialog, which ->
-                PlayListsFragment.createArgs(playListName)
-
-                findNavController().navigateUp()
-            }
-            .setPositiveButton("Отмена") { dialog, which ->
-            }
 
         confirmDialogPlaylistExists = MaterialAlertDialogBuilder(requireContext())
             .setTitle(requireContext().getString(R.string.create_playlist_dialog_hint))
@@ -203,7 +258,7 @@ class CreatePlayListsFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(!s.isNullOrEmpty()) {
+                if (!s.isNullOrEmpty()) {
                     binding.createPlayListButton.isEnabled = true
                     playListName = s.toString().trim()
                 } else {
@@ -221,7 +276,7 @@ class CreatePlayListsFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    playListDescription = s.toString().trim()
+                playListDescription = s.toString().trim()
                 Log.d("Playlistdescription", "$playListDescription")
             }
 
@@ -229,27 +284,29 @@ class CreatePlayListsFragment : Fragment() {
             }
         }
         binding.playlistNameInputEditText.addTextChangedListener(playlistNameTextWatcher)
-        binding.playlistDescriptionInputEditText.addTextChangedListener(playlistDescriptionTextWatcher)
+        binding.playlistDescriptionInputEditText.addTextChangedListener(
+            playlistDescriptionTextWatcher
+        )
     }
 
     private fun processState(state: CreatePlaylistState) {
         when (state) {
-            is CreatePlaylistState.CopyExists -> confirmDialogPlaylistExists?.show()
-            is CreatePlaylistState.NoCopyExists -> {
-                playlist = Playlist(
-                    playListName,
-                    playListDescription,
-                    coverUri,
-                    0,
-                    false
-                )
-                viewModel.addPlaylistWithReplace(playlist)
-
-            }
+//            is CreatePlaylistState.CopyExists -> confirmDialogPlaylistExists?.show()
+//            is CreatePlaylistState.NoCopyExists -> {
+//                playlist = Playlist(
+//                    playListName,
+//                    playListDescription,
+//                    coverUri,
+//                    0,
+//                    false
+//                )
+//                viewModel.addPlaylistWithReplace(playlist)
+//
+//            }
 
             is CreatePlaylistState.Content -> {
-                playlist = Playlist(playListName, playListDescription, coverUri,0, false)
-                val filteredPlaylist = state.playLists.find { it.name == playlist.name }
+                playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
+                val filteredPlaylist = this.playLists.find { it.name == playlist.name }
                 Log.d("ViewmodelPlaylist", "$filteredPlaylist")
                 if (filteredPlaylist == null) {
                     viewModel.addPlaylistWithReplace(playlist)
@@ -262,6 +319,51 @@ class CreatePlayListsFragment : Fragment() {
                 Log.d("Playlists", "${state.playLists}")
             }
         }
+    }
+
+    private fun checkExistsAndSet() {
+        playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
+        val filteredPlaylist = playLists.find { it.name == playlist.name }
+        Log.d("ViewmodelPlaylist", "$filteredPlaylist")
+        if (filteredPlaylist == null) {
+            viewModel.addPlaylistWithReplace(playlist)
+            findNavController().navigateUp()
+
+        } else {
+            confirmDialogPlaylistExists?.show()
+        }
+    }
+
+    private fun notificationFadeIn() {
+        handler.removeCallbacksAndMessages(keyObject)
+        handler.postDelayed(
+            {
+                binding.notificationDialog.startAnimation(notificationFadeIn)
+                binding.notificationDialog.isVisible = true
+            },
+            keyObject,
+            ANIMATION_DELAY_MILLIS
+        )
+    }
+
+    private fun notificationFadeOut() {
+        handler.postDelayed(
+            {
+                binding.notificationDialog.startAnimation(notificationFadeOut)
+                binding.notificationDialog.isVisible = false
+            },
+            keyObject,
+            ANIMATION_DELAY_MILLIS
+        )
+    }
+
+    private fun endEditing() {
+        notificationFadeOut()
+        findNavController().navigateUp()
+    }
+
+    private fun onCancelButtonPressed() {
+        notificationFadeOut()
     }
 
     private fun saveImageToPrivateStorage(uri: Uri) {
@@ -288,6 +390,15 @@ class CreatePlayListsFragment : Fragment() {
             )
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            setClickTrueDebounce(true)
+        }
+        return current
+    }
+
     private fun String.addSuffix(suffix: String): String {
         return this + suffix
     }
@@ -295,7 +406,8 @@ class CreatePlayListsFragment : Fragment() {
     private fun grantPersistableUriPermission(uri: Uri) {
         try {
             val contentResolver = requireActivity().contentResolver
-            val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            val flags =
+                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             contentResolver.takePersistableUriPermission(uri, flags)
         } catch (e: SecurityException) {
             e.printStackTrace()
@@ -306,7 +418,14 @@ class CreatePlayListsFragment : Fragment() {
         _binding = null
         coverUri = null
         confirmDialogPlaylistExists = null
-        confirmDialogIsPlaylistFinished = null
+        handler.removeCallbacksAndMessages(keyObject)
         super.onDestroyView()
+    }
+
+    companion object {
+        private val keyObject: Any = Unit
+        private const val ANIMATION_DELAY_MILLIS = 100L
+        private const val DEBOUNCE_DELAY_MILLIS = 2_000L
+
     }
 }

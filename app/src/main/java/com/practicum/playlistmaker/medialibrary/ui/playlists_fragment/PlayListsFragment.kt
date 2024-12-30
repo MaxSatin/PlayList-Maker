@@ -29,6 +29,8 @@ class PlayListsFragment() : Fragment() {
     private val binding get() = _binding!!
     private val handler = Handler(Looper.getMainLooper())
 
+    private var latestAddedPlaylist: Playlist? = null
+
     private lateinit var playlistAddedNotificationFadeIn: Animation
     private lateinit var playlistAddedNotificationFadeOut: Animation
 
@@ -44,7 +46,6 @@ class PlayListsFragment() : Fragment() {
         _binding = PlaylistsFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -98,8 +99,11 @@ class PlayListsFragment() : Fragment() {
 
     private fun showContent(playlists: List<Playlist>) {
         val playlist = playlists.firstOrNull()
-        if (playlist != null) {
-            showAddedInPlaylistNotification(playlist.name)
+        if (playlist != null && playlist != latestAddedPlaylist && latestAddedPlaylist == null) {
+            latestAddedPlaylist = playlist
+        } else if (playlist != null && playlist != latestAddedPlaylist){
+            latestAddedPlaylist = playlist
+            showAddedInPlaylistNotification("Плейлист ${playlist.name} создан!")
         }
         playlistAdapter.updateItems(playlists)
         binding.playlistsRecyclerView.isVisible = true
@@ -146,6 +150,7 @@ class PlayListsFragment() : Fragment() {
 
     override fun onDestroyView() {
         handler.removeCallbacksAndMessages(keyObject)
+        latestAddedPlaylist = null
         super.onDestroyView()
         _binding = null
     }

@@ -7,10 +7,11 @@ import androidx.room.PrimaryKey
 
 @Entity (tableName = "playlist_table")
 data class PlaylistEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "playlistName")
+    @PrimaryKey @ColumnInfo(name = "playlistName")
     val name: String,
     val description: String,
     val coverUri: String,
     val trackCount: Int,
-    val containsCurrentTrack: Boolean
+    val containsCurrentTrack: Boolean,
+    val timeStamp:Long = System.currentTimeMillis()
 )

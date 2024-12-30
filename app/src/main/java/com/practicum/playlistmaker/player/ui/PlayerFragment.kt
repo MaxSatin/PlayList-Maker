@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import android.view.animation.AnimationUtils
+import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
@@ -42,11 +43,20 @@ class PlayerFragment : Fragment() {
     private lateinit var trackAddedNotificationFadeIn: Animation
     private lateinit var trackAddedNotificationFadeOut: Animation
 
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
     private val handler = Handler(Looper.getMainLooper())
 
     private val playlistAdapter = BottomSheetPlaylistAdapter { playlist: Playlist ->
 //        viewModel.addTrackPlayListCrossRef(playlist.name)
         viewModel.addTrackToPlayList(playlist)
+        handler.postDelayed(
+            {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            },
+            keyObject,
+            300
+        )
     }
 
     override fun onCreateView(
@@ -76,7 +86,7 @@ class PlayerFragment : Fragment() {
         binding.playlistsRV.adapter = playlistAdapter
         binding.playButton.isEnabled = false
 
-        val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer).apply {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
