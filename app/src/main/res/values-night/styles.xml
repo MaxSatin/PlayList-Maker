@@ -219,7 +219,7 @@
     </style>
 
     <style name="PlaylistNotificationStyle">
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@drawable/tracklist_notification_background_night</item>
         <item name="android:textColor">@color/yp_black</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">14sp</item>

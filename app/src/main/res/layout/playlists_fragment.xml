@@ -36,7 +36,6 @@
                 android:id="@+id/playlistsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 android:layout_marginTop="@dimen/padding_16"
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
@@ -61,10 +60,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/padding_46" />
-                <!--        app:layout_constraintTop_toBottomOf="parent"-->
-                <!--        app:layout_constraintStart_toStartOf="parent"-->
-                <!--        app:layout_constraintEnd_toEndOf="parent"-->
-
                 />
 
                 <TextView
@@ -75,10 +70,6 @@
                     android:layout_marginTop="@dimen/padding_16"
                     android:gravity="center"
                     android:text="@string/playlists_are_empty" />
-                <!--        app:layout_constraintTop_toBottomOf="@id/emptyPlaylistImg"-->
-                <!--        app:layout_constraintStart_toStartOf="@id/emptyPlaylistImg"-->
-                <!--        app:layout_constraintEnd_toEndOf="@id/emptyPlaylistImg"-->
-
                 />
             </LinearLayout>
         </LinearLayout>

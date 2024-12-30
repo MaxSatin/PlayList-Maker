@@ -99,11 +99,12 @@ class PlayListsFragment() : Fragment() {
 
     private fun showContent(playlists: List<Playlist>) {
         val playlist = playlists.firstOrNull()
-        if (playlist != null && playlist != latestAddedPlaylist && latestAddedPlaylist == null) {
+        if (playlist != latestAddedPlaylist && latestAddedPlaylist == null) {
             latestAddedPlaylist = playlist
-        } else if (playlist != null && playlist != latestAddedPlaylist){
+        }
+        else if (playlist != latestAddedPlaylist){
             latestAddedPlaylist = playlist
-            showAddedInPlaylistNotification("Плейлист ${playlist.name} создан!")
+            showAddedInPlaylistNotification("Плейлист ${playlist?.name} создан!")
         }
         playlistAdapter.updateItems(playlists)
         binding.playlistsRecyclerView.isVisible = true
