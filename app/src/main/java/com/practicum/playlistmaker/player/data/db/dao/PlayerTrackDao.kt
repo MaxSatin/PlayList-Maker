@@ -47,11 +47,13 @@ interface PlayerTrackDao {
         p.description AS description,
         p.coverUri AS coverUri,
         COUNT(crossRef.trackId) AS trackCount,
-        p.containsCurrentTrack AS containsCurrentTrack
+        p.containsCurrentTrack AS containsCurrentTrack,
+        p.timeStamp as timeStamp
     FROM playlist_table AS p
     LEFT JOIN playlistcrossref_table AS crossRef 
         ON p.playlistName = crossRef.playlistName
-    GROUP BY p.playlistName
+    GROUP BY p.playlistName, p.description, p.coverUri, p.trackCount, p.containsCurrentTrack
+    ORDER BY p.timeStamp ASC
 """
     )
     fun getPlaylistsWithTrackCount(): Flow<List<PlaylistEntity>>

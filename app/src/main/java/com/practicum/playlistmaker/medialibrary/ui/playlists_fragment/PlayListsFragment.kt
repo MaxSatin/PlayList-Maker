@@ -34,6 +34,8 @@ class PlayListsFragment() : Fragment() {
     private lateinit var playlistAddedNotificationFadeIn: Animation
     private lateinit var playlistAddedNotificationFadeOut: Animation
 
+    private var isFirstTimeLoaded: Boolean = true
+
     private val playlistAdapter = PlaylistAdapter {
         Log.d("Openplaylists", "playlist is open!")
     }
@@ -44,6 +46,7 @@ class PlayListsFragment() : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         _binding = PlaylistsFragmentBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -62,10 +65,16 @@ class PlayListsFragment() : Fragment() {
             addItemDecoration(GridLayoutItemDecorations(2, 8, true))
         }
 
-        viewModel.getPlayListScreenState().observe(viewLifecycleOwner) { playlistScreenState ->
-            Log.d("PlaylistState", "$playlistScreenState")
-            processState(playlistScreenState)
-        }
+//        viewModel.getPlayListScreenState().observe(viewLifecycleOwner) { playlistScreenState ->
+//            Log.d("PlaylistState", "$playlistScreenState")
+//            processState(playlistScreenState)
+//        }
+
+        viewModel.playlistStateMediatorLiveData().observe(viewLifecycleOwner) { playlistScreenState ->
+                Log.d("PlaylistState", "$playlistScreenState")
+                processState(playlistScreenState)
+
+            }
 
         if (!arguments?.getString(PLAYLIST_CREATED).isNullOrEmpty()) {
             var playlistName: String? = arguments?.getString(PLAYLIST_CREATED)
@@ -99,13 +108,18 @@ class PlayListsFragment() : Fragment() {
 
     private fun showContent(playlists: List<Playlist>) {
         val playlist = playlists.firstOrNull()
-        if (playlist != latestAddedPlaylist && latestAddedPlaylist == null) {
-            latestAddedPlaylist = playlist
-        }
-        else if (playlist != latestAddedPlaylist){
-            latestAddedPlaylist = playlist
+        if (isFirstTimeLoaded) {
+            isFirstTimeLoaded = false
+        } else {
             showAddedInPlaylistNotification("Плейлист ${playlist?.name} создан!")
         }
+//        if (playlist != latestAddedPlaylist && latestAddedPlaylist == null) {
+//            latestAddedPlaylist = playlist
+//        }
+//        else if (playlist != latestAddedPlaylist){
+//            latestAddedPlaylist = playlist
+//            showAddedInPlaylistNotification("Плейлист ${playlist?.name} создан!")
+//        }
         playlistAdapter.updateItems(playlists)
         binding.playlistsRecyclerView.isVisible = true
     }
@@ -150,6 +164,7 @@ class PlayListsFragment() : Fragment() {
 //    }
 
     override fun onDestroyView() {
+        isFirstTimeLoaded = false
         handler.removeCallbacksAndMessages(keyObject)
         latestAddedPlaylist = null
         super.onDestroyView()

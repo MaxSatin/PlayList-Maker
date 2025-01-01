@@ -106,8 +106,8 @@ class CreatePlayListsFragment : Fragment() {
             if (clickDebounce()) {
                 when {
                     playListName.isNotEmpty() -> notificationFadeIn()
-                    coverUri != null && playListName.isNotEmpty() -> notificationFadeIn()
-                    playListDescription.isNotEmpty() && playListName.isNotEmpty() -> notificationFadeIn()
+                    coverUri != null -> notificationFadeIn()
+                    playListDescription.isNotEmpty() -> notificationFadeIn()
                     else -> {
                         findNavController().navigateUp()
                     }
@@ -122,8 +122,8 @@ class CreatePlayListsFragment : Fragment() {
                     if (clickDebounce()) {
                         when {
                             playListName.isNotEmpty() -> notificationFadeIn()
-                            coverUri != null && playListName.isNotEmpty() -> notificationFadeIn()
-                            playListDescription.isNotEmpty() && playListName.isNotEmpty() -> notificationFadeIn()
+                            coverUri != null -> notificationFadeIn()
+                            playListDescription.isNotEmpty() -> notificationFadeIn()
                             else -> {
                                 findNavController().navigateUp()
                             }

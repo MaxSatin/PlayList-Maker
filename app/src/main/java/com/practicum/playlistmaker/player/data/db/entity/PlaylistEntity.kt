@@ -11,5 +11,6 @@ data class PlaylistEntity(
     val description: String,
     val coverUri: String,
     val trackCount: Int,
-    val containsCurrentTrack: Boolean
+    val containsCurrentTrack: Boolean,
+    val timeStamp:Long = System.currentTimeMillis()
 )

@@ -2,12 +2,14 @@ package com.practicum.playlistmaker.medialibrary.presentation.playlists.playlist
 
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryInteractor
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlayListsScreenState
+import com.practicum.playlistmaker.medialibrary.presentation.utils.SingleLineEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -19,9 +21,44 @@ class PlaylistViewModel(
     private val mediaLibraryInteractor: MediaLibraryInteractor,
 ) : ViewModel() {
 
+    private var lastPostedList = emptyList<Playlist>()
+
     private val playlistScreenStateLiveData = MutableLiveData<PlayListsScreenState>()
     fun getPlayListScreenState(): LiveData<PlayListsScreenState> = playlistScreenStateLiveData
 
+    private val mediatorStateLiveData = SingleLineEvent<PlayListsScreenState>().also { livedata ->
+        livedata.addSource(playlistScreenStateLiveData) { playlistState ->
+            when (playlistState) {
+                is PlayListsScreenState.Content -> {
+                    if (!areListsAreEqual(lastPostedList, playlistState.playlists)) {
+                        lastPostedList = playlistState.playlists
+                        livedata.postValue(
+                            PlayListsScreenState.Content(
+                                playlistState.playlists
+                            )
+                        )
+                    }
+                }
+                else ->  livedata.postValue(
+                    PlayListsScreenState.Empty("Список плейлистов пуст!")
+                )
+            }
+        }
+    }
+
+    fun playlistStateMediatorLiveData(): LiveData<PlayListsScreenState> = mediatorStateLiveData
+
+    private fun setUniqueValue(newList: List<Playlist>): List<Playlist> {
+        if (!areListsAreEqual(lastPostedList, newList)) {
+            lastPostedList = newList
+        }
+        return newList
+    }
+
+
+    private fun areListsAreEqual(oldList: List<Playlist>?, newList: List<Playlist>?): Boolean {
+        return oldList == newList || (oldList != null && newList != null && oldList.size == newList.size)
+    }
 
     fun getPlaylists() {
         viewModelScope.launch {
