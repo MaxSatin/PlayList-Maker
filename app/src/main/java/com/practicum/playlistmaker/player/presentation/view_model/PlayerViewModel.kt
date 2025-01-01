@@ -79,26 +79,6 @@ class PlayerViewModel(
                     processResult(playlist)
                 }
         }
-//            databaseInteractor.getPlaylists()
-//                .map { playlist ->
-//                    playlist.map { playlist ->
-//                        async(Dispatchers.IO) {
-//                            val trackList = databaseInteractor
-//                                .getAllTracksFromPlaylist(playlist.name)
-//
-//                            if (trackList.contains(trackItem)) {
-//                                playlist.copy(tracksCount = trackList.size, containsTrack = true)
-//                            } else {
-//                                playlist.copy(tracksCount = trackList.size, containsTrack = false)
-//                            }
-//                        }
-//                    }.awaitAll()
-//                }
-//
-//                .collect { updatedPlaylists ->
-//                    processResult(updatedPlaylists)
-//                }
-//        }
     }
 
     private fun addTrackPlayListCrossRef(playlistName: String) {
@@ -106,16 +86,6 @@ class PlayerViewModel(
             databaseInteractor.insertPlayListTrackCrossRef(playlistName, trackItem)
         }
     }
-
-//    private suspend fun checkTrack(playlist: Playlist, trackList: List<Track>): Playlist {
-//        return if (trackList.contains(trackItem)) {
-//            playlist.copy(trackCount = trackList.size, containsCurrentTrack = true)
-//
-//        } else {
-//            playlist.copy(trackCount = trackList.size, containsCurrentTrack = false)
-//
-//        }
-//    }
 
     fun addTrackToPlayList(playlist: Playlist) {
         if (clickDebounce()) {
@@ -145,10 +115,6 @@ class PlayerViewModel(
             }
         }
     }
-//        viewModelScope.launch {
-//            databaseInteractor.insertPlayListTrackCrossRef(playlist.name, trackItem)
-//        }
-
 
     private fun processResult(playLists: List<Playlist>) {
         if (playLists.isEmpty()) {

@@ -48,14 +48,6 @@ class PlaylistViewModel(
 
     fun playlistStateMediatorLiveData(): LiveData<PlayListsScreenState> = mediatorStateLiveData
 
-    private fun setUniqueValue(newList: List<Playlist>): List<Playlist> {
-        if (!areListsAreEqual(lastPostedList, newList)) {
-            lastPostedList = newList
-        }
-        return newList
-    }
-
-
     private fun areListsAreEqual(oldList: List<Playlist>?, newList: List<Playlist>?): Boolean {
         return oldList == newList || (oldList != null && newList != null && oldList.size == newList.size)
     }
@@ -68,35 +60,6 @@ class PlaylistViewModel(
                 }
         }
     }
-//        viewModelScope.launch {
-//            mediaLibraryInteractor.getPlaylists()
-//                .map { playlists ->
-//                    playlists.map { playlist ->
-//                        async(Dispatchers.IO) {
-//                            val trackCount = mediaLibraryInteractor
-//                                .getAllTracksFromPlaylist(playlist.name)
-//                                .count()
-//                            playlist.copy(trackCount = trackCount)
-//                        }
-//                    }.awaitAll()
-//                }
-//                .collect { updatedPlaylists ->
-//                    processResult(updatedPlaylists)
-//                }
-//        }
-//    }
-//    fun getPlaylists() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            mediaLibraryInteractor.getPlaylists()
-//                .collect { playlists ->
-//                    playlists.forEach {
-//                        it.tracksNumber =
-//                            mediaLibraryInteractor.getAllTracksFromPlaylist(it.name).size
-//                    }
-//                    processResult(playlists)
-//                }
-//        }
-//    }
 
     private fun render(state: PlayListsScreenState) {
         playlistScreenStateLiveData.postValue(state)

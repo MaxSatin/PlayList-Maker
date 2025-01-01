@@ -66,10 +66,6 @@ class SearchViewModel(
     fun observeTrackSearchState(): LiveData<State.SearchListState> = stateLiveData
     fun getShowTrackPlayerTrigger(): LiveData<String> = showTrackPlayerTrigger
 
-//    init {
-//        getHistoryTracks()
-//    }
-
 
     fun getHistoryTracks() {
 

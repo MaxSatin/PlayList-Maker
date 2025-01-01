@@ -141,32 +141,6 @@ class CreatePlayListsFragment : Fragment() {
             isClickAllowed = true
         }
 
-
-//        binding.createPlayListButton.setOnClickListener {
-////                processState(state)
-//            Log.d("Playlistvalue", "$playListName $playListDescription $coverUri")
-//            val playlist = Playlist(
-//                playListName,
-//                playListDescription,
-//                coverUri
-//            )
-//            viewModel.addPlaylistWithReplace(playlist)
-//        }
-
-
-//            val playlist = Playlist(
-////                playListName,
-////                playListDescription,
-////                coverUri
-////            )
-////            viewModel.checkCurrentPlaylists(playlist)
-////            Log.d("PlaylistOnClick", "$playlist")
-//
-//        val playlist = Playlist(
-//            playListName,
-//            playListDescription,
-//            coverUri
-//        )
         viewModel.checkCurrentPlaylists()
 
         viewModel.permissionStateLiveData().observe(viewLifecycleOwner) { state ->
@@ -178,30 +152,6 @@ class CreatePlayListsFragment : Fragment() {
                 processState(state)
 
             }
-//                val playlist = Playlist(
-//                    playListName,
-//                    playListDescription,
-//                    coverUri
-//                )
-//                viewModel.checkCurrentPlaylists(playlist)
-//                Log.d("PlaylistOnClick", "$playlist")
-
-////                val playlist = Playlist(
-////                    playListName,
-////                    playListDescription,
-////                    coverUri
-////                )
-////                viewModel.checkCurrentPlaylists(playlist)
-//            }
-//                Log.d("PlaylistOnClick", "$playlist")
-//                processState(state)
-//                Log.d("Playlistvalue", "$playListName $playListDescription $coverUri")
-//                val playlist = Playlist(
-//                    playListName,
-//                    playListDescription,
-//                    coverUri
-//                )
-//                viewModel.addPlaylistWithReplace(playlist)
         }
 
 
@@ -291,19 +241,6 @@ class CreatePlayListsFragment : Fragment() {
 
     private fun processState(state: CreatePlaylistState) {
         when (state) {
-//            is CreatePlaylistState.CopyExists -> confirmDialogPlaylistExists?.show()
-//            is CreatePlaylistState.NoCopyExists -> {
-//                playlist = Playlist(
-//                    playListName,
-//                    playListDescription,
-//                    coverUri,
-//                    0,
-//                    false
-//                )
-//                viewModel.addPlaylistWithReplace(playlist)
-//
-//            }
-
             is CreatePlaylistState.Content -> {
                 playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
                 val filteredPlaylist = this.playLists.find { it.name == playlist.name }
@@ -315,7 +252,6 @@ class CreatePlayListsFragment : Fragment() {
                 } else {
                     confirmDialogPlaylistExists?.show()
                 }
-//                confirmDialog?.show()
                 Log.d("Playlists", "${state.playLists}")
             }
         }

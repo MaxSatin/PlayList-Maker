@@ -68,12 +68,4 @@ interface PlayerTrackDao {
     )
     suspend fun checkPlaylistHasTrack(trackId: String, playlistName: String): Boolean
 
-    //    @Query(
-//        ""
-//            SELECT EXISTS(
-//            SELECT 1
-//            FROM playlist_table t
-//            INNER JOIN playlistcrossref_table j ON  = j.playlistName
-//            )
-//    "")
 }

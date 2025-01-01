@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class FavoriteTracksViewModel(
     private val mediaLibraryInteractor: MediaLibraryInteractor,
-    private val gson: Gson
+    private val gson: Gson,
 ) : ViewModel() {
 
     private val favoriteScreenState = MutableLiveData<FavoriteListScreenState>()

@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.medialibrary.presentation.playlists.createplaylists.viewmodel
 
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,13 +33,6 @@ class CreatePlayListsViewModel(
     }
 
     private var latestCheckedPlayList: Playlist? = null
-    private val checkPlaylistExists = debounce<Playlist>(
-        CLICK_DEBOUNCE_DELAY,
-        viewModelScope,
-        false
-    ) { playlist ->
-//        checkCurrentPlaylists(playlist)
-    }
 
     init {
         isCopyNeeded = false
@@ -58,35 +51,8 @@ class CreatePlayListsViewModel(
             mediaLibraryInteractor.getPlaylists()
                 .collect { playlists ->
                     renderState(CreatePlaylistState.Content(playlists))
-//                    var playlistst = playlists
-//                    val filteredPlaylist = playlistst.find {
-//                        it.name.trim().equals(playlist.name.trim(), ignoreCase = true)
-//                    }
-//                    Log.d("ViewmodelPlaylistR", "$filteredPlaylist")
-//                    if (filteredPlaylist?.name.isNullOrEmpty()) {
-//                        renderState(
-//                            CreatePlaylistState.NoCopyExists
-//                        )
-//                    }
-//                    renderState(
-//                        CreatePlaylistState.CopyExists
-//                    )
                 }
-//                        if (isCopyNeeded) {
-//                            addPlaylist(playlist)
-//                        } else {
-//                            addPlaylistWithReplace(playlist)
-//                        }
         }
-    }
-
-
-    private fun onPermissionGranted() {
-        isCopyNeeded = true
-    }
-
-    private fun onPermissionDenied() {
-        isCopyNeeded = false
     }
 
     private fun clickDebounce(): Boolean {

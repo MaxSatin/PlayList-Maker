@@ -56,12 +56,6 @@ class MediaLibraryRepositoryImpl(
             val reversedPlaylist = playList.reversed()
             emit(convertFromPlaylistEntity(reversedPlaylist))
         }
-//        val playlists = getPlaylistsFromStorage()
-//        return if (playlists.isNullOrEmpty()){
-//            emptyList<List<Track>>()
-//        } else {
-//            playlists
-//        }
     }
 
     override suspend fun addPlaylistWithReplace(playlist: Playlist) {

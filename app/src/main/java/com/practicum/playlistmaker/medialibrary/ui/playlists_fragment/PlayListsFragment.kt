@@ -65,15 +65,10 @@ class PlayListsFragment() : Fragment() {
             addItemDecoration(GridLayoutItemDecorations(2, 8, true))
         }
 
-//        viewModel.getPlayListScreenState().observe(viewLifecycleOwner) { playlistScreenState ->
-//            Log.d("PlaylistState", "$playlistScreenState")
-//            processState(playlistScreenState)
-//        }
 
         viewModel.playlistStateMediatorLiveData().observe(viewLifecycleOwner) { playlistScreenState ->
                 Log.d("PlaylistState", "$playlistScreenState")
                 processState(playlistScreenState)
-
             }
 
         if (!arguments?.getString(PLAYLIST_CREATED).isNullOrEmpty()) {
@@ -82,15 +77,6 @@ class PlayListsFragment() : Fragment() {
             showAddedInPlaylistNotification("Плейлист $playlistName создан!")
         }
 
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            // получаем flatList отедельно и передаем в параметр getTrackList, чтобы использовать
-//            // соответствующие методы для соответствующих версий Android
-//            val favorites = emptyList<List<Track>>()
-//            if (favorites.isNullOrEmpty()) {
-//                binding.emptyPlayListsPH.isVisible = true
-//            }
-//        }
 
         binding.createPlayListButton.setOnClickListener {
             findNavController().navigate(
@@ -113,13 +99,7 @@ class PlayListsFragment() : Fragment() {
         } else {
             showAddedInPlaylistNotification("Плейлист ${playlist?.name} создан!")
         }
-//        if (playlist != latestAddedPlaylist && latestAddedPlaylist == null) {
-//            latestAddedPlaylist = playlist
-//        }
-//        else if (playlist != latestAddedPlaylist){
-//            latestAddedPlaylist = playlist
-//            showAddedInPlaylistNotification("Плейлист ${playlist?.name} создан!")
-//        }
+
         playlistAdapter.updateItems(playlists)
         binding.playlistsRecyclerView.isVisible = true
     }
@@ -144,25 +124,6 @@ class PlayListsFragment() : Fragment() {
 
     }
 
-//    private fun getTrackListList(
-//        arguments: Bundle?,
-//        flatList: ArrayList<Track>?,
-//    ): List<List<Track>>? {
-//        val sizes = arguments?.getIntegerArrayList(KEY_SIZES)
-//
-//        if (flatList == null || sizes == null) return null
-//
-//        val trackLists = ArrayList<List<Track>>()
-//        var index = 0
-//
-//        sizes.forEach { size ->
-//            val sublist = flatList.subList(index, index + size)
-//            trackLists.add(sublist)
-//            index += size
-//        }
-//        return trackLists
-//    }
-
     override fun onDestroyView() {
         isFirstTimeLoaded = false
         handler.removeCallbacksAndMessages(keyObject)
@@ -184,23 +145,5 @@ class PlayListsFragment() : Fragment() {
     }
 }
 
-
-//        fun newInstance(favoriteTracks: List<List<Track>>?): PlayListsFragment {
-//            val flatList = ArrayList<Track>()
-//            val sizes = ArrayList<Int>()
-//
-//            favoriteTracks?.forEach { trackList ->
-//                sizes.add(trackList.size)
-//
-//                flatList.addAll(trackList)
-//            }
-//            return PlayListsFragment().apply {
-//                arguments = bundleOf(
-//                    KEY_TRACKS to ArrayList(flatList),
-//                    KEY_SIZES to ArrayList(sizes)
-//                )
-//            }
-//        }
-//    }
 
 

@@ -48,7 +48,6 @@ class PlayerFragment : Fragment() {
     private val handler = Handler(Looper.getMainLooper())
 
     private val playlistAdapter = BottomSheetPlaylistAdapter { playlist: Playlist ->
-//        viewModel.addTrackPlayListCrossRef(playlist.name)
         viewModel.addTrackToPlayList(playlist)
         handler.postDelayed(
             {
@@ -70,7 +69,6 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val trackGson = intent.getStringExtra(TRACK_ITEM_KEY)
         val trackGson = requireArguments().getString(TRACK_ITEM_KEY)
         viewModel = getViewModel { parametersOf(trackGson) }
 
@@ -195,22 +193,15 @@ class PlayerFragment : Fragment() {
             state.isAlreadyInPlaylist -> showAddedInPlaylistNotification(
                 "Трек ${state.trackName} уже добавлен в плейлист ${state.playListName}"
             )
-//                Toast.makeText(requireContext(),
-//                "Трек уже есть в плейлисте!",
-//                Toast.LENGTH_LONG).show()
             state.transactionId == -1L -> showAddedInPlaylistNotification(
                 "Не удалось добавить трек ${state.trackName} в плейлист"
             )
-//            Toast.makeText(requireContext(),
-//                "Не удалось добавить трек в плейлист",
-//                Toast.LENGTH_LONG).show()
+
             else ->
                 showAddedInPlaylistNotification(
                     "Добавлено в плейлист ${state.playListName}"
                 )
-//                Toast.makeText(requireContext(),
-//                "Трек добавлен в ${state.playListName} плейлист!",
-//                Toast.LENGTH_LONG).show()
+
         }
     }
 
@@ -263,13 +254,11 @@ class PlayerFragment : Fragment() {
     // Скрывая poster - скрываем и остальные элементы. (наверно, кривое решение. буду очень рад комметариям!))
     private fun showLoading() {
         binding.poster.isVisible = true
-//        binding.loadingOverlay.isVisible = true
         binding.progressbar.isVisible = true
     }
 
     private fun showTrackDetails(playerState: PlayerState) {
         with(playerState) {
-//            binding.loadingOverlay.isVisible = false
             binding.progressbar.isVisible = false
             binding.progressbar.isVisible = false
             binding.poster.isVisible = true

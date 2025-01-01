@@ -7,8 +7,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class MediaLibraryViewPagerAdapter(
     private val fragmentList: MutableList<Fragment>,
-//    private val favoriteListScreenState: FavoriteListScreenState,
-//    private val playLists: List<List<Track>>?,
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
 
@@ -17,9 +15,5 @@ class MediaLibraryViewPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return fragmentList[position]
-//        return when(position){
-//            0 ->  FavoriteTracksFragment.newInstance(favoriteListScreenState)
-//           else -> PlayListsFragment.newInstance(playLists)
-//        }
     }
 }
