@@ -31,6 +31,8 @@ class PlayListsFragment() : Fragment() {
 
     private var latestAddedPlaylist: Playlist? = null
 
+    private var lastPostedList = emptyList<Playlist>()
+
     private lateinit var playlistAddedNotificationFadeIn: Animation
     private lateinit var playlistAddedNotificationFadeOut: Animation
 
@@ -66,7 +68,8 @@ class PlayListsFragment() : Fragment() {
         }
 
 
-        viewModel.playlistStateMediatorLiveData().observe(viewLifecycleOwner) { playlistScreenState ->
+        viewModel.playlistStateMediatorLiveData()
+            .observe(viewLifecycleOwner) { playlistScreenState ->
                 Log.d("PlaylistState", "$playlistScreenState")
                 processState(playlistScreenState)
             }
@@ -85,6 +88,15 @@ class PlayListsFragment() : Fragment() {
         }
     }
 
+    private fun <T> areListsAreEqual(
+        list1: List<T>,
+        list2: List<T>,
+        comparator: (T, T) -> Boolean,
+    ): Boolean {
+        if (list1.size != list2.size) return false
+        return list1.zip(list2).all { (item1, item2) -> comparator(item1, item2) }
+    }
+
     private fun processState(state: PlayListsScreenState) {
         when (state) {
             is PlayListsScreenState.Content -> showContent(state.playlists)
@@ -97,7 +109,13 @@ class PlayListsFragment() : Fragment() {
         if (isFirstTimeLoaded) {
             isFirstTimeLoaded = false
         } else {
-            showAddedInPlaylistNotification("Плейлист ${playlist?.name} создан!")
+            var areListsEqual = areListsAreEqual(lastPostedList, playlists) { p1, p2 ->
+                p1.name == p2.name
+            }
+            if (!areListsEqual) {
+                lastPostedList = playlists
+                showAddedInPlaylistNotification("Плейлист ${playlist?.name} создан!")
+            }
         }
 
         playlistAdapter.updateItems(playlists)
@@ -137,7 +155,6 @@ class PlayListsFragment() : Fragment() {
         private const val PLAYLIST_CREATED = "playlist"
         private val keyObject: Any = Unit
         private const val ANIMATION_DELAY = 1_500L
-
 
         fun createArgs(playlistName: String): Bundle = bundleOf(
             PLAYLIST_CREATED to playlistName,

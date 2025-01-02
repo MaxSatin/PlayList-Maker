@@ -30,7 +30,7 @@ class PlaylistViewModel(
         livedata.addSource(playlistScreenStateLiveData) { playlistState ->
             when (playlistState) {
                 is PlayListsScreenState.Content -> {
-                    if (!areListsAreEqual(lastPostedList, playlistState.playlists)) {
+                    if (!areListsEqual(lastPostedList, playlistState.playlists)) {
                         lastPostedList = playlistState.playlists
                         livedata.postValue(
                             PlayListsScreenState.Content(
@@ -39,7 +39,8 @@ class PlaylistViewModel(
                         )
                     }
                 }
-                else ->  livedata.postValue(
+
+                else -> livedata.postValue(
                     PlayListsScreenState.Empty("Список плейлистов пуст!")
                 )
             }
@@ -48,8 +49,10 @@ class PlaylistViewModel(
 
     fun playlistStateMediatorLiveData(): LiveData<PlayListsScreenState> = mediatorStateLiveData
 
-    private fun areListsAreEqual(oldList: List<Playlist>?, newList: List<Playlist>?): Boolean {
-        return oldList == newList || (oldList != null && newList != null && oldList.size == newList.size)
+    private fun areListsEqual(oldList: List<Playlist>?, newList: List<Playlist>?): Boolean {
+        return oldList == newList || (oldList != null && newList != null && oldList.size == newList.size && oldList.containsAll(
+            newList
+        ))
     }
 
     fun getPlaylists() {
