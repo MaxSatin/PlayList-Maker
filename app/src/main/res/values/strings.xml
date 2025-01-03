@@ -25,6 +25,7 @@
 
     <string name="library_is_empty">Ваша медиатека пуста</string>
     <string name="playlists_are_empty">Вы не создали\n ни одного плейлиста</string>
+    <string name="playlist_is_empty">Вы не добавили ни одного трека</string>
     <string name="new_playlist">Новый плейлист</string>
     <string name="new_playlist_name">Название*</string>
     <string name="new_playlist_description">Описание</string>

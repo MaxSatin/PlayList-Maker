@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
     tools:context=".medialibrary.ui.playlistscreen_fragment.PlaylistScreenFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -153,13 +152,13 @@
         android:id="@+id/bottomSheetContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@drawable/playlist_edit_bottom_background"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/padding_16"
         app:behavior_hideable="true"
         app:behavior_peekHeight="240dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:visibility="gone">
+        android:visibility="visible">
 
     <View
         android:id="@+id/view"
@@ -172,19 +171,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:id="@+id/textView"
-        style="@style/ys_display_medium_text_19"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_30"
-        android:text="@string/playlistTracklist"
-        android:gravity="center_horizontal"
-        android:textColor="@color/yp_black"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playlistsRV"
@@ -192,9 +178,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_24"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/playlist_player_fragment_item"
+        tools:listitem="@layout/track_item"
         android:visibility="visible"
-        app:layout_constraintTop_toTopOf="@id/textView"
+        app:layout_constraintTop_toTopOf="@id/view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -219,7 +205,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_16"
-            android:text="@string/playlists_are_empty"
+            android:text="@string/playlist_is_empty"
             android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"/>
 
