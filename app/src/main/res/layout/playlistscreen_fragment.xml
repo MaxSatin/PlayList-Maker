@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     tools:context=".medialibrary.ui.playlistscreen_fragment.PlaylistScreenFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/PlayerTrackBackGround"
         android:id="@+id/playerActivity"
+        android:background="@color/grey_pale"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -51,12 +53,11 @@
         android:id="@+id/poster"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="30dp"
         app:layout_constraintDimensionRatio="h,1:1"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toBottomOf="@id/buttonBackBarrier"
-        app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintEnd_toStartOf="@id/rightBorder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/vector_empty_album_placeholder"
         android:visibility="visible"/>
 
@@ -130,6 +131,21 @@
             android:id="@+id/shareIc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_16"
+            android:src="@drawable/share_vector_24"
+            app:layout_constraintTop_toBottomOf="@id/playlistContents"
+            app:layout_constraintStart_toEndOf="@id/leftBorder"/>
+
+        <ImageView
+            android:id="@+id/moreIc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_16"
+            android:layout_marginLeft="@dimen/padding_16"
+            android:src="@drawable/more_vector_vert_24"
+            app:layout_constraintTop_toBottomOf="@id/playlistContents"
+            app:layout_constraintStart_toEndOf="@id/shareIc"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
