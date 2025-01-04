@@ -1,13 +1,21 @@
 package com.practicum.playlistmaker.medialibrary.domain.repository
 
+import com.practicum.playlistmaker.medialibrary.data.db.entity.PlaylistEntity
+import com.practicum.playlistmaker.medialibrary.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import kotlinx.coroutines.flow.Flow
 
 interface MediaLibraryRepository {
-    suspend fun getAllTracksFromPlaylist(playlistName: String): List<Track>
+    fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>>
 
     fun getPlaylists(): Flow<List<Playlist>>
+
+    suspend fun getPlaylistByName(playlistName: String): Playlist
+
+    suspend fun deleteTrackFromPlaylist(playlistName: String, trackId: String)
+
+    suspend fun updatePlaylist(oldPlaylistName: String, newPlaylistName: String)
 
     suspend fun addPlaylistWithReplace(playlist: Playlist)
 
