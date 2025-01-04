@@ -19,6 +19,7 @@ import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Play
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlayListsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlists.viewmodel.PlaylistViewModel
 import com.practicum.playlistmaker.medialibrary.ui.decorations.GridLayoutItemDecorations
+import com.practicum.playlistmaker.medialibrary.ui.playlistdetails_fragment.PlaylistDetailsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayListsFragment() : Fragment() {
@@ -38,8 +39,9 @@ class PlayListsFragment() : Fragment() {
 
     private var isFirstTimeLoaded: Boolean = true
 
-    private val playlistAdapter = PlaylistAdapter {
-        Log.d("Openplaylists", "playlist is open!")
+    private val playlistAdapter = PlaylistAdapter { playlist ->
+        PlaylistDetailsFragment.createArgs(playlist.name)
+        findNavController().navigate(R.id.action_mediaLibraryFragment_to_playlistDetailsFragment)
     }
 
     override fun onCreateView(

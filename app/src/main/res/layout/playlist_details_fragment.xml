@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".medialibrary.ui.playlistscreen_fragment.PlaylistScreenFragment">
+    tools:context=".medialibrary.ui.playlistdetails_fragment.PlaylistDetailsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/PlayerTrackBackGround"

@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.medialibrary.data.repository
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.core.net.toUri
+import androidx.room.Transaction
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.AppDatabase
@@ -13,7 +14,9 @@ import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Play
 import com.practicum.playlistmaker.medialibrary.domain.repository.MediaLibraryRepository
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -41,8 +44,8 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-    private fun convertFromPlaylistEntity(playlistEntitie: List<PlaylistEntity>): List<Playlist> {
-        return playlistEntitie.map { playlistEntity ->
+    private fun convertFromPlaylistEntity(playlistEntity: List<PlaylistEntity>): List<Playlist> {
+        return playlistEntity.map { playlistEntity ->
             converter.map(playlistEntity)
         }
     }
@@ -82,8 +85,12 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
+    @Transaction
     override suspend fun updatePlaylist(oldPlaylistName: String, newPlaylistName: String) {
-        TODO("Not yet implemented")
+        withContext(Dispatchers.IO){
+            appDatabase.playlistDao().updatePlaylistTable(oldPlaylistName, newPlaylistName)
+            appDatabase.playlistDao().updateCrossRefTable(oldPlaylistName, newPlaylistName)
+        }
     }
 
     override suspend fun addPlaylistWithReplace(playlist: Playlist) {

@@ -11,15 +11,26 @@ class MediaLibraryInteractorImpl(
 
     override fun getFavoriteTrackList(): Flow<List<Track>> {
         return mediaLibraryRepository.getFavoriteTrackList()
-
     }
 
-    override suspend fun getAllTracksFromPlaylist(playlistName: String): List<Track> {
+    override fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>> {
         return mediaLibraryRepository.getAllTracksFromPlaylist(playlistName)
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> {
         return mediaLibraryRepository.getPlaylists()
+    }
+
+    override suspend fun getPlaylistByName(playlistName: String): Playlist {
+        return mediaLibraryRepository.getPlaylistByName(playlistName)
+    }
+
+    override suspend fun deleteTrackFromPlaylist(playlistName: String, trackId: String) {
+        mediaLibraryRepository.deleteTrackFromPlaylist(playlistName, trackId)
+    }
+
+    override suspend fun updatePlaylist(oldPlaylistName: String, newPlaylistName: String) {
+        mediaLibraryRepository.updatePlaylist(oldPlaylistName, newPlaylistName)
     }
 
     override suspend fun addPlaylistWithReplace(playlist: Playlist) {

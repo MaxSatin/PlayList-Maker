@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.ui.playlistscreen_fragment
+package com.practicum.playlistmaker.medialibrary.ui.playlistdetails_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import com.practicum.playlistmaker.databinding.PlaylistscreenFragmentBinding
+import com.practicum.playlistmaker.databinding.PlaylistDetailsFragmentBinding
 
-class PlaylistScreenFragment: Fragment() {
+class PlaylistDetailsFragment: Fragment() {
 
-    private var _binding: PlaylistscreenFragmentBinding? = null
+    private var _binding: PlaylistDetailsFragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -18,7 +18,7 @@ class PlaylistScreenFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = PlaylistscreenFragmentBinding.inflate(inflater, container, false)
+        _binding = PlaylistDetailsFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
