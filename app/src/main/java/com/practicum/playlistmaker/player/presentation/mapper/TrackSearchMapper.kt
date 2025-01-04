@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.player.presentation.mapper
 
 import com.practicum.playlistmaker.search.domain.track_model.Track
-import com.practicum.playlistmaker.player.presentation.model.TrackSearchModel
+import com.practicum.playlistmaker.player.domain.model.track_model.TrackSearchModel
 
 // Маппер для непригодившихся сейчас моделей. Оставил на будущее.
 class TrackSearchMapper {

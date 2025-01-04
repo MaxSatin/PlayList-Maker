@@ -7,16 +7,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.practicum.playlistmaker.player.domain.db_interactor.DatabaseInteractor
+import com.practicum.playlistmaker.player.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.player.domain.player_interactor.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.presentation.mapper.DateFormatter
 import com.practicum.playlistmaker.player.presentation.mapper.TrackInfoMapper
-import com.practicum.playlistmaker.player.presentation.model.Track
+import com.practicum.playlistmaker.player.domain.model.track_model.Track
+import com.practicum.playlistmaker.player.presentation.state.PlayListsScreenState
 import com.practicum.playlistmaker.player.presentation.state.PlayStatus
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
+import com.practicum.playlistmaker.player.presentation.state.TrackState
 import com.practicum.playlistmaker.search.presentation.utils.debounce
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PlayerViewModel(
     application: Application,
@@ -28,7 +35,6 @@ class PlayerViewModel(
 
     private val trackItem = loadTrackScreen(trackGson)
 
-    private val playerStateLiveData = MutableLiveData<PlayerState>()
 
     private var timerJob: Job? = null
 
@@ -42,13 +48,106 @@ class PlayerViewModel(
         isClickAllowed = isAllowed
     }
 
+    private val playerStateLiveData = MutableLiveData<PlayerState>()
+    fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
+
+    private val playlistStateLiveData = MutableLiveData<PlayListsScreenState>()
+    fun getPlaylistStateLiveData() = playlistStateLiveData
+
+    private val checkTrackBelongsToPlaylistLiveData = MutableLiveData<TrackState>()
+    fun getCheckTrackBelongsToPlaylistLiveData() = checkTrackBelongsToPlaylistLiveData
+
     init {
         showLoading()
         loadContent()
-        preparePlayer()
+
+        getPlaylists()
     }
 
-    fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
+    fun refreshPlayerState() {
+        playerStateLiveData.value = getCurrentPlayerState()
+    }
+
+    fun resetPlayer() {
+        playerInteractor.resetPlayer()
+    }
+
+    fun getPlaylists() {
+        viewModelScope.launch {
+            databaseInteractor.getPlaylistsWithTrackCount()
+                .collect { playlist ->
+                    processResult(playlist)
+                }
+        }
+    }
+
+    private fun addTrackPlayListCrossRef(playlistName: String) {
+        viewModelScope.launch {
+            databaseInteractor.insertPlayListTrackCrossRef(playlistName, trackItem)
+        }
+    }
+
+    fun addTrackToPlayList(playlist: Playlist) {
+        if (clickDebounce()) {
+            viewModelScope.launch {
+                val isAlreadyInPlayList = async(Dispatchers.IO) {
+                    databaseInteractor.checkPlaylistHasTrack(trackItem.trackId, playlist.name)
+                }.await()
+                if (isAlreadyInPlayList) {
+                    renderState(
+                        TrackState.TrackInfo(
+                            trackItem.trackName, true,
+                            playlist.name, null
+                        )
+                    )
+                } else {
+                    val id = async(Dispatchers.IO) {
+                        databaseInteractor.insertPlayListTrackCrossRef(playlist.name, trackItem)
+                    }.await()
+                    addTrackPlayListCrossRef(playlist.name)
+                    renderState(
+                        TrackState.TrackInfo(
+                            trackItem.trackName, false,
+                            playlist.name, id
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private fun processResult(playLists: List<Playlist>) {
+        if (playLists.isEmpty()) {
+            renderState(
+                PlayListsScreenState.Empty("Список плейлистов пуст!")
+            )
+        } else {
+            viewModelScope.launch {
+                val updatedPlayList = withContext(Dispatchers.IO) {
+                    playLists.map { playlist ->
+                        async {
+                            playlist.copy(
+                                containsCurrentTrack = databaseInteractor.checkPlaylistHasTrack(
+                                    trackItem.trackId,
+                                    playlist.name
+                                )
+                            )
+                        }
+                    }.awaitAll()
+                }
+                renderState(
+                    PlayListsScreenState.Content(updatedPlayList)
+                )
+            }
+        }
+    }
+
+    private fun renderState(state: Any) {
+        when (state) {
+            is PlayListsScreenState -> playlistStateLiveData.postValue(state)
+            is TrackState -> checkTrackBelongsToPlaylistLiveData.postValue(state)
+        }
+    }
 
     private fun loadTrackScreen(track: String?): Track {
         val trackItem = gson.fromJson<Track>(track, Track::class.java)
@@ -67,17 +166,17 @@ class PlayerViewModel(
         )
     }
 
-    private fun clickDebounce(): Boolean{
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
-        if (isClickAllowed){
+        if (isClickAllowed) {
             isClickAllowed = false
             setIsClickAllowed(true)
         }
         return current
     }
 
-    fun controlFavoriteState(){
-        if(trackItem.isFavorite){
+    fun controlFavoriteState() {
+        if (trackItem.isFavorite) {
             removeFromFavorite()
         } else {
             saveTrackToFavorites()
@@ -101,6 +200,7 @@ class PlayerViewModel(
             }
         }
     }
+
     fun playerController() {
         if (playerInteractor.isPlaying()) {
             pausePlayer()
@@ -186,13 +286,17 @@ class PlayerViewModel(
         }
     }
 
+    fun releasePlayer() {
+        playerInteractor.releasePlayer()
+    }
+
     override fun onCleared() {
         super.onCleared()
         playerInteractor.releasePlayer()
     }
 
     private companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 50L
+        private const val CLICK_DEBOUNCE_DELAY = 1_500L
         private const val TIMER_DELAY = 50L
         private val TRACK_TIMER_TOKEN = Any()
 

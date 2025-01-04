@@ -8,10 +8,9 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.MedialibraryFragmentBinding
-import com.practicum.playlistmaker.medialibrary.presentation.viewmodel.MediaLibraryViewModel
-import com.practicum.playlistmaker.medialibrary.ui.fragment.favorite_tracks_fragment.FavoriteTracksFragment
-import com.practicum.playlistmaker.medialibrary.ui.fragment.PlayListsFragment
-import com.practicum.playlistmaker.medialibrary.ui.viewpager.MediaLibraryViewPagerAdapter
+import com.practicum.playlistmaker.medialibrary.presentation.root.viewmodel.MediaLibraryViewModel
+import com.practicum.playlistmaker.medialibrary.ui.favorite_tracks_fragment.FavoriteTracksFragment
+import com.practicum.playlistmaker.medialibrary.ui.playlists_fragment.PlayListsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaLibraryFragment : Fragment() {

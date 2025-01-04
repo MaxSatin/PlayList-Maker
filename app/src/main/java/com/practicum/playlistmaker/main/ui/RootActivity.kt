@@ -17,12 +17,13 @@ import com.practicum.playlistmaker.databinding.RootActivityBinding
 
 class RootActivity : AppCompatActivity() {
 
-    private lateinit var binding: RootActivityBinding
+    private var _binding: RootActivityBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = RootActivityBinding.inflate(layoutInflater)
+        _binding = RootActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -37,6 +38,23 @@ class RootActivity : AppCompatActivity() {
 
         val bottomNavigationView = binding.bottomNavigationView
         bottomNavigationView.setupWithNavController(navHostController)
+
+        navHostController.addOnDestinationChangedListener{ _, destination, _ ->
+            when(destination.id){
+                R.id.playerFragment -> {
+                    binding.bottomNavigationView.isVisible = false
+                    binding.shadowView.isVisible = false
+                }
+                else -> binding.bottomNavigationView.isVisible = true
+            }
+
+        }
+
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
 
     }
 }

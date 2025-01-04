@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -13,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.player.presentation.model.TrackInfoModel
+import com.practicum.playlistmaker.player.domain.model.track_model.TrackInfoModel
 import com.practicum.playlistmaker.player.presentation.state.PlayerState
 import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -133,6 +134,9 @@ class PlayerActivity : AppCompatActivity() {
 
     companion object {
         private const val TRACK_ITEM_KEY = "trackItem"
+
+        fun createArgs(trackGson: String): Bundle = bundleOf(TRACK_ITEM_KEY to trackGson)
+
 
         fun show(context: Context, trackGson: String) {
             val intent = Intent(context, PlayerActivity::class.java)

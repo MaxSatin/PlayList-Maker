@@ -17,7 +17,8 @@ object TrackMapper {
             releaseDate = trackDto.releaseDate,
             primaryGenreName = trackDto.primaryGenreName,
             country = trackDto.country,
-            isFavorite = false
+            isFavorite = false,
+            playListName = ""
         )
     }
 }

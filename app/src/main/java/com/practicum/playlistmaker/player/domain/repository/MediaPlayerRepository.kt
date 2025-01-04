@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.player.domain.repository
 
 interface MediaPlayerRepository {
     fun preparePlayer(url: String)
+    fun resetPlayer()
     fun setOnPreparedListener(listener: () -> Unit)
     fun playBackControll()
     fun isPlayerPrepared(): Boolean

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SearchDao {
 
-    @Query("SELECT track_id FROM favorite_tracks_table")
+    @Query("SELECT trackId FROM tracks_table WHERE isFavorite = 1")
     fun getFavoriteTracksId(): Flow<List<String>>
 
 }

@@ -1,12 +1,13 @@
 package com.practicum.playlistmaker.search.data.db.entity
 
+import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "favorite_tracks_table")
+@Entity(tableName = "tracks_table")
 data class TrackEntity(
-    @PrimaryKey @ColumnInfo(name ="track_id")
+    @PrimaryKey @ColumnInfo(name ="trackId")
     val trackId: String,
     val artistName: String,
     val trackName: String,
@@ -18,5 +19,7 @@ data class TrackEntity(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    var isInFavorite: Boolean
+    var isInFavorite: Boolean,
+    @Nullable
+    val playListName: String?
 )

@@ -1,14 +1,14 @@
 package com.practicum.playlistmaker.player.presentation.mapper
 
-import com.practicum.playlistmaker.player.presentation.model.Track
-import com.practicum.playlistmaker.player.presentation.model.TrackInfoModel
+import com.practicum.playlistmaker.player.domain.model.track_model.Track
+import com.practicum.playlistmaker.player.domain.model.track_model.TrackInfoModel
 
 
 // TrackInfoModel практически ничем не отличается от основной модели Track за исключением полей trackTimeMillis и releaseDate
 // тут сразу форматируем их, чтобы вынести логику из Activity
 
 object TrackInfoMapper {
-    fun map (track: Track): TrackInfoModel {
+    fun map(track: Track): TrackInfoModel {
         return TrackInfoModel(
             trackId = track.trackId,
             trackName = track.trackName,
@@ -20,7 +20,8 @@ object TrackInfoMapper {
             releaseDate = DateFormatter.yearFormatter.format(track.trackTimeMillis),
             primaryGenreName = track.primaryGenreName,
             country = track.country,
-            isInFavorite = track.isFavorite
+            isInFavorite = track.isFavorite,
+            playListName = null
         )
     }
 }
