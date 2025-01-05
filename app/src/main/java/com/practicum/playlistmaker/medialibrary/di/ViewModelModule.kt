@@ -27,7 +27,7 @@ val mediaLibraryViewModelModule = module {
     }
 
     viewModel {
-        PlaylistDetailsViewModel(get())
+        PlaylistDetailsViewModel(get(), get())
     }
 
     single { Gson() }

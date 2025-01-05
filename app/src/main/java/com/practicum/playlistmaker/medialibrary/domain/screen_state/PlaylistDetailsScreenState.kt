@@ -1,17 +1,13 @@
 package com.practicum.playlistmaker.medialibrary.domain.screen_state
 
+import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 
-sealed interface PlaylistDetailsScreenState {
+data class PlaylistDetailsScreenState(
+    val isLoading: Boolean,
+    val overallDuretion: Long,
+    val playlist: Playlist,
+    val contents: List<Track>,
+    val emptyMessage: String
+)
 
-    object Loading: PlaylistDetailsScreenState
-
-    data class Content(
-        val contents: List<Track>
-    ): PlaylistDetailsScreenState
-
-    data class Empty(
-        val message: String
-    ): PlaylistDetailsScreenState
-
-}
