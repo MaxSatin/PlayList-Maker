@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".medialibrary.ui.playlistdetails_fragment.PlaylistDetailsFragment">
+    tools:context=".medialibrary.ui.playlist_details_fragment.PlaylistDetailsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/PlayerTrackBackGround"
@@ -76,7 +76,7 @@
 
         <TextView
             style="@style/PlayerTrackText"
-            android:id="@+id/playlistYear"
+            android:id="@+id/playlistDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_8"
@@ -93,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/playlistYear"
+            app:layout_constraintTop_toBottomOf="@id/playlistDescription"
             app:layout_constraintStart_toEndOf="@id/leftBorder">
 
             <TextView
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_22sp"
-                android:id="@+id/trackArtistName"
+                android:id="@+id/playlistDuration"
                 tools:text="300 минут"
                 android:layout_gravity="bottom"
                 android:maxLines="1"
@@ -120,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_22sp"
-                android:id="@+id/trackLength"
+                android:id="@+id/tracksNumber"
                 tools:text="98 треков"
                 android:layout_gravity="bottom"/>
 
@@ -158,7 +158,7 @@
         app:behavior_hideable="true"
         app:behavior_peekHeight="240dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:visibility="visible">
+        android:visibility="gone">
 
     <View
         android:id="@+id/view"

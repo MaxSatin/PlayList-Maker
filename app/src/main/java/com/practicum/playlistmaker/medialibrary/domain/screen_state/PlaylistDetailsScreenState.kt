@@ -5,8 +5,8 @@ import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 
 data class PlaylistDetailsScreenState(
     val isLoading: Boolean,
-    val overallDuretion: Long,
-    val playlist: Playlist,
+    val overallDuration: Long,
+    val playlist: Playlist?,
     val contents: List<Track>,
     val emptyMessage: String
 )

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.ui.playlistdetails_fragment
+package com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -22,8 +22,8 @@ class TrackItemViewHolder(
 
     fun bind(item: Track) {
         binding.trackName.text = item.trackName
-        binding.trackArtistName.text = item.artistName
-        binding.trackLength.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
+//        binding.trackArtistName.text = item.artistName
+//        binding.trackLength.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
         Glide.with(binding.root.context)
             .load(item.artworkUrl60)
             .placeholder(R.drawable.vector_empty_album_placeholder)

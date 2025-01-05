@@ -90,7 +90,7 @@
     </fragment>
     <fragment
         android:id="@+id/playlistDetailsFragment"
-        android:name="com.practicum.playlistmaker.medialibrary.ui.playlistdetails_fragment.PlaylistDetailsFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment.PlaylistDetailsFragment"
         android:label="playlist_details_fragment"
         tools:layout="@layout/playlist_details_fragment" >
         <action

@@ -10,9 +10,8 @@ import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryIn
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlaylistDetailsScreenState
+import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.SingleEventLifeData
 import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.debounce
-import com.practicum.playlistmaker.search.di.viewModelModule
-import com.practicum.playlistmaker.search.presentation.utils.SingleEventLifeData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,8 +50,11 @@ class PlaylistDetailsViewModel(
     fun loadPlaylistDetails(playlistName: String) {
         viewModelScope.launch {
             val playlist = mediaLibraryInteractor.getPlaylistByName(playlistName)
-            getCurrentPlaylistDetailsScreenState().copy(
-                playlist = playlist
+            renderState(
+                getCurrentPlaylistDetailsScreenState().copy(
+                    playlist = playlist,
+                    emptyMessage = ""
+                )
             )
         }
     }
@@ -70,7 +72,7 @@ class PlaylistDetailsViewModel(
         return withContext(Dispatchers.Default) {
             var trackLength = 0L
             trackList.forEach { trackLength += it.trackTimeMillis }
-            trackLength.toLong()
+            trackLength / 60_000
         }
     }
 
@@ -97,7 +99,7 @@ class PlaylistDetailsViewModel(
         return playlistDetailsLiveData.value ?: PlaylistDetailsScreenState(
             false,
             0L,
-            Playlist("", "", "".toUri(), 0, false),
+            null,
             emptyList(),
             "Данные о треках и плейлисте отсутствуют"
         )
@@ -120,7 +122,7 @@ class PlaylistDetailsViewModel(
                 val playlistDuration = provideOverallTrackLength(trackList)
                 renderState(
                     getCurrentPlaylistDetailsScreenState().copy(
-                        overallDuretion = playlistDuration,
+                        overallDuration = playlistDuration,
                         contents = trackList,
                         emptyMessage = ""
                     )
