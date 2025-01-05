@@ -42,6 +42,7 @@ class PlaylistDetailsFragment: Fragment() {
 
         if (playlistName != null) {
             viewModel.loadPlaylistDetails(playlistName)
+            viewModel.getAllTracksFromPlaylist(playlistName)
         } else {
             Toast.makeText(requireContext(), "playlist is null", Toast.LENGTH_LONG).show()
         }
