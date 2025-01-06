@@ -37,7 +37,6 @@ class PlaylistDetailsViewModel(
         isClickAllowed = isAllowed
     }
 
-
     fun getAllTracksFromPlaylist(playlistName: String) {
         viewModelScope.launch {
             mediaLibraryInteractor.getAllTracksFromPlaylist(playlistName)
@@ -95,15 +94,14 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    private fun getCurrentPlaylistDetailsScreenState(): PlaylistDetailsScreenState {
-        return playlistDetailsLiveData.value ?: PlaylistDetailsScreenState(
-            false,
-            0L,
-            null,
-            emptyList(),
-            "Данные о треках и плейлисте отсутствуют"
-        )
-    }
+//    private fun getCurrentPlaylistDetailsScreenState(): PlaylistDetailsScreenState {
+//        return playlistDetailsLiveData.value ?: PlaylistDetailsScreenState(
+//            0L,
+//            null,
+//            emptyList(),
+//            "Данные о треках и плейлисте отсутствуют"
+//        )
+//    }
 
     private fun renderState(state: PlaylistDetailsScreenState) {
         playlistDetailsLiveData.postValue(state)
@@ -112,20 +110,26 @@ class PlaylistDetailsViewModel(
     private fun processTrackListResult(trackList: List<Track>) {
         if (trackList.isEmpty()) {
             renderState(
-                getCurrentPlaylistDetailsScreenState().copy(
-                    contents = emptyList(),
-                    emptyMessage = "Список плейлистов пуст!"
-                )
+                PlaylistDetailsScreenState.Empty("Список треков пуст!")
+//                getCurrentPlaylistDetailsScreenState().copy(
+//                    contents = emptyList(),
+//                    emptyMessage = "Список плейлистов пуст!"
+//                )
             )
         } else {
             viewModelScope.launch {
                 val playlistDuration = provideOverallTrackLength(trackList)
                 renderState(
-                    getCurrentPlaylistDetailsScreenState().copy(
+                    PlaylistDetailsScreenState.DetailsState(
                         overallDuration = playlistDuration,
-                        contents = trackList,
-                        emptyMessage = ""
+//                        contents = trackList,
                     )
+//                    getCurrentPlaylistDetailsScreenState().copy(
+//                        isLoading = false,
+//                        overallDuration = playlistDuration,
+//                        contents = trackList,
+//                        emptyMessage = ""
+//                    )
                 )
             }
 

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -55,11 +56,13 @@ class PlaylistDetailsFragment: Fragment() {
 
     private fun processData(state:PlaylistDetailsScreenState){
         when {
+            state.isLoading -> showLoading()
             state.playlist != null -> showPlaylistInfo(state)
         }
     }
 
     private fun showPlaylistInfo(state: PlaylistDetailsScreenState) {
+        binding.loadingScreen.isVisible = false
         with(state.playlist!!) {
             Glide.with(binding.root.context)
                 .load(coverUri)
@@ -81,6 +84,12 @@ class PlaylistDetailsFragment: Fragment() {
         )
     }
 
+    private fun showLoading(){
+        with(binding){
+            loadingScreen.isVisible = true
+        }
+    }
+
 
     private fun attachWordEndingTracks(trackNumber: Int): String {
         return when {
@@ -96,8 +105,8 @@ class PlaylistDetailsFragment: Fragment() {
     private fun attachWordEndingMinutes(minutesAmount: Long): String {
         return when {
             minutesAmount % 10 == 0L -> "минут"
-            minutesAmount % 10 == 1L -> "минута"
-            minutesAmount % 10 in 2..4 -> "минуты"
+            minutesAmount < 10 && minutesAmount % 10 == 1L -> "минута"
+            minutesAmount < 10 && minutesAmount % 10 in 2..4 -> "минуты"
             minutesAmount % 10 in 5..9 -> "минут"
             minutesAmount % 100 in 11..20 -> "минут"
             else -> ""

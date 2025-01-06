@@ -41,8 +41,21 @@ interface PlaylistDao {
     )
     fun getAllTracksFromPlaylist(playlistName: String): Flow<List<TrackEntity>>
 
-    @Query("SELECT * FROM playlist_table WHERE playlistName =:playlistName LIMIT 1")
-    suspend fun getPlaylistByName(playlistName: String): PlaylistEntity?
+    @Query("""SELECT 
+        p.playlistName AS playlistName,
+        p.description AS description,
+        p.coverUri AS coverUri,
+        COUNT(crossRef.trackId) AS trackCount,
+        p.containsCurrentTrack AS containsCurrentTrack,
+        p.timeStamp as timeStamp
+    FROM playlist_table AS p
+    LEFT JOIN playlistcrossref_table AS crossref
+        ON p.playlistName = crossref.playlistName
+    WHERE p.playlistName = :playListName
+    GROUP BY p.playlistName
+    LIMIT 1
+        """)
+    suspend fun getPlaylistByName(playListName: String): PlaylistEntity?
 
     @Query("DELETE FROM playlistcrossref_table WHERE playlistName =:playlistName AND trackId =:trackId")
     suspend fun deleteTrackFromPlaylist(playlistName: String, trackId: String)
