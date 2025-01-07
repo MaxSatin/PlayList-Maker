@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.medialibrary.domain.screen_state.FavoriteListScreenState
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.media_library.FavoriteListScreenState
 import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryInteractor
 import com.practicum.playlistmaker.medialibrary.domain.model.state.State
 
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
-import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlayListsScreenState
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.media_library.PlayListsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.SingleLineEvent
 import kotlinx.coroutines.launch
 

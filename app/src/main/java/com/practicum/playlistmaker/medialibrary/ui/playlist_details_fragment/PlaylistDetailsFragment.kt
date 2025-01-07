@@ -1,35 +1,60 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment
 
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistDetailsFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
-import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlaylistDetailsScreenState
+import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.PlaylistDetailsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlist_details.viewmodel.PlaylistDetailsViewModel
+import com.practicum.playlistmaker.player.ui.PlayerFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 
-class PlaylistDetailsFragment: Fragment() {
+class PlaylistDetailsFragment : Fragment() {
 
     private var _binding: PlaylistDetailsFragmentBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: PlaylistDetailsViewModel by viewModel()
+    private val handler = Handler(Looper.getMainLooper())
+
+    private var currentAction: Int = 0
+
+    private lateinit var trackListBHBehavior: BottomSheetBehavior<ConstraintLayout>
+    private lateinit var editPLBHBehavior: BottomSheetBehavior<ConstraintLayout>
+
+    private lateinit var trackAddedNotificationFadeIn: Animation
+    private lateinit var trackAddedNotificationFadeOut: Animation
+
+    private var trackListAdapter: TrackListAdapter? = TrackListAdapter {
+        trackListBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        viewModel.showTrackPlayer(it)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = PlaylistDetailsFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -39,55 +64,198 @@ class PlaylistDetailsFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val playlistName = arguments?.getString(PLAYLIST_NAME_KEY)
-        Log.d("PlaylistName", "$playlistName")
-
         if (playlistName != null) {
-            viewModel.loadPlaylistDetails(playlistName)
-            viewModel.getAllTracksFromPlaylist(playlistName)
+            viewModel.loadPlayListDetails(playlistName)
+//            viewModel.loadPlaylistDetailsState(playlistName)
+//            viewModel.getAllTracksFromPlaylist(playlistName)
         } else {
             Toast.makeText(requireContext(), "playlist is null", Toast.LENGTH_LONG).show()
         }
+        Log.d("PlaylistName", "$playlistName")
 
-        viewModel.getPlaylistDetailsLiveData().observe(viewLifecycleOwner){ playlistState ->
-            processData(playlistState)
+        binding.trackListRV.adapter = trackListAdapter
+
+        trackListBHBehavior = BottomSheetBehavior.from(binding.trackListBSContainer).apply {
+            state = BottomSheetBehavior.STATE_COLLAPSED
         }
+
+        editPLBHBehavior = BottomSheetBehavior.from(binding.editPlayListBSContainer).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        viewModel.getPlayListDetailsMediatorLiveData()
+            .observe(viewLifecycleOwner) { playListDetails ->
+                Log.d("PlaylistDetails", "$playListDetails")
+                processData(playListDetails)
+            }
+
+        viewModel.getShowPlayerLiveData().observe(viewLifecycleOwner){ track ->
+            handler.postDelayed(
+                { findNavController().navigate(
+                    R.id.action_playlistDetailsFragment_to_playerFragment,
+                    PlayerFragment.createArgs(track)
+                )},
+                keyObject,
+                300
+            )
+
+        }
+
+//        viewModel.getPlaylistDetailsLiveData().observe(viewLifecycleOwner){ playlistState ->
+//            processData(playlistState)
+//        }
+
+        binding.moreIc.setOnClickListener {
+            editPLBHBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        currentAction = 0
+        binding.toolbar.setOnClickListener {
+            closeBottomSheetAndNavigateBack()
+//            if (trackListBHBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+//                when (currentAction) {
+//                    0 -> trackListBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+//                    1 -> findNavController().navigateUp()
+//                }
+//            } else if (trackListBHBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+//                findNavController().navigateUp()
+//            }
+//            currentAction = (currentAction + 1) % 2
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    closeBottomSheetAndNavigateBack()
+//                    if (trackListBHBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+//                        when (currentAction) {
+//                            0 -> trackListBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+//                            1 -> findNavController().navigateUp()
+//                        }
+//                    } else if (trackListBHBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+//                        findNavController().navigateUp()
+//                    }
+//                    currentAction = (currentAction + 1) % 2
+                }
+            })
 
     }
 
-    private fun processData(state:PlaylistDetailsScreenState){
-        when {
-            state.isLoading -> showLoading()
-            state.playlist != null -> showPlaylistInfo(state)
+    private fun closeBottomSheetAndNavigateBack() {
+        if (trackListBHBehavior.state != BottomSheetBehavior.STATE_COLLAPSED && editPLBHBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+            when (currentAction) {
+                0 -> trackListBHBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                1 -> findNavController().navigateUp()
+            }
+        } else if (trackListBHBehavior.state == BottomSheetBehavior.STATE_COLLAPSED && editPLBHBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+            when (currentAction) {
+                0 -> editPLBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                1 -> findNavController().navigateUp()
+            }
+        } else if (trackListBHBehavior.state == BottomSheetBehavior.STATE_COLLAPSED && editPLBHBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+            findNavController().navigateUp()
+        }
+        currentAction = (currentAction + 1) % 2
+
+    }
+
+    private fun processData(state: PlaylistDetailsScreenState) {
+//        when {
+//            state.isLoading -> showLoading()
+//            state.playlist != null -> showPlaylistInfo(state)
+//        }
+        when (state) {
+            is PlaylistDetailsScreenState.Loading -> showLoading()
+            is PlaylistDetailsScreenState.DetailsState -> {
+                showPlaylistInfo(state)
+                showTrackList(state.contents)
+            }
+
+            is PlaylistDetailsScreenState.Empty -> Toast.makeText(
+                requireContext(),
+                "Empty PL",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
-    private fun showPlaylistInfo(state: PlaylistDetailsScreenState) {
+    private fun showPlaylistInfo(state: PlaylistDetailsScreenState.DetailsState) {
+        if (state.playlist != null) {
+            loadPlayListData(state.playlist)
+            binding.tracksNumber.text = getTracksNumberAsTextField(state.playlist)
+        }
         binding.loadingScreen.isVisible = false
-        with(state.playlist!!) {
-            Glide.with(binding.root.context)
-                .load(coverUri)
-                .placeholder(R.drawable.vector_empty_album_placeholder)
-                .fitCenter()
-                .transform(RoundedCorners(8))
-                .into(binding.poster)
-            binding.playlistTitle.text = name
-            binding.playlistDescription.text = description
+        binding.playlistDuration.text = getPlaylistDurationTextField(state.overallDuration)
+    }
+
+    private fun showTrackList(trackList: List<Track>?) {
+        if (!trackList.isNullOrEmpty()) {
+            binding.trackListRV.isVisible = true
+            binding.emptyPlaylistsPH.isVisible = false
+            trackListAdapter?.updateItems(trackList)
+        } else {
+            binding.trackListRV.isVisible = false
+            binding.emptyPlaylistsPH.isVisible = true
         }
-        binding.playlistDuration.text = String.format(
+    }
+
+    private fun loadPlayListData(playList: Playlist) {
+//        Glide.with(binding.root.context)
+//            .load(playList.coverUri)
+//            .placeholder(R.drawable.vector_empty_album_placeholder)
+//            .fitCenter()
+//            .transform(RoundedCorners(8))
+//            .into(binding.poster)
+        upLoadImage(playList.coverUri, binding.poster)
+        binding.playlistTitle.text = playList.name
+        binding.playlistDescription.text = playList.description
+        binding.tracksNumber.text = getTracksNumberAsTextField(playList)
+
+//        Glide.with(binding.root.context)
+//            .load(playList.coverUri)
+//            .placeholder(R.drawable.vector_empty_album_placeholder)
+//            .fitCenter()
+//            .transform(RoundedCorners(8))
+//            .into(binding.playListPreviewImage)
+        upLoadImage(playList.coverUri, binding.playListPreviewImage)
+        binding.playListPreviewName.text = playList.name
+        binding.playListPreviewTrackCount.text = getTracksNumberAsTextField(playList)
+    }
+
+    private fun upLoadImage(uri: Uri?, imageView: ImageView){
+        Glide.with(binding.root.context)
+            .load(uri)
+            .placeholder(R.drawable.vector_empty_album_placeholder)
+            .fitCenter()
+            .transform(RoundedCorners(8))
+            .into(imageView)
+    }
+
+    private fun getTracksNumberAsTextField(playlist: Playlist): String {
+        return String.format(
             Locale.getDefault(),
-            "%d %s", state.overallDuration,
-            attachWordEndingMinutes(state.overallDuration)
-        )
-        binding.tracksNumber.text = String.format(Locale.getDefault(),
-            "%d %s", state.playlist.trackCount,
-            attachWordEndingTracks(state.contents.size)
+            "%d %s", playlist.trackCount,
+            attachWordEndingTracks(playlist.trackCount)
         )
     }
 
-    private fun showLoading(){
-        with(binding){
+    private fun getPlaylistDurationTextField(duration: Long): String {
+        return String.format(
+            Locale.getDefault(),
+            "%d %s", duration,
+            attachWordEndingMinutes(duration)
+        )
+    }
+
+    private fun showLoading() {
+        with(binding) {
             loadingScreen.isVisible = true
         }
+    }
+
+    private fun showEmptyPH() {
+        binding.trackListRV.isVisible = false
+        binding.emptyPlaylistsPH.isVisible = true
     }
 
 
@@ -113,10 +281,8 @@ class PlaylistDetailsFragment: Fragment() {
         }
     }
 
-
-
     companion object {
-
+        private val keyObject = Unit
         private const val PLAYLIST_NAME_KEY = "playlistName"
         fun createArgs(playlistName: String) = bundleOf(
             PLAYLIST_NAME_KEY to playlistName

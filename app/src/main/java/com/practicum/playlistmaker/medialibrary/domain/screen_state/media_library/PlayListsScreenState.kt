@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.domain.screen_state
+package com.practicum.playlistmaker.medialibrary.domain.screen_state.media_library
 
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryInteractor
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
-import com.practicum.playlistmaker.medialibrary.domain.screen_state.CreatePlaylistState
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.create_playlist.CreatePlaylistState
 import com.practicum.playlistmaker.search.presentation.utils.debounce
 import kotlinx.coroutines.launch
 

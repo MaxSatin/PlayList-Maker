@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistsFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
-import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlayListsScreenState
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.media_library.PlayListsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlists.viewmodel.PlaylistViewModel
 import com.practicum.playlistmaker.medialibrary.ui.decorations.GridLayoutItemDecorations
 import com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment.PlaylistDetailsFragment

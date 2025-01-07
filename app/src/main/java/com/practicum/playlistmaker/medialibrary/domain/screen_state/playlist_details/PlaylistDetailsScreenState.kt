@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.medialibrary.domain.screen_state
+package com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details
 
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
@@ -9,12 +9,10 @@ sealed interface PlaylistDetailsScreenState {
     data class DetailsState(
         val overallDuration: Long,
         val playlist: Playlist?,
-        val contents: List<Track>,
+        val contents: List<Track>?,
     ): PlaylistDetailsScreenState
 
     data class Empty(
         val message: String
     ): PlaylistDetailsScreenState
 }
-
-
