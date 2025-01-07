@@ -9,12 +9,13 @@ import com.google.gson.Gson
 import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryInteractor
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
-import com.practicum.playlistmaker.medialibrary.domain.screen_state.media_library.PlayListsScreenState
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.NavigateFragment
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.PlaylistDetailsScreenState
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.PlaylistState
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.TrackListState
 import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.SingleEventLifeData
 import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.debounce
+import com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlayListFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,8 +31,8 @@ class PlaylistDetailsViewModel(
     private val trackListLiveData = MutableLiveData<TrackListState>()
     fun getTrackListStateLiveData(): LiveData<TrackListState> = trackListLiveData
 
-    private val showPlayerLiveData = SingleEventLifeData<String>()
-    fun getShowPlayerLiveData(): LiveData<String> = showPlayerLiveData
+    private val showFragmentLiveData = SingleEventLifeData<NavigateFragment>()
+    fun getShowFragmentLiveData(): LiveData<NavigateFragment> = showFragmentLiveData
 
     private val playListMediatorLiveData = MediatorLiveData<PlaylistDetailsScreenState>().apply {
         var overallDuration: Long = 0L
@@ -188,7 +189,17 @@ class PlaylistDetailsViewModel(
     fun showTrackPlayer(track: Track) {
         if (clickDebounce()) {
             val trackGson = gson.toJson(track)
-            showPlayerLiveData.postValue(trackGson)
+            showFragmentLiveData.postValue(
+                NavigateFragment.PlayerFragment(trackGson)
+            )
+        }
+    }
+
+    fun showEditPlayListFragment(playListName: String){
+        if(clickDebounce()){
+            showFragmentLiveData.postValue(
+                NavigateFragment.EditPlayListFragment(playListName)
+            )
         }
     }
 

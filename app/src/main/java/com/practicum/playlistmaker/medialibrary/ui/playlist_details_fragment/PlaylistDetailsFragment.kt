@@ -24,8 +24,10 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistDetailsFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.NavigateFragment
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.PlaylistDetailsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlist_details.viewmodel.PlaylistDetailsViewModel
+import com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlayListFragment
 import com.practicum.playlistmaker.player.ui.PlayerFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
@@ -39,6 +41,8 @@ class PlaylistDetailsFragment : Fragment() {
     private val handler = Handler(Looper.getMainLooper())
 
     private var currentAction: Int = 0
+    private var _playListName: String? = null
+    private val playListName get() = _playListName!!
 
     private lateinit var trackListBHBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var editPLBHBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -89,15 +93,16 @@ class PlaylistDetailsFragment : Fragment() {
                 processData(playListDetails)
             }
 
-        viewModel.getShowPlayerLiveData().observe(viewLifecycleOwner){ track ->
-            handler.postDelayed(
-                { findNavController().navigate(
-                    R.id.action_playlistDetailsFragment_to_playerFragment,
-                    PlayerFragment.createArgs(track)
-                )},
-                keyObject,
-                300
-            )
+        viewModel.getShowFragmentLiveData().observe(viewLifecycleOwner){ parameter ->
+            showFragment(parameter)
+//            handler.postDelayed(
+//                { findNavController().navigate(
+//                    R.id.action_playlistDetailsFragment_to_playerFragment,
+//                    PlayerFragment.createArgs(track)
+//                )},
+//                keyObject,
+//                300
+//            )
 
         }
 
@@ -107,6 +112,10 @@ class PlaylistDetailsFragment : Fragment() {
 
         binding.moreIc.setOnClickListener {
             editPLBHBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        binding.editEditPl.setOnClickListener{
+            viewModel.showEditPlayListFragment(playListName)
         }
         currentAction = 0
         binding.toolbar.setOnClickListener {
@@ -139,6 +148,27 @@ class PlaylistDetailsFragment : Fragment() {
                 }
             })
 
+    }
+
+    private fun showFragment(state: NavigateFragment){
+        when(state){
+            is NavigateFragment.PlayerFragment -> handler.postDelayed(
+                { findNavController().navigate(
+                    R.id.action_playlistDetailsFragment_to_playerFragment,
+                    PlayerFragment.createArgs(state.trackGson)
+                )},
+                keyObject,
+                300
+            )
+            is NavigateFragment.EditPlayListFragment -> handler.postDelayed(
+                { findNavController().navigate(
+                    R.id.action_playlistDetailsFragment_to_editPlayListFragment,
+                    EditPlayListFragment.createArgs(state.playListName)
+                )},
+                keyObject,
+                300
+            )
+        }
     }
 
     private fun closeBottomSheetAndNavigateBack() {
@@ -180,12 +210,13 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun showPlaylistInfo(state: PlaylistDetailsScreenState.DetailsState) {
+        binding.loadingScreen.isVisible = false
         if (state.playlist != null) {
             loadPlayListData(state.playlist)
+            _playListName = state.playlist.name
             binding.tracksNumber.text = getTracksNumberAsTextField(state.playlist)
+            binding.playlistDuration.text = getPlaylistDurationTextField(state.overallDuration)
         }
-        binding.loadingScreen.isVisible = false
-        binding.playlistDuration.text = getPlaylistDurationTextField(state.overallDuration)
     }
 
     private fun showTrackList(trackList: List<Track>?) {

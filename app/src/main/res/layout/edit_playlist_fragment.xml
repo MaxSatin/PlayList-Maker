@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".medialibrary.ui.playlists_fragment.CreatePlayListsFragment">
+    tools:context=".medialibrary.ui.edit_playlist_fragment.EditPlayListFragment">
 
     <Toolbar
         android:id="@+id/toolbar"
