@@ -64,7 +64,7 @@ interface PlayerTrackDao {
                 "SELECT 1 " +
                 "FROM playlist_table t " +
                 "INNER JOIN playlistcrossref_table j ON t.playlistId = j.playListId " +
-                "WHERE j.trackId =:trackId AND t.playlistName = :playlistId)"
+                "WHERE j.trackId =:trackId AND t.playlistId = :playlistId)"
     )
     suspend fun checkPlaylistHasTrack(trackId: String, playlistId: Long): Boolean
 
