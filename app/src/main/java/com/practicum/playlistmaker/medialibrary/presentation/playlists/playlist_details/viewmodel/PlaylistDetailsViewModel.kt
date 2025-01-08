@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.medialibrary.presentation.playlists.playlist_details.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -56,7 +57,10 @@ class PlaylistDetailsViewModel(
 
         addSource(playlistDetailsLiveData) { playListState ->
             playlist = when (playListState) {
-                is PlaylistState.DetailsState -> playListState.playlist
+                is PlaylistState.DetailsState -> {
+                    Log.d("PlaylistDetails", "${playListState.playlist}")
+                    playListState.playlist
+                }
                 is PlaylistState.Empty -> null
             }
             updateState()
@@ -148,7 +152,6 @@ class PlaylistDetailsViewModel(
                         processTrackListResult(trackList)
                     }
             }
-
             playlistFlow.await()
             trackListFlow.await()
         }

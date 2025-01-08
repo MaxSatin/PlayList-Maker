@@ -227,6 +227,7 @@ class EditPlayListFragment: Fragment() {
                     binding.createPlayListButton.isEnabled = false
                 }
                 Log.d("Playlistname", "$playListName")
+                Log.d("PlaylistnameInit", "$initPlayListName")
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -276,10 +277,11 @@ class EditPlayListFragment: Fragment() {
                 playlist = Playlist(this.playListName, playListDescription, coverUri, 0, false)
                 val filteredPlaylist = this.playLists.find { it.name == playlist.name }
 
-                Log.d("ViewmodelPlaylist", "$filteredPlaylist")
+                Log.d("ViewmodelInitName", "$initPlayListName")
+                Log.d("Viewmodelname", "$playListName")
 
-                if (filteredPlaylist == null) {
-                    if (playListName != initPlayListName || playListDescription != initPlayListDescription || coverUri != initCoverUri) {
+//                if (filteredPlaylist == null) {
+//                    if (playListName != initPlayListName || playListDescription != initPlayListDescription || coverUri != initCoverUri) {
 //                        viewModel.addPlaylistWithReplace(playlist)
                         viewModel.updatePlaylist(
                             initPlayListName,
@@ -292,10 +294,10 @@ class EditPlayListFragment: Fragment() {
                             PlaylistDetailsFragment.createArgs(playListName)
                         )
 
-                    }
-                } else if(playListName == initPlayListName && playListDescription == initPlayListDescription && coverUri == initCoverUri) {
-                    confirmDialogPlaylistExists?.show()
-                }
+//                    }
+//                } else if(playListName == initPlayListName && playListDescription == initPlayListDescription && coverUri == initCoverUri) {
+//                    confirmDialogPlaylistExists?.show()
+//                }
                 Log.d("Playlists", "${state.playLists}")
             }
         }

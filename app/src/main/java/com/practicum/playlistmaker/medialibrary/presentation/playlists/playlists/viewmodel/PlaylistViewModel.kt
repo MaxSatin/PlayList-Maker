@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.medialibrary.presentation.playlists.playlists.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -54,6 +55,7 @@ class PlaylistViewModel(
         viewModelScope.launch {
             mediaLibraryInteractor.getPlaylists()
                 .collect { playLists ->
+                    Log.d("PlaylistsFragment", "$playLists")
                     processResult(playLists)
                 }
         }

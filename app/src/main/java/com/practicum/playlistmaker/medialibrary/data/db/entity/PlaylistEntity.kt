@@ -11,14 +11,14 @@ import androidx.room.Relation
 data class PlaylistEntity(
     @PrimaryKey @ColumnInfo(name = "playlistName")
     val name: String,
-//    @Relation(
-//        parentColumn = "playlistName",
-//        entityColumn = "trackId",
-//        associateBy = Junction(PlaylistCrossRef::class)
-//    )
     val description: String,
     val coverUri: String,
     val trackCount: Int,
     val containsCurrentTrack: Boolean,
     val timeStamp:Long = System.currentTimeMillis()
 )
+//    @Relation(
+//        parentColumn = "playlistName",
+//        entityColumn = "trackId",
+//        associateBy = Junction(PlaylistCrossRef::class)
+//    )

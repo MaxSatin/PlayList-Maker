@@ -42,7 +42,8 @@ interface PlaylistDao {
     fun getAllTracksFromPlaylist(playlistName: String): Flow<List<TrackEntity>>
 
     @Transaction
-    @Query("""SELECT 
+    @Query(
+        """SELECT 
         p.playlistName AS playlistName,
         p.description AS description,
         p.coverUri AS coverUri,
@@ -55,7 +56,8 @@ interface PlaylistDao {
     WHERE p.playlistName = :playListName
     GROUP BY p.playlistName
     LIMIT 1
-        """)
+        """
+    )
     fun getPlaylistByName(playListName: String): Flow<PlaylistEntity>
 //    suspend fun getPlaylistByName(playListName: String): PlaylistEntity?
 
@@ -82,14 +84,15 @@ interface PlaylistDao {
 //    suspend fun updatePlaylistTable(oldPlaylistName: String, newPlaylistName: String)
 
     @Transaction
-    @Query("""
-    UPDATE playlist_table
-    SET 
+    @Query(
+        """UPDATE playlist_table
+        SET 
         playlistName = CASE WHEN :newPlaylistName IS NOT NULL THEN :newPlaylistName ELSE playlistName END,
         description = CASE WHEN :newDescription IS NOT NULL THEN :newDescription ELSE description END,
         coverUri = CASE WHEN :newCoverUri IS NOT NULL THEN :newCoverUri ELSE coverUri END
     WHERE playlistName = :oldPlaylistName
-""")
+"""
+    )
     suspend fun updatePlaylistTable(
         oldPlaylistName: String,
         newPlaylistName: String,
@@ -107,4 +110,14 @@ interface PlaylistDao {
     )
     suspend fun updateCrossRefTable(oldPlaylistName: String, newPlaylistName: String)
 
+    @Transaction
+    suspend fun updateDependencies(
+        oldPlaylistName: String,
+        newPlaylistName: String,
+        newDescription: String,
+        newCoverUri: String,
+    ){
+        updateCrossRefTable(oldPlaylistName, newPlaylistName)
+        updatePlaylistTable(oldPlaylistName, newPlaylistName, newDescription, newCoverUri)
+    }
 }

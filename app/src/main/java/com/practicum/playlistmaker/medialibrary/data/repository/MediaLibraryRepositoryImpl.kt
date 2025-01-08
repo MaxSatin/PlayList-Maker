@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.medialibrary.data.repository
 
 import android.content.SharedPreferences
+import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.core.net.toUri
 import androidx.room.Transaction
@@ -96,21 +97,24 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-    @Transaction
     override suspend fun updatePlaylist(
         oldPlaylistName: String,
         newPlaylistName: String,
         newDescription: String,
         newCoverUri: String,
     ) {
-            appDatabase.playlistDao().updatePlaylistTable(oldPlaylistName,
-                newPlaylistName,
-                newDescription,
-                newCoverUri
-            )
-                appDatabase.playlistDao().updateCrossRefTable(oldPlaylistName, newPlaylistName)
-
+//        withContext(Dispatchers.IO) {
+//            appDatabase.playlistDao()
+//                .updatePlaylistTable(oldPlaylistName, newPlaylistName, newDescription, newCoverUri)
+//        }
+        appDatabase.playlistDao().updateCrossRefTable(oldPlaylistName, newPlaylistName)
+//        val name = oldPlaylistName
+//        val new = newPlaylistName
+//        Log.d("oldPlaylistName","$name")
+//        Log.d("newPlaylistName","$new")
+//        appDatabase.playlistDao().updatePlaylistTable(oldPlaylistName, newPlaylistName, newDescription, newCoverUri)
     }
+
 
     override suspend fun addPlaylistWithReplace(playlist: Playlist) {
         withContext(Dispatchers.IO) {
