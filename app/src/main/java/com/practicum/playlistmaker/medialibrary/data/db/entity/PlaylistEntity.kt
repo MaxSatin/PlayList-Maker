@@ -9,7 +9,9 @@ import androidx.room.Relation
 
 @Entity (tableName = "playlist_table")
 data class PlaylistEntity(
-    @PrimaryKey @ColumnInfo(name = "playlistName")
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "playlistId")
+    val id: Long,
+    @ColumnInfo(name = "playlistName")
     val name: String,
     val description: String,
     val coverUri: String,

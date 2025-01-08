@@ -1,10 +1,7 @@
 package com.practicum.playlistmaker.medialibrary.data.repository
 
 import android.content.SharedPreferences
-import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
-import androidx.core.net.toUri
-import androidx.room.Transaction
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.AppDatabase
@@ -15,9 +12,6 @@ import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Play
 import com.practicum.playlistmaker.medialibrary.domain.repository.MediaLibraryRepository
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -51,8 +45,8 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-    override fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>> = flow {
-        val trackListFlow = appDatabase.playlistDao().getAllTracksFromPlaylist(playlistName)
+    override fun getAllTracksFromPlaylist(playlistId: Long): Flow<List<Track>> = flow {
+        val trackListFlow = appDatabase.playlistDao().getAllTracksFromPlaylist(playlistId)
         trackListFlow.collect { trackList ->
             val reversedTracklist = trackList.reversed()
             emit(convertFromTrackEntity(reversedTracklist))
@@ -67,8 +61,8 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-    override fun getPlaylistByName(playListName: String): Flow<Playlist> = flow {
-        val playListFlow = appDatabase.playlistDao().getPlaylistByName(playListName)
+    override fun getPlaylistById(playlistId: Long): Flow<Playlist> = flow {
+        val playListFlow = appDatabase.playlistDao().getPlaylistById(playlistId)
 
         playListFlow.collect { playList ->
             Log.d("PlaylistafterUpdate", "$playList")
@@ -91,29 +85,46 @@ class MediaLibraryRepositoryImpl(
 //        }
 //    }
 
-    override suspend fun deleteTrackFromPlaylist(playlistName: String, trackId: String) {
+    override suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: String) {
         withContext(Dispatchers.IO) {
-            appDatabase.playlistDao().deleteTrackFromPlaylist(playlistName, trackId)
+            appDatabase.playlistDao().deleteTrackFromPlaylist(playlistId, trackId)
         }
     }
 
-    override suspend fun updatePlaylist(
-        oldPlaylistName: String,
+    override suspend fun updatePlaylistTable(
+        playListId: Long,
         newPlaylistName: String,
         newDescription: String,
         newCoverUri: String,
     ) {
+        withContext(Dispatchers.IO){
+            appDatabase.playlistDao().updatePlaylistTable(
+                playListId,
+                newPlaylistName,
+                newDescription,
+                newCoverUri
+            )
+        }
+    }
+
+//    override suspend fun updatePlaylist(
+//        playlistId: Long,
+//        newPlaylistName: String,
+//        newDescription: String,
+//        newCoverUri: String
+//    ) {
+
 //        withContext(Dispatchers.IO) {
 //            appDatabase.playlistDao()
 //                .updatePlaylistTable(oldPlaylistName, newPlaylistName, newDescription, newCoverUri)
 //        }
-        appDatabase.playlistDao().updateCrossRefTable(oldPlaylistName, newPlaylistName)
+//        appDatabase.playlistDao().updateCrossRefTable(oldPlaylistName, newPlaylistName)
 //        val name = oldPlaylistName
 //        val new = newPlaylistName
 //        Log.d("oldPlaylistName","$name")
 //        Log.d("newPlaylistName","$new")
 //        appDatabase.playlistDao().updatePlaylistTable(oldPlaylistName, newPlaylistName, newDescription, newCoverUri)
-    }
+//    }
 
 
     override suspend fun addPlaylistWithReplace(playlist: Playlist) {

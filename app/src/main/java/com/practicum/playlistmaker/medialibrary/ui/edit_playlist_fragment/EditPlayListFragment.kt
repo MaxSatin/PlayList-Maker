@@ -48,6 +48,7 @@ class EditPlayListFragment: Fragment() {
 
     private val requester = PermissionRequester.instance()
 
+    private var playlistId: Long = 0L
     private var initPlayListName: String = ""
     private var initPlayListDescription: String = ""
     private var initCoverUri: Uri? = null
@@ -107,9 +108,9 @@ class EditPlayListFragment: Fragment() {
 
         binding.createPlayListButton.isEnabled = false
 
-        val playListNameArgs = arguments?.getString(PLAY_LIST_KEY) ?: "Ошибка"
+        playlistId = arguments?.getLong(PLAY_LIST_KEY) ?: 0L
 
-        viewModel.loadPlaylistDetailsState(playListNameArgs)
+        viewModel.loadPlaylistDetailsState(playlistId)
 
         viewModel.getPlaylistDetailsLiveData().observe(viewLifecycleOwner){ playlistState ->
             processPlayListData(playlistState)
@@ -227,7 +228,7 @@ class EditPlayListFragment: Fragment() {
                     binding.createPlayListButton.isEnabled = false
                 }
                 Log.d("Playlistname", "$playListName")
-                Log.d("PlaylistnameInit", "$initPlayListName")
+                Log.d("PlaylistnameInit", "$playlistId")
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -274,7 +275,8 @@ class EditPlayListFragment: Fragment() {
     private fun processState(state: CreatePlaylistState) {
         when (state) {
             is CreatePlaylistState.Content -> {
-                playlist = Playlist(this.playListName, playListDescription, coverUri, 0, false)
+                playlist = Playlist(
+                    playlistId, this.playListName, playListDescription, coverUri, 0, false)
                 val filteredPlaylist = this.playLists.find { it.name == playlist.name }
 
                 Log.d("ViewmodelInitName", "$initPlayListName")
@@ -284,14 +286,14 @@ class EditPlayListFragment: Fragment() {
 //                    if (playListName != initPlayListName || playListDescription != initPlayListDescription || coverUri != initCoverUri) {
 //                        viewModel.addPlaylistWithReplace(playlist)
                         viewModel.updatePlaylist(
-                            initPlayListName,
+                            playlistId,
                             playListName,
                             playListDescription,
                             coverUri.toString()
                         )
                         findNavController().navigate(
                             R.id.action_editPlayListFragment_to_playlistDetailsFragment,
-                            PlaylistDetailsFragment.createArgs(playListName)
+                            PlaylistDetailsFragment.createArgs(playlistId)
                         )
 
 //                    }
@@ -304,7 +306,7 @@ class EditPlayListFragment: Fragment() {
     }
 
     private fun checkExistsAndSet() {
-        playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
+//        playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
         val filteredPlaylist = playLists.find { it.name == playlist.name }
         Log.d("ViewmodelPlaylist", "$filteredPlaylist")
         if (filteredPlaylist == null) {
@@ -410,8 +412,8 @@ class EditPlayListFragment: Fragment() {
         private const val DEBOUNCE_DELAY_MILLIS = 2_000L
         private const val PLAY_LIST_KEY = "playlist_key"
 
-        fun createArgs(playListName: String) = bundleOf(
-            PLAY_LIST_KEY to playListName
+        fun createArgs(playlistId: Long) = bundleOf(
+            PLAY_LIST_KEY to playlistId
         )
     }
 }

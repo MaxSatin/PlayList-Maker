@@ -81,9 +81,9 @@ class PlayerViewModel(
         }
     }
 
-    private fun addTrackPlayListCrossRef(playlistName: String) {
+    private fun addTrackPlayListCrossRef(playlistId: Long) {
         viewModelScope.launch {
-            databaseInteractor.insertPlayListTrackCrossRef(playlistName, trackItem)
+            databaseInteractor.insertPlayListTrackCrossRef(playlistId, trackItem)
         }
     }
 
@@ -91,7 +91,7 @@ class PlayerViewModel(
         if (clickDebounce()) {
             viewModelScope.launch {
                 val isAlreadyInPlayList = async(Dispatchers.IO) {
-                    databaseInteractor.checkPlaylistHasTrack(trackItem.trackId, playlist.name)
+                    databaseInteractor.checkPlaylistHasTrack(trackItem.trackId, playlist.id)
                 }.await()
                 if (isAlreadyInPlayList) {
                     renderState(
@@ -102,9 +102,9 @@ class PlayerViewModel(
                     )
                 } else {
                     val id = async(Dispatchers.IO) {
-                        databaseInteractor.insertPlayListTrackCrossRef(playlist.name, trackItem)
+                        databaseInteractor.insertPlayListTrackCrossRef(playlist.id, trackItem)
                     }.await()
-                    addTrackPlayListCrossRef(playlist.name)
+                    addTrackPlayListCrossRef(playlist.id)
                     renderState(
                         TrackState.TrackInfo(
                             trackItem.trackName, false,
@@ -129,7 +129,7 @@ class PlayerViewModel(
                             playlist.copy(
                                 containsCurrentTrack = databaseInteractor.checkPlaylistHasTrack(
                                     trackItem.trackId,
-                                    playlist.name
+                                    playlist.id
                                 )
                             )
                         }

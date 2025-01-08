@@ -16,7 +16,6 @@ import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_det
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.TrackListState
 import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.SingleEventLifeData
 import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.debounce
-import com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlayListFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -134,20 +133,20 @@ class PlaylistDetailsViewModel(
         isClickAllowed = isAllowed
     }
 
-    fun loadPlayListDetails(playlistName: String) {
+    fun loadPlayListDetails(playlistId: Long) {
         viewModelScope.launch {
 //            val playList = mediaLibraryInteractor.getPlaylistByName(playlistName)
 //            processPlayListResult(playList)
 
             val playlistFlow = async {
-                mediaLibraryInteractor.getPlaylistByName(playlistName)
+                mediaLibraryInteractor.getPlaylistById(playlistId)
                     .collect { playlist ->
                         processPlayListResult(playlist)
                     }
             }
 
             val trackListFlow = async {
-                mediaLibraryInteractor.getAllTracksFromPlaylist(playlistName)
+                mediaLibraryInteractor.getAllTracksFromPlaylist(playlistId)
                     .collect { trackList ->
                         processTrackListResult(trackList)
                     }
@@ -157,9 +156,9 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    private fun getAllTracksFromPlaylist(playlistName: String) {
+    private fun getAllTracksFromPlaylist(playlistId: Long) {
         viewModelScope.launch {
-            mediaLibraryInteractor.getAllTracksFromPlaylist(playlistName)
+            mediaLibraryInteractor.getAllTracksFromPlaylist(playlistId)
                 .collect { trackList ->
                     processTrackListResult(trackList)
                 }
@@ -211,10 +210,10 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    fun showEditPlayListFragment(playListName: String) {
+    fun showEditPlayListFragment(playListId: Long) {
         if (clickDebounce()) {
             showFragmentLiveData.postValue(
-                NavigateFragment.EditPlayListFragment(playListName)
+                NavigateFragment.EditPlayListFragment(playListId)
             )
         }
     }
@@ -225,9 +224,9 @@ class PlaylistDetailsViewModel(
 //        }
 //    }
 
-    fun deleteTrackFromPlaylist(playListName: String, trackId: String) {
+    fun deleteTrackFromPlaylist(playlistId: Long, trackId: String) {
         viewModelScope.launch {
-            mediaLibraryInteractor.deleteTrackFromPlaylist(playListName, trackId)
+            mediaLibraryInteractor.deleteTrackFromPlaylist(playlistId, trackId)
         }
     }
 

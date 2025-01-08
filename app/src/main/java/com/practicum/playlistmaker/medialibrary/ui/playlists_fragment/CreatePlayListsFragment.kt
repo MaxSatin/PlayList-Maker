@@ -242,23 +242,23 @@ class CreatePlayListsFragment : Fragment() {
     private fun processState(state: CreatePlaylistState) {
         when (state) {
             is CreatePlaylistState.Content -> {
-                playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
-                val filteredPlaylist = this.playLists.find { it.name == playlist.name }
-                Log.d("ViewmodelPlaylist", "$filteredPlaylist")
-                if (filteredPlaylist == null) {
-                    viewModel.addPlaylistWithReplace(playlist)
-                    findNavController().navigateUp()
-
-                } else {
-                    confirmDialogPlaylistExists?.show()
-                }
-                Log.d("Playlists", "${state.playLists}")
+//                playlist = Playlist(pl playListName, playListDescription, coverUri, 0, false)
+//                val filteredPlaylist = this.playLists.find { it.name == playlist.name }
+//                Log.d("ViewmodelPlaylist", "$filteredPlaylist")
+//                if (filteredPlaylist == null) {
+//                    viewModel.addPlaylistWithReplace(playlist)
+//                    findNavController().navigateUp()
+//
+//                } else {
+//                    confirmDialogPlaylistExists?.show()
+//                }
+//                Log.d("Playlists", "${state.playLists}")
             }
         }
     }
 
     private fun checkExistsAndSet() {
-        playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
+//        playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
         val filteredPlaylist = playLists.find { it.name == playlist.name }
         Log.d("ViewmodelPlaylist", "$filteredPlaylist")
         if (filteredPlaylist == null) {

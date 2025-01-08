@@ -5,18 +5,15 @@ import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import kotlinx.coroutines.flow.Flow
 
 interface MediaLibraryInteractor {
-    fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>>
+    fun getAllTracksFromPlaylist(playlistId: Long): Flow<List<Track>>
 
     fun getPlaylists(): Flow<List<Playlist>>
-    fun getPlaylistByName(playListName: String): Flow<Playlist>
-//    suspend fun getPlaylistByName(playlistName: String): Playlist
 
-    suspend fun deleteTrackFromPlaylist(playlistName: String, trackId: String)
+    fun getPlaylistById(playlistId: Long): Flow<Playlist>
 
-    suspend fun updatePlaylist(
-        oldPlaylistName: String, newPlaylistName: String,
-        newDescription: String, newCoverUri: String,
-    )
+    suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: String)
+
+    suspend fun updatePlaylistTable(playListId: Long, newPlaylistName: String, newDescription: String, newCoverUri: String)
 
     suspend fun addPlaylistWithReplace(playlist: Playlist)
 

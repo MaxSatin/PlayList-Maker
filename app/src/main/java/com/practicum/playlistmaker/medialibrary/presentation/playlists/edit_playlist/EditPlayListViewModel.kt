@@ -55,9 +55,9 @@ class EditPlayListViewModel(
         }
     }
 
-    fun loadPlaylistDetailsState(playlistName: String) {
+    fun loadPlaylistDetailsState(playlistId: Long) {
         viewModelScope.launch {
-            mediaLibraryInteractor.getPlaylistByName(playlistName)
+            mediaLibraryInteractor.getPlaylistById(playlistId)
                 .collect { playlist ->
                     processPlayListResult(playlist)
                 }
@@ -65,12 +65,12 @@ class EditPlayListViewModel(
     }
 
     fun updatePlaylist(
-        oldPlaylistName: String, newPlaylistName: String,
+        playlistId: Long, newPlaylistName: String,
         newDescription: String, newCoverUri: String,
     ) {
         viewModelScope.launch {
-            mediaLibraryInteractor.updatePlaylist(
-                oldPlaylistName, newPlaylistName,
+            mediaLibraryInteractor.updatePlaylistTable(
+                playlistId, newPlaylistName,
                 newDescription, newCoverUri
             )
         }

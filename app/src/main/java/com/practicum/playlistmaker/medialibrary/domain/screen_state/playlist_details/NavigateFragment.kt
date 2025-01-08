@@ -7,6 +7,6 @@ sealed interface NavigateFragment {
     ) : NavigateFragment
 
     data class EditPlayListFragment(
-        val playListName: String,
+        val playListId: Long,
     ) : NavigateFragment
 }

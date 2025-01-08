@@ -13,32 +13,32 @@ class MediaLibraryInteractorImpl(
         return mediaLibraryRepository.getFavoriteTrackList()
     }
 
-    override fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>> {
-        return mediaLibraryRepository.getAllTracksFromPlaylist(playlistName)
+    override fun getAllTracksFromPlaylist(playlistId: Long): Flow<List<Track>> {
+        return mediaLibraryRepository.getAllTracksFromPlaylist(playlistId)
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> {
         return mediaLibraryRepository.getPlaylists()
     }
 
-    override fun getPlaylistByName(playListName: String): Flow<Playlist>{
-        return mediaLibraryRepository.getPlaylistByName(playListName)
+    override fun getPlaylistById(playlistId: Long): Flow<Playlist>{
+        return mediaLibraryRepository.getPlaylistById(playlistId)
     }
 
 //    override suspend fun getPlaylistByName(playlistName: String): Playlist {
 //        return mediaLibraryRepository.getPlaylistByName(playlistName)
 //    }
 
-    override suspend fun deleteTrackFromPlaylist(playlistName: String, trackId: String) {
-        mediaLibraryRepository.deleteTrackFromPlaylist(playlistName, trackId)
+    override suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: String) {
+        mediaLibraryRepository.deleteTrackFromPlaylist(playlistId, trackId)
     }
 
-    override suspend fun updatePlaylist(
-        oldPlaylistName: String, newPlaylistName: String,
+    override suspend fun updatePlaylistTable(
+        playlistId: Long, newPlaylistName: String,
         newDescription: String, newCoverUri: String,
     ) {
-        mediaLibraryRepository.updatePlaylist(
-            oldPlaylistName, newPlaylistName,
+        mediaLibraryRepository.updatePlaylistTable(
+            playlistId, newPlaylistName,
             newDescription, newCoverUri
         )
     }

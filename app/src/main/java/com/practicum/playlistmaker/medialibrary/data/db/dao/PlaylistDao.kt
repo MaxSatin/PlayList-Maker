@@ -6,10 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.practicum.playlistmaker.medialibrary.data.db.entity.PlaylistCrossRef
 import com.practicum.playlistmaker.medialibrary.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.medialibrary.data.db.entity.TrackEntity
-import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,7 +15,8 @@ interface PlaylistDao {
     @Transaction
     @Query(
         """
-    SELECT 
+    SELECT
+        p.playlistId AS playlistId,
         p.playlistName AS playlistName,
         p.description AS description,
         p.coverUri AS coverUri,
@@ -26,7 +25,7 @@ interface PlaylistDao {
         p.timeStamp as timeStamp
     FROM playlist_table AS p
     LEFT JOIN playlistcrossref_table AS crossRef 
-        ON p.playlistName = crossRef.playlistName
+        ON p.playlistId = crossRef.playListId
     GROUP BY p.playlistName, p.description, p.coverUri, p.trackCount, p.containsCurrentTrack
     ORDER BY p.timeStamp ASC
 """
@@ -37,13 +36,14 @@ interface PlaylistDao {
     @Query(
         "SELECT t.* FROM tracks_table t " +
                 "INNER JOIN playlistcrossref_table j ON t.trackId = j.trackId " +
-                "WHERE j.playlistName = :playlistName"
+                "WHERE j.playlistId = :playListId"
     )
-    fun getAllTracksFromPlaylist(playlistName: String): Flow<List<TrackEntity>>
+    fun getAllTracksFromPlaylist(playListId: Long): Flow<List<TrackEntity>>
 
     @Transaction
     @Query(
         """SELECT 
+        p.playlistId AS playlistId,
         p.playlistName AS playlistName,
         p.description AS description,
         p.coverUri AS coverUri,
@@ -52,18 +52,18 @@ interface PlaylistDao {
         p.timeStamp as timeStamp
     FROM playlist_table AS p
     LEFT JOIN playlistcrossref_table AS crossref
-        ON p.playlistName = crossref.playlistName
-    WHERE p.playlistName = :playListName
+        ON p.playlistId = crossref.playListId
+    WHERE p.playlistId = :playListId
     GROUP BY p.playlistName
     LIMIT 1
         """
     )
-    fun getPlaylistByName(playListName: String): Flow<PlaylistEntity>
+    fun getPlaylistById(playListId: Long): Flow<PlaylistEntity>
 //    suspend fun getPlaylistByName(playListName: String): PlaylistEntity?
 
 
-    @Query("DELETE FROM playlistcrossref_table WHERE playlistName =:playlistName AND trackId =:trackId")
-    suspend fun deleteTrackFromPlaylist(playlistName: String, trackId: String)
+    @Query("DELETE FROM playlistcrossref_table WHERE playListId =:playListId AND trackId =:trackId")
+    suspend fun deleteTrackFromPlaylist(playListId: Long, trackId: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPlaylistWithReplace(playlist: PlaylistEntity)
@@ -90,34 +90,34 @@ interface PlaylistDao {
         playlistName = CASE WHEN :newPlaylistName IS NOT NULL THEN :newPlaylistName ELSE playlistName END,
         description = CASE WHEN :newDescription IS NOT NULL THEN :newDescription ELSE description END,
         coverUri = CASE WHEN :newCoverUri IS NOT NULL THEN :newCoverUri ELSE coverUri END
-    WHERE playlistName = :oldPlaylistName
+    WHERE playlistId = :playListId
 """
     )
     suspend fun updatePlaylistTable(
-        oldPlaylistName: String,
+        playListId: Long,
         newPlaylistName: String,
         newDescription: String,
         newCoverUri: String,
     )
 
-    @Transaction
-    @Query(
-        """
-            UPDATE playlistcrossref_table 
-            SET playlistName =:newPlaylistName
-            WHERE playlistName =:oldPlaylistName
-        """
-    )
-    suspend fun updateCrossRefTable(oldPlaylistName: String, newPlaylistName: String)
+//    @Transaction
+//    @Query(
+//        """
+//            UPDATE playlistcrossref_table
+//            SET playlistName =:newPlaylistName
+//            WHERE playlistName =:oldPlaylistName
+//        """
+//    )
+//    suspend fun updateCrossRefTable(oldPlaylistName: String, newPlaylistName: String)
 
-    @Transaction
-    suspend fun updateDependencies(
-        oldPlaylistName: String,
-        newPlaylistName: String,
-        newDescription: String,
-        newCoverUri: String,
-    ){
-        updateCrossRefTable(oldPlaylistName, newPlaylistName)
-        updatePlaylistTable(oldPlaylistName, newPlaylistName, newDescription, newCoverUri)
-    }
+//    @Transaction
+//    suspend fun updateDependencies(
+//        oldPlaylistName: String,
+//        newPlaylistName: String,
+//        newDescription: String,
+//        newCoverUri: String,
+//    ){
+//        updateCrossRefTable(oldPlaylistName, newPlaylistName)
+//        updatePlaylistTable(oldPlaylistName, newPlaylistName, newDescription, newCoverUri)
+//    }
 }

@@ -6,10 +6,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.practicum.playlistmaker.player.data.db.entity.PlaylistTracksCrossRef
 import com.practicum.playlistmaker.player.data.db.entity.PlaylistEntity
-import com.practicum.playlistmaker.player.data.db.entity.PlaylistTrackCrossRef
 import com.practicum.playlistmaker.player.data.db.entity.TrackEntity
-import com.practicum.playlistmaker.player.domain.model.track_model.Track
 import kotlinx.coroutines.flow.Flow
 
 
@@ -33,16 +32,17 @@ interface PlayerTrackDao {
     @Query(
         "SELECT t.* FROM tracks_table t " +
                 "INNER JOIN playlistcrossref_table j ON t.trackId = j.trackId " +
-                "WHERE j.playlistName = :playlistName"
+                "WHERE j.playListId = :playlistId"
     )
-    suspend fun getAllTracksFromPlaylist(playlistName: String): List<TrackEntity>
+    suspend fun getAllTracksFromPlaylist(playlistId: Long): List<TrackEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlayListTrackCrossRef(crossRef: PlaylistTrackCrossRef):Long
+    suspend fun insertPlayListTrackCrossRef(crossRef: PlaylistTracksCrossRef):Long
 
     @Query(
         """
     SELECT 
+        p.playlistId AS playlistId,
         p.playlistName AS playlistName,
         p.description AS description,
         p.coverUri AS coverUri,
@@ -51,7 +51,7 @@ interface PlayerTrackDao {
         p.timeStamp as timeStamp
     FROM playlist_table AS p
     LEFT JOIN playlistcrossref_table AS crossRef 
-        ON p.playlistName = crossRef.playlistName
+        ON p.playlistId = crossRef.playListId
     GROUP BY p.playlistName, p.description, p.coverUri, p.trackCount, p.containsCurrentTrack
     ORDER BY p.timeStamp ASC
 """
@@ -63,9 +63,9 @@ interface PlayerTrackDao {
         "SELECT EXISTS(" +
                 "SELECT 1 " +
                 "FROM playlist_table t " +
-                "INNER JOIN playlistcrossref_table j ON t.playlistName = j.playlistName " +
-                "WHERE j.trackId =:trackId AND t.playlistName = :playlistName)"
+                "INNER JOIN playlistcrossref_table j ON t.playlistId = j.playListId " +
+                "WHERE j.trackId =:trackId AND t.playlistName = :playlistId)"
     )
-    suspend fun checkPlaylistHasTrack(trackId: String, playlistName: String): Boolean
+    suspend fun checkPlaylistHasTrack(trackId: String, playlistId: Long): Boolean
 
 }

@@ -3,8 +3,7 @@ package com.practicum.playlistmaker.player.data.repository
 import android.util.Log
 import com.practicum.playlistmaker.AppDatabase
 import com.practicum.playlistmaker.player.data.db.entity.PlaylistEntity
-import com.practicum.playlistmaker.player.data.db.entity.PlaylistTrackCrossRef
-
+import com.practicum.playlistmaker.player.data.db.entity.PlaylistTracksCrossRef
 import com.practicum.playlistmaker.player.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.player.data.utils.TrackDbConverter
 import com.practicum.playlistmaker.player.domain.model.playlist_model.Playlist
@@ -34,8 +33,8 @@ class DatabaseRepositoryImpl(
         }
     }
 
-    override suspend fun getAllTracksFromPlaylist(playlistName: String): List<Track> {
-        val trackList = appDatabase.playerTrackDao().getAllTracksFromPlaylist(playlistName)
+    override suspend fun getAllTracksFromPlaylist(playlistId: Long): List<Track> {
+        val trackList = appDatabase.playerTrackDao().getAllTracksFromPlaylist(playlistId)
         val reversedTracklist = trackList.reversed()
         return convertFromTrackEntity(reversedTracklist)
     }
@@ -56,19 +55,19 @@ class DatabaseRepositoryImpl(
         }
     }
 
-    override suspend fun insertPlayListTrackCrossRef(playlistName: String, track: Track): Long {
+    override suspend fun insertPlayListTrackCrossRef(playlistId: Long, track: Track): Long {
         return if (appDatabase.playerTrackDao().isTrackInDataBase(track.trackId)) {
             appDatabase.playerTrackDao()
-                .insertPlayListTrackCrossRef(PlaylistTrackCrossRef(playlistName, track.trackId))
+                .insertPlayListTrackCrossRef(PlaylistTracksCrossRef(playlistId, track.trackId))
         } else {
             appDatabase.playerTrackDao().insertTrack(converter.map(track))
             appDatabase.playerTrackDao()
-                .insertPlayListTrackCrossRef(PlaylistTrackCrossRef(playlistName, track.trackId))
+                .insertPlayListTrackCrossRef(PlaylistTracksCrossRef(playlistId, track.trackId))
         }
     }
 
-    override suspend fun checkPlaylistHasTrack(trackId: String, playlistName: String): Boolean {
-        return appDatabase.playerTrackDao().checkPlaylistHasTrack(trackId, playlistName)
+    override suspend fun checkPlaylistHasTrack(trackId: String, playlistId: Long): Boolean {
+        return appDatabase.playerTrackDao().checkPlaylistHasTrack(trackId, playlistId)
     }
 
 

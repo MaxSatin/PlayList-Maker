@@ -41,8 +41,7 @@ class PlaylistDetailsFragment : Fragment() {
     private val handler = Handler(Looper.getMainLooper())
 
     private var currentAction: Int = 0
-    private var _playListName: String? = null
-    private val playListName get() = _playListName!!
+    private var playListId: Long = 0
 
     private lateinit var trackListBHBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var editPLBHBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -67,15 +66,15 @@ class PlaylistDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val playlistName = arguments?.getString(PLAYLIST_NAME_KEY)
-        if (playlistName != null) {
-            viewModel.loadPlayListDetails(playlistName)
+        val playlistId = arguments?.getLong(PLAYLIST_NAME_KEY)
+        if (playlistId != null) {
+            viewModel.loadPlayListDetails(playlistId)
 //            viewModel.loadPlaylistDetailsState(playlistName)
 //            viewModel.getAllTracksFromPlaylist(playlistName)
         } else {
             Toast.makeText(requireContext(), "playlist is null", Toast.LENGTH_LONG).show()
         }
-        Log.d("PlaylistName", "$playlistName")
+        Log.d("PlaylistName", "$playlistId")
 
         binding.trackListRV.adapter = trackListAdapter
 
@@ -115,7 +114,7 @@ class PlaylistDetailsFragment : Fragment() {
         }
 
         binding.editEditPl.setOnClickListener{
-            viewModel.showEditPlayListFragment(playListName)
+            viewModel.showEditPlayListFragment(playListId)
         }
         currentAction = 0
         binding.toolbar.setOnClickListener {
@@ -163,7 +162,7 @@ class PlaylistDetailsFragment : Fragment() {
             is NavigateFragment.EditPlayListFragment -> handler.postDelayed(
                 { findNavController().navigate(
                     R.id.action_playlistDetailsFragment_to_editPlayListFragment,
-                    EditPlayListFragment.createArgs(state.playListName)
+                    EditPlayListFragment.createArgs(state.playListId)
                 )},
                 keyObject,
                 300
@@ -213,7 +212,7 @@ class PlaylistDetailsFragment : Fragment() {
         binding.loadingScreen.isVisible = false
         if (state.playlist != null) {
             loadPlayListData(state.playlist)
-            _playListName = state.playlist.name
+            playListId = state.playlist.id
             binding.tracksNumber.text = getTracksNumberAsTextField(state.playlist)
             binding.playlistDuration.text = getPlaylistDurationTextField(state.overallDuration)
         }
@@ -315,8 +314,8 @@ class PlaylistDetailsFragment : Fragment() {
     companion object {
         private val keyObject = Unit
         private const val PLAYLIST_NAME_KEY = "playlistName"
-        fun createArgs(playlistName: String) = bundleOf(
-            PLAYLIST_NAME_KEY to playlistName
+        fun createArgs(playlistId: Long) = bundleOf(
+            PLAYLIST_NAME_KEY to playlistId
         )
     }
 }

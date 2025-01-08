@@ -31,6 +31,7 @@ class TrackDbConverter {
     fun map(playlistEntity: PlaylistEntity): Playlist {
         return with(playlistEntity) {
             Playlist(
+                id,
                 name,
                 description,
                 toUriConverter(coverUri),
@@ -43,6 +44,7 @@ class TrackDbConverter {
     fun map(playlist: Playlist): PlaylistEntity {
         return with(playlist){
             PlaylistEntity(
+                id,
                 name,
                 description,
                 fromUriConverter(coverUri),
