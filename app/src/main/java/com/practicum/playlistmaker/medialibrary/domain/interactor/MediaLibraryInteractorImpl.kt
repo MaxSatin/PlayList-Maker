@@ -21,16 +21,26 @@ class MediaLibraryInteractorImpl(
         return mediaLibraryRepository.getPlaylists()
     }
 
-    override suspend fun getPlaylistByName(playlistName: String): Playlist {
-        return mediaLibraryRepository.getPlaylistByName(playlistName)
+    override fun getPlaylistByName(playListName: String): Flow<Playlist>{
+        return mediaLibraryRepository.getPlaylistByName(playListName)
     }
+
+//    override suspend fun getPlaylistByName(playlistName: String): Playlist {
+//        return mediaLibraryRepository.getPlaylistByName(playlistName)
+//    }
 
     override suspend fun deleteTrackFromPlaylist(playlistName: String, trackId: String) {
         mediaLibraryRepository.deleteTrackFromPlaylist(playlistName, trackId)
     }
 
-    override suspend fun updatePlaylist(oldPlaylistName: String, newPlaylistName: String) {
-        mediaLibraryRepository.updatePlaylist(oldPlaylistName, newPlaylistName)
+    override suspend fun updatePlaylist(
+        oldPlaylistName: String, newPlaylistName: String,
+        newDescription: String, newCoverUri: String,
+    ) {
+        mediaLibraryRepository.updatePlaylist(
+            oldPlaylistName, newPlaylistName,
+            newDescription, newCoverUri
+        )
     }
 
     override suspend fun addPlaylistWithReplace(playlist: Playlist) {

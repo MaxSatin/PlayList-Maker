@@ -30,10 +30,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.markodevcic.peko.PermissionRequester
 import com.markodevcic.peko.PermissionResult
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.CreatePlaylistFragmentBinding
+import com.practicum.playlistmaker.databinding.EditPlaylistFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.create_playlist.CreatePlaylistState
-import com.practicum.playlistmaker.medialibrary.presentation.playlists.createplaylists.viewmodel.CreatePlayListsViewModel
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.PlaylistState
+import com.practicum.playlistmaker.medialibrary.presentation.playlists.edit_playlist.EditPlayListViewModel
+import com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment.PlaylistDetailsFragment
 import com.practicum.playlistmaker.player.presentation.utils.debounce
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,11 +43,14 @@ import java.io.File
 import java.io.FileOutputStream
 
 class EditPlayListFragment: Fragment() {
-    private var _binding: CreatePlaylistFragmentBinding? = null
+    private var _binding: EditPlaylistFragmentBinding? = null
     private val binding get() = _binding!!
 
     private val requester = PermissionRequester.instance()
 
+    private var initPlayListName: String = ""
+    private var initPlayListDescription: String = ""
+    private var initCoverUri: Uri? = null
 
     private var playListName: String = ""
     private var playListDescription: String = ""
@@ -61,7 +66,7 @@ class EditPlayListFragment: Fragment() {
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private val viewModel: CreatePlayListsViewModel by viewModel()
+    private val viewModel: EditPlayListViewModel by viewModel()
 
     private var isClickAllowed: Boolean = true
     private val setClickTrueDebounce = debounce<Boolean>(
@@ -78,7 +83,7 @@ class EditPlayListFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        _binding = CreatePlaylistFragmentBinding.inflate(inflater, container, false)
+        _binding = EditPlaylistFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -102,6 +107,13 @@ class EditPlayListFragment: Fragment() {
 
         binding.createPlayListButton.isEnabled = false
 
+        val playListNameArgs = arguments?.getString(PLAY_LIST_KEY) ?: "Ошибка"
+
+        viewModel.loadPlaylistDetailsState(playListNameArgs)
+
+        viewModel.getPlaylistDetailsLiveData().observe(viewLifecycleOwner){ playlistState ->
+            processPlayListData(playlistState)
+        }
         binding.toolbar.setOnClickListener {
             if (clickDebounce()) {
                 when {
@@ -239,17 +251,49 @@ class EditPlayListFragment: Fragment() {
         )
     }
 
+    private fun processPlayListData(state: PlaylistState){
+        when(state){
+            is PlaylistState.DetailsState -> loadPlayListData(state.playlist)
+            is PlaylistState.Empty -> Toast.makeText(requireContext(), "Информация отсутсвует", Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+    private fun loadPlayListData(playList: Playlist?){
+        if (playList != null) with(playList){
+            initPlayListName = name
+            binding.playlistNameInputEditText.setText(initPlayListName)
+            initPlayListDescription = description
+            binding.playlistDescriptionInputEditText.setText(initPlayListDescription)
+            initCoverUri = coverUri
+            binding.imagepickArea.setImageURI(initCoverUri)
+        }
+    }
+
     private fun processState(state: CreatePlaylistState) {
         when (state) {
             is CreatePlaylistState.Content -> {
-                playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
+                playlist = Playlist(this.playListName, playListDescription, coverUri, 0, false)
                 val filteredPlaylist = this.playLists.find { it.name == playlist.name }
-                Log.d("ViewmodelPlaylist", "$filteredPlaylist")
-                if (filteredPlaylist == null) {
-                    viewModel.addPlaylistWithReplace(playlist)
-                    findNavController().navigateUp()
 
-                } else {
+                Log.d("ViewmodelPlaylist", "$filteredPlaylist")
+
+                if (filteredPlaylist == null) {
+                    if (playListName != initPlayListName || playListDescription != initPlayListDescription || coverUri != initCoverUri) {
+//                        viewModel.addPlaylistWithReplace(playlist)
+                        viewModel.updatePlaylist(
+                            initPlayListName,
+                            playListName,
+                            playListDescription,
+                            coverUri.toString()
+                        )
+                        findNavController().navigate(
+                            R.id.action_editPlayListFragment_to_playlistDetailsFragment,
+                            PlaylistDetailsFragment.createArgs(playListName)
+                        )
+
+                    }
+                } else if(playListName == initPlayListName && playListDescription == initPlayListDescription && coverUri == initCoverUri) {
                     confirmDialogPlaylistExists?.show()
                 }
                 Log.d("Playlists", "${state.playLists}")

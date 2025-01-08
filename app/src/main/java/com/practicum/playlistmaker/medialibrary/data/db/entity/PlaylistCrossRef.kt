@@ -12,12 +12,14 @@ import androidx.room.ForeignKey
             parentColumns = ["playlistName"],
             childColumns = ["playlistName"],
             onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = TrackEntity::class,
             parentColumns = ["trackId"],
             childColumns = ["trackId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
         )
     ])
 data class PlaylistCrossRef(

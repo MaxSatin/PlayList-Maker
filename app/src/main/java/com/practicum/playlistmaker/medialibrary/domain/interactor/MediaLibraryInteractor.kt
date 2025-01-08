@@ -8,12 +8,15 @@ interface MediaLibraryInteractor {
     fun getAllTracksFromPlaylist(playlistName: String): Flow<List<Track>>
 
     fun getPlaylists(): Flow<List<Playlist>>
-
-    suspend fun getPlaylistByName(playlistName: String): Playlist
+    fun getPlaylistByName(playListName: String): Flow<Playlist>
+//    suspend fun getPlaylistByName(playlistName: String): Playlist
 
     suspend fun deleteTrackFromPlaylist(playlistName: String, trackId: String)
 
-    suspend fun updatePlaylist(oldPlaylistName: String, newPlaylistName: String)
+    suspend fun updatePlaylist(
+        oldPlaylistName: String, newPlaylistName: String,
+        newDescription: String, newCoverUri: String,
+    )
 
     suspend fun addPlaylistWithReplace(playlist: Playlist)
 

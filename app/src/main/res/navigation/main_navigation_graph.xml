@@ -108,5 +108,12 @@
         android:id="@+id/editPlayListFragment"
         android:name="com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlayListFragment"
         android:label="edit_playlist_fragment"
-        tools:layout="@layout/edit_playlist_fragment" />
+        tools:layout="@layout/edit_playlist_fragment" >
+        <action
+            android:id="@+id/action_editPlayListFragment_to_playlistDetailsFragment"
+            app:destination="@id/playlistDetailsFragment" />
+        <action
+            android:id="@+id/action_editPlayListFragment_to_mediaLibraryFragment"
+            app:destination="@id/mediaLibraryFragment" />
+    </fragment>
 </navigation>

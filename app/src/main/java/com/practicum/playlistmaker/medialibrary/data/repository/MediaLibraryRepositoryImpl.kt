@@ -66,31 +66,50 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-    override suspend fun getPlaylistByName(playlistName: String): Playlist {
-        return withContext(Dispatchers.IO) {
-            try {
-                val playlistEntity = appDatabase.playlistDao().getPlaylistByName(playlistName)
-                    ?: throw NullPointerException("Playlist not found")
-                converter.map(playlistEntity)
-            } catch (e: NullPointerException) {
-                Log.e("PlaylistRepository", "Error fetching playlist", e)
-                Playlist("", "", "".toUri(), 0, false)
+    override fun getPlaylistByName(playListName: String): Flow<Playlist> = flow {
+        val playListFlow = appDatabase.playlistDao().getPlaylistByName(playListName)
+
+        playListFlow.collect { playList ->
+            Log.d("PlaylistafterUpdate", "$playList")
+            if (playList != null) {
+                emit(converter.map(playList))
             }
         }
     }
 
+//    override suspend fun getPlaylistByName(playlistName: String): Playlist {
+//        return withContext(Dispatchers.IO) {
+//            try {
+//                val playlistEntity = appDatabase.playlistDao().getPlaylistByName(playlistName)
+//                    ?: throw NullPointerException("Playlist not found")
+//                converter.map(playlistEntity)
+//            } catch (e: NullPointerException) {
+//                Log.e("PlaylistRepository", "Error fetching playlist", e)
+//                Playlist("", "", "".toUri(), 0, false)
+//            }
+//        }
+//    }
+
     override suspend fun deleteTrackFromPlaylist(playlistName: String, trackId: String) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             appDatabase.playlistDao().deleteTrackFromPlaylist(playlistName, trackId)
         }
     }
 
     @Transaction
-    override suspend fun updatePlaylist(oldPlaylistName: String, newPlaylistName: String) {
-        withContext(Dispatchers.IO){
-            appDatabase.playlistDao().updatePlaylistTable(oldPlaylistName, newPlaylistName)
-            appDatabase.playlistDao().updateCrossRefTable(oldPlaylistName, newPlaylistName)
-        }
+    override suspend fun updatePlaylist(
+        oldPlaylistName: String,
+        newPlaylistName: String,
+        newDescription: String,
+        newCoverUri: String,
+    ) {
+            appDatabase.playlistDao().updatePlaylistTable(oldPlaylistName,
+                newPlaylistName,
+                newDescription,
+                newCoverUri
+            )
+                appDatabase.playlistDao().updateCrossRefTable(oldPlaylistName, newPlaylistName)
+
     }
 
     override suspend fun addPlaylistWithReplace(playlist: Playlist) {
