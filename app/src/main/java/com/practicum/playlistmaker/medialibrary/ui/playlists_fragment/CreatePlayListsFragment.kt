@@ -242,17 +242,17 @@ class CreatePlayListsFragment : Fragment() {
     private fun processState(state: CreatePlaylistState) {
         when (state) {
             is CreatePlaylistState.Content -> {
-//                playlist = Playlist(pl playListName, playListDescription, coverUri, 0, false)
-//                val filteredPlaylist = this.playLists.find { it.name == playlist.name }
-//                Log.d("ViewmodelPlaylist", "$filteredPlaylist")
-//                if (filteredPlaylist == null) {
-//                    viewModel.addPlaylistWithReplace(playlist)
-//                    findNavController().navigateUp()
-//
-//                } else {
-//                    confirmDialogPlaylistExists?.show()
-//                }
-//                Log.d("Playlists", "${state.playLists}")
+                playlist = Playlist(0, playListName, playListDescription, coverUri, 0, false)
+                val filteredPlaylist = this.playLists.find { it.name == playlist.name }
+                Log.d("ViewmodelPlaylist", "$filteredPlaylist")
+                if (filteredPlaylist == null) {
+                    viewModel.addPlaylistWithReplace(playlist)
+                    findNavController().navigateUp()
+
+                } else {
+                    confirmDialogPlaylistExists?.show()
+                }
+                Log.d("Playlists", "${state.playLists}")
             }
         }
     }
