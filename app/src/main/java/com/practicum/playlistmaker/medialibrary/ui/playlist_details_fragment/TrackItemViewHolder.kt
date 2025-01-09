@@ -28,11 +28,9 @@ class TrackItemViewHolder(
     init {
         itemView.apply {
             setOnClickListener {
-                // Обычное нажатие
                 onSingleTap(bindingAdapterPosition)
             }
             setOnLongClickListener {
-                // Долгое нажатие
                 onLongPress(bindingAdapterPosition)
                 true
             }

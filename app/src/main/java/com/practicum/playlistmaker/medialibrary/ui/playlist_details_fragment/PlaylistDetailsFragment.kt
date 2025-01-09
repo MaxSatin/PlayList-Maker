@@ -181,6 +181,14 @@ class PlaylistDetailsFragment : Fragment() {
             }
         }
 
+        binding.editShare.setOnClickListener{
+            if (isTrackListEmpty){
+                showNothingToShareNote()
+            } else {
+                viewModel.share()
+            }
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
