@@ -26,7 +26,7 @@ interface PlaylistDao {
     FROM playlist_table AS p
     LEFT JOIN playlistcrossref_table AS crossRef 
         ON p.playlistId = crossRef.playListId
-    GROUP BY p.playlistName, p.description, p.coverUri, p.trackCount, p.containsCurrentTrack
+    GROUP BY p.playlistId, p.playlistName, p.description, p.coverUri, p.trackCount, p.containsCurrentTrack
     ORDER BY p.timeStamp ASC
 """
     )

@@ -53,7 +53,6 @@ class PlayListsFragment() : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         _binding = PlaylistsFragmentBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -66,7 +65,6 @@ class PlayListsFragment() : Fragment() {
             AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
 
         viewModel.getPlaylists()
-
         with(binding.playlistsRecyclerView) {
             adapter = playlistAdapter
             addItemDecoration(GridLayoutItemDecorations(2, 8, true))
@@ -79,11 +77,11 @@ class PlayListsFragment() : Fragment() {
                 processState(playlistScreenState)
             }
 
-        if (!arguments?.getString(PLAYLIST_CREATED).isNullOrEmpty()) {
-            var playlistName: String? = arguments?.getString(PLAYLIST_CREATED)
-            Log.d("PlaylistArgs", "${arguments?.getString(PLAYLIST_CREATED)}")
-            showAddedInPlaylistNotification("Плейлист $playlistName создан!")
-        }
+//        if (!arguments?.getString(PLAYLIST_CREATED).isNullOrEmpty()) {
+//            var playlistName: String? = arguments?.getString(PLAYLIST_CREATED)
+//            Log.d("PlaylistArgs", "${arguments?.getString(PLAYLIST_CREATED)}")
+//            showAddedInPlaylistNotification("Плейлист $playlistName создан!")
+//        }
 
 
         binding.createPlayListButton.setOnClickListener {
@@ -117,13 +115,16 @@ class PlayListsFragment() : Fragment() {
             var areListsEqual = areListsAreEqual(lastPostedList, playlists) { p1, p2 ->
                 p1.name == p2.name
             }
-            if (!areListsEqual) {
+            if (!areListsEqual && lastPostedList.isEmpty()) {
+                lastPostedList = playlists
+            } else if (!areListsEqual){
                 lastPostedList = playlists
                 showAddedInPlaylistNotification("Плейлист ${playlist?.name} создан!")
             }
         }
 
         playlistAdapter.updateItems(playlists)
+        Log.d("PlaylistAdapter", "$playlists")
         binding.playlistsRecyclerView.isVisible = true
     }
 
@@ -154,6 +155,17 @@ class PlayListsFragment() : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onResume() {
+        super.onResume()
+        isFirstTimeLoaded = true
+    }
+
+    override fun onStart() {
+        super.onStart()
+        isFirstTimeLoaded = true
+    }
+
 
     companion object {
 

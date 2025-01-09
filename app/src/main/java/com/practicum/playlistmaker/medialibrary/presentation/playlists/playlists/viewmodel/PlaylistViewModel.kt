@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.medialibrary.presentation.playlists.playlist
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +23,7 @@ class PlaylistViewModel(
     private val playlistScreenStateLiveData = MutableLiveData<PlayListsScreenState>()
     fun getPlayListScreenState(): LiveData<PlayListsScreenState> = playlistScreenStateLiveData
 
-    private val mediatorStateLiveData = SingleLineEvent<PlayListsScreenState>().also { livedata ->
+    private val mediatorStateLiveData = MediatorLiveData<PlayListsScreenState>().also { livedata ->
         livedata.addSource(playlistScreenStateLiveData) { playlistState ->
             when (playlistState) {
                 is PlayListsScreenState.Content -> {
