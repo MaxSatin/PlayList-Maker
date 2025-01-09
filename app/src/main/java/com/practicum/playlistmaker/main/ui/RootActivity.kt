@@ -40,16 +40,19 @@ class RootActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navHostController)
 
         navHostController.addOnDestinationChangedListener{ _, destination, _ ->
-            when(destination.id){
-                R.id.playerFragment -> {
-                    binding.bottomNavigationView.isVisible = false
-                    binding.shadowView.isVisible = false
-                }
+            when(destination.id) {
+                R.id.playerFragment -> hideBottomBar()
+                R.id.playlistDetailsFragment -> hideBottomBar()
+                R.id.editPlayListFragment -> hideBottomBar()
+                R.id.createPlayListsFragment -> hideBottomBar()
                 else -> binding.bottomNavigationView.isVisible = true
             }
-
         }
+    }
 
+    private fun hideBottomBar(){
+        binding.bottomNavigationView.isVisible = false
+        binding.shadowView.isVisible = false
     }
 
     override fun onDestroy() {

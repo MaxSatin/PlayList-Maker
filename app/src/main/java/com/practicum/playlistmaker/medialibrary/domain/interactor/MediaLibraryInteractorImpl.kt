@@ -9,6 +9,10 @@ class MediaLibraryInteractorImpl(
     private val mediaLibraryRepository: MediaLibraryRepository,
 ) : MediaLibraryInteractor {
 
+    override fun share(text: String){
+        mediaLibraryRepository.share(text)
+    }
+
     override fun getFavoriteTrackList(): Flow<List<Track>> {
         return mediaLibraryRepository.getFavoriteTrackList()
     }

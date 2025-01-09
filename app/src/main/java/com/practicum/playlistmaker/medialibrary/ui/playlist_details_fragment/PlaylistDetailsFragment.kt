@@ -32,6 +32,7 @@ import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_det
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlist_details.viewmodel.PlaylistDetailsViewModel
 import com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlayListFragment
 import com.practicum.playlistmaker.player.ui.PlayerFragment
+import com.practicum.playlistmaker.player.ui.PlayerFragment.Companion
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -47,6 +48,7 @@ class PlaylistDetailsFragment : Fragment() {
 
     private var currentAction: Int = 0
     private var playListId: Long = 0
+    private var isTrackListEmpty: Boolean = false
     private lateinit var trackId: String
 
     private lateinit var trackListBHBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -171,6 +173,14 @@ class PlaylistDetailsFragment : Fragment() {
             }
         }
 
+        binding.shareIc.setOnClickListener{
+            if (isTrackListEmpty){
+                showNothingToShareNote()
+            } else {
+                viewModel.share()
+            }
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -216,6 +226,10 @@ class PlaylistDetailsFragment : Fragment() {
                 300
             )
         }
+    }
+
+    private fun sharePlaylist() {
+
     }
 
     private fun closeBottomSheetAndNavigateBack() {
@@ -273,9 +287,23 @@ class PlaylistDetailsFragment : Fragment() {
             binding.emptyPlaylistsPH.isVisible = false
             trackListAdapter?.updateItems(trackList)
         } else {
+            isTrackListEmpty = true
             binding.trackListRV.isVisible = false
             binding.emptyPlaylistsPH.isVisible = true
         }
+    }
+
+    private fun showNothingToShareNote() {
+        binding.nothingToShareNotification.isVisible = true
+        binding.nothingToShareNotification.startAnimation(notificationFadeIn)
+        handler.postDelayed(
+            {
+                binding.nothingToShareNotification.startAnimation(notificationFadeOut)
+                binding.nothingToShareNotification.isVisible = false
+            },
+            keyObject,
+            ANIMATION_DELAY_MILLIS_1000
+        )
     }
 
     private fun loadPlayListData(playList: Playlist) {
@@ -433,6 +461,7 @@ class PlaylistDetailsFragment : Fragment() {
         private val keyObject = Unit
         private const val PLAYLIST_NAME_KEY = "playlistName"
         private const val ANIMATION_DELAY_MILLIS = 300L
+        private const val ANIMATION_DELAY_MILLIS_1000 = 1000L
         fun createArgs(playlistId: Long) = bundleOf(
             PLAYLIST_NAME_KEY to playlistId
         )

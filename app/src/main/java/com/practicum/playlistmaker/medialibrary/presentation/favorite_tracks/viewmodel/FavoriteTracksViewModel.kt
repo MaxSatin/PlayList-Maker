@@ -39,9 +39,9 @@ class FavoriteTracksViewModel(
 
 
     fun loadFavoriteTrackList() {
-        render(
-            FavoriteListScreenState.Loading
-        )
+//        render(
+//            FavoriteListScreenState.Loading
+//        )
 
         viewModelScope.launch {
             mediaLibraryInteractor.getFavoriteTrackList()

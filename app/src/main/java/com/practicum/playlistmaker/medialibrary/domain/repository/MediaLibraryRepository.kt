@@ -5,6 +5,8 @@ import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import kotlinx.coroutines.flow.Flow
 
 interface MediaLibraryRepository {
+    fun share(text: String)
+
     fun getAllTracksFromPlaylist(playlistId: Long): Flow<List<Track>>
 
     fun getPlaylists(): Flow<List<Playlist>>
@@ -24,6 +26,7 @@ interface MediaLibraryRepository {
     suspend fun deletePlaylist(playListId: Long)
 
     fun getFavoriteTrackList(): Flow<List<Track>>
+
 
     //    suspend fun getPlaylistByName(playlistName: String): Playlist
 }

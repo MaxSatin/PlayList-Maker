@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.medialibrary.data.repository
 
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
@@ -22,8 +24,19 @@ class MediaLibraryRepositoryImpl(
     private val converter: TrackDbConverter,
     private val gson: Gson,
     private val sharedPrefs: SharedPreferences,
-
+    private val context: Context
     ) : MediaLibraryRepository {
+
+    override fun share(text: String) {
+        context.startActivity(
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, text)
+                type = "text/plain"
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+        )
+    }
 
     override fun getFavoriteTrackList(): Flow<List<Track>> = flow {
         val favoriteTrackListFlow = appDatabase.favoriteTracklistDao().getFavoriteTrackList()

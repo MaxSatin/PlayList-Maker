@@ -43,6 +43,7 @@
 
     <string name="delete_playlist">Удалить плейлист</string>
     <string name="check_playlist_deletion_intent">Вы уверены, что хотите удалить плейлист?</string>
+    <string name="nothing_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
 
 
     <string name="finish_editing">Завершить</string>

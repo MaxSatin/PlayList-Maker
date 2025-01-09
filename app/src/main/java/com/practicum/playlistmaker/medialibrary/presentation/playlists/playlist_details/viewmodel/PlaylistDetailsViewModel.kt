@@ -35,10 +35,11 @@ class PlaylistDetailsViewModel(
     private val showFragmentLiveData = SingleEventLifeData<NavigateFragment>()
     fun getShowFragmentLiveData(): LiveData<NavigateFragment> = showFragmentLiveData
 
+    private var overallDuration: Long = 0L
+    private var playlist: Playlist? = null
+    private var trackList: List<Track>? = null
+
     private val playListMediatorLiveData = MediatorLiveData<PlaylistDetailsScreenState>().apply {
-        var overallDuration: Long = 0L
-        var playlist: Playlist? = null
-        var trackList: List<Track>? = null
 
         fun updateState() {
             if (playlist != null && trackList != null) {
@@ -60,6 +61,7 @@ class PlaylistDetailsViewModel(
                     Log.d("PlaylistDetails", "${playListState.playlist}")
                     playListState.playlist
                 }
+
                 is PlaylistState.Empty -> null
             }
             updateState()
@@ -81,6 +83,17 @@ class PlaylistDetailsViewModel(
                     updateState()
                 }
             }
+        }
+    }
+
+    fun share() {
+        val playlist = this.playlist
+        val trackList = this.trackList
+        if (playlist != null && !trackList.isNullOrEmpty()) {
+            var textMessage =
+                "${playlist.name}\n${trackList.size} ${attachWordEndingTracks(trackList.size)}"
+            trackList.forEachIndexed { index, track -> textMessage += "\n${index + 1}. ${track.artistName} - ${track.trackName} ${track.trackTimeMillis}" }
+            mediaLibraryInteractor.share(textMessage)
         }
     }
 
@@ -157,7 +170,7 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    fun deletePlaylist(playlistId: Long){
+    fun deletePlaylist(playlistId: Long) {
         viewModelScope.launch {
             mediaLibraryInteractor.deletePlaylist(playlistId)
         }
@@ -294,6 +307,17 @@ class PlaylistDetailsViewModel(
             )
         }
 
+    }
+
+    private fun attachWordEndingTracks(trackNumber: Int): String {
+        return when {
+            trackNumber % 10 == 0 -> "треков"
+            trackNumber % 10 == 1 -> "трек"
+            trackNumber % 10 in 2..4 -> "трека"
+            trackNumber % 10 in 5..9 -> "треков"
+            trackNumber % 100 in 11..19 -> "треков"
+            else -> ""
+        }
     }
 
 

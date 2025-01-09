@@ -5,6 +5,9 @@ import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import kotlinx.coroutines.flow.Flow
 
 interface MediaLibraryInteractor {
+
+    fun share(text: String)
+
     fun getAllTracksFromPlaylist(playlistId: Long): Flow<List<Track>>
 
     fun getPlaylists(): Flow<List<Playlist>>

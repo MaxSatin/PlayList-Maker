@@ -19,7 +19,7 @@ val mediaLibraryDataModule = module{
     }
 
     single<MediaLibraryRepository> {
-        MediaLibraryRepositoryImpl(get(), get(), get(), get())
+        MediaLibraryRepositoryImpl(get(), get(), get(), get(), androidApplication())
     }
 
     single {
