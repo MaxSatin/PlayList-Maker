@@ -370,5 +370,168 @@
             android:text="Удалить плейлист"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/deleteTrackDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/exitdialogshape"
+        android:elevation="@dimen/padding_24"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/rightBorder"
+        app:layout_constraintStart_toEndOf="@id/leftBorder"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/endEditingtv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_8"
+                android:fontFamily="@font/ys_display_medium"
+                android:textSize="@dimen/text_size_16sp"
+                android:paddingHorizontal="@dimen/padding_16"
+                android:text="@string/delete_track_from_playlist"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/dataWillBeLosttv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_8"
+                android:fontFamily="@font/ys_display_medium"
+                android:textSize="@dimen/text_size_16sp"
+                android:gravity="start"
+                android:paddingHorizontal="@dimen/padding_16"
+                android:text="@string/check_deletion_intent"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/endEditingtv" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/deleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_gravity="start"
+                android:layout_marginHorizontal="@dimen/padding_8"
+                android:layout_marginVertical="@dimen/padding_16"
+                android:background="@drawable/create_playlist_button_inactive"
+                android:elevation="@dimen/padding_8"
+                android:fontFamily="@font/ys_display_medium"
+                android:text="@string/confirm_deletion"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cancel"
+                app:layout_constraintTop_toBottomOf="@id/dataWillBeLosttv" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginHorizontal="@dimen/padding_16"
+                android:layout_marginVertical="@dimen/padding_16"
+                android:background="@drawable/create_playlist_button"
+                android:elevation="@dimen/padding_8"
+                android:fontFamily="@font/ys_display_medium"
+                android:text="@string/cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dataWillBeLosttv" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/deletePlaylistDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/exitdialogshape"
+        android:elevation="@dimen/padding_24"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/rightBorder"
+        app:layout_constraintStart_toEndOf="@id/leftBorder"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/deletePlaylistTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_8"
+                android:fontFamily="@font/ys_display_medium"
+                android:textSize="@dimen/text_size_16sp"
+                android:paddingHorizontal="@dimen/padding_16"
+                android:text="@string/delete_playlist"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/playlistDeleteIntentTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_8"
+                android:fontFamily="@font/ys_display_medium"
+                android:textSize="@dimen/text_size_16sp"
+                android:gravity="start"
+                android:paddingHorizontal="@dimen/padding_16"
+                android:text="@string/check_playlist_deletion_intent"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/deletePlaylistTV" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/deletePlaylistButton"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_gravity="start"
+                android:layout_marginHorizontal="@dimen/padding_8"
+                android:layout_marginVertical="@dimen/padding_16"
+                android:background="@drawable/create_playlist_button_inactive"
+                android:elevation="@dimen/padding_8"
+                android:fontFamily="@font/ys_display_medium"
+                android:text="@string/confirm_deletion"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cancelPlaylistDeletion"
+                app:layout_constraintTop_toBottomOf="@id/playlistDeleteIntentTV" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancelPlaylistDeletion"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginHorizontal="@dimen/padding_16"
+                android:layout_marginVertical="@dimen/padding_16"
+                android:background="@drawable/create_playlist_button"
+                android:elevation="@dimen/padding_8"
+                android:fontFamily="@font/ys_display_medium"
+                android:text="@string/cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/playlistDeleteIntentTV" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

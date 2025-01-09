@@ -19,7 +19,9 @@ interface MediaLibraryRepository {
 
     suspend fun addPlaylist(playlist: Playlist)
 
-    suspend fun deletePlaylist(playlist: Playlist)
+//    suspend fun deletePlaylist(playlist: Playlist)
+
+    suspend fun deletePlaylist(playListId: Long)
 
     fun getFavoriteTrackList(): Flow<List<Track>>
 

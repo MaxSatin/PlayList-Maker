@@ -197,7 +197,7 @@ class PlayerViewModel(
     private fun updateIsFavoriteStatus(isFavorite: Boolean, track: Track){
         if (clickDebounce()){
             viewModelScope.launch {
-                databaseInteractor.updateIsFavoriteStatus(true, track)
+                databaseInteractor.updateIsFavoriteStatus(isFavorite, track)
             }
         }
     }

@@ -141,12 +141,18 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-    override suspend fun deletePlaylist(playlist: Playlist) {
+    override suspend fun deletePlaylist(playListId: Long) {
         withContext(Dispatchers.IO) {
-            val playlistEntity = converter.map(playlist)
-            appDatabase.playlistDao().deletePlaylist(playlistEntity)
+            appDatabase.playlistDao().deletePlaylist(playListId)
         }
     }
+
+//    override suspend fun deletePlaylist(playlist: Playlist) {
+//        withContext(Dispatchers.IO) {
+//            val playlistEntity = converter.map(playlist)
+//            appDatabase.playlistDao().deletePlaylist(playlistEntity)
+//        }
+//    }
 
     private fun getPlaylistsFromStorage(): List<List<Track>>? {
         val playlistsGson: String? = sharedPrefs.getString(PLAYLIST_KEY, null)

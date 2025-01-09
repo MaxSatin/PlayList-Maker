@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment
 
+import android.view.GestureDetector
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -11,12 +12,30 @@ import java.util.Locale
 
 class TrackItemViewHolder(
     private val binding: TrackItemBinding,
-    onTrackClicked: (position: Int) -> Unit
+//    private val gestureDetector: GestureDetector
+    onSingleTap: (position: Int) -> Unit,
+    onLongPress: (position: Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    init{
-        itemView.setOnClickListener {
-            onTrackClicked(bindingAdapterPosition)
+//    init{
+//        itemView.setOnTouchListener { _, e ->
+////            onTrackClicked(bindingAdapterPosition)
+//            gestureDetector.onTouchEvent(e)
+//            true
+//        }
+//    }
+
+    init {
+        itemView.apply {
+            setOnClickListener {
+                // Обычное нажатие
+                onSingleTap(bindingAdapterPosition)
+            }
+            setOnLongClickListener {
+                // Долгое нажатие
+                onLongPress(bindingAdapterPosition)
+                true
+            }
         }
     }
 

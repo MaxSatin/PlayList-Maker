@@ -77,6 +77,7 @@ class PlaylistDetailsViewModel(
 
                 is TrackListState.Empty -> {
                     trackList = emptyList()
+                    overallDuration = 0L
                     updateState()
                 }
             }
@@ -153,6 +154,12 @@ class PlaylistDetailsViewModel(
             }
             playlistFlow.await()
             trackListFlow.await()
+        }
+    }
+
+    fun deletePlaylist(playlistId: Long){
+        viewModelScope.launch {
+            mediaLibraryInteractor.deletePlaylist(playlistId)
         }
     }
 

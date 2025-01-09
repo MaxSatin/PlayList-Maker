@@ -51,8 +51,12 @@ class MediaLibraryInteractorImpl(
         mediaLibraryRepository.addPlaylist(playlist)
     }
 
-    override suspend fun deletePlaylist(playlist: Playlist) {
-        mediaLibraryRepository.deletePlaylist(playlist)
+    override suspend fun deletePlaylist(playListId: Long) {
+        mediaLibraryRepository.deletePlaylist(playListId)
     }
+
+//    override suspend fun deletePlaylist(playlist: Playlist) {
+//        mediaLibraryRepository.deletePlaylist(playlist)
+//    }
 
 }

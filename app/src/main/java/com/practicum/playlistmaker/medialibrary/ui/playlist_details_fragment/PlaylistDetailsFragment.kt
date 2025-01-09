@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -16,10 +17,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistDetailsFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
@@ -29,6 +32,8 @@ import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_det
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlist_details.viewmodel.PlaylistDetailsViewModel
 import com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlayListFragment
 import com.practicum.playlistmaker.player.ui.PlayerFragment
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 
@@ -42,17 +47,27 @@ class PlaylistDetailsFragment : Fragment() {
 
     private var currentAction: Int = 0
     private var playListId: Long = 0
+    private lateinit var trackId: String
 
     private lateinit var trackListBHBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var editPLBHBehavior: BottomSheetBehavior<ConstraintLayout>
 
-    private lateinit var trackAddedNotificationFadeIn: Animation
-    private lateinit var trackAddedNotificationFadeOut: Animation
+    private var confirmDialogPlaylistExists: MaterialAlertDialogBuilder? = null
 
-    private var trackListAdapter: TrackListAdapter? = TrackListAdapter {
-        trackListBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        viewModel.showTrackPlayer(it)
-    }
+    private lateinit var notificationFadeIn: Animation
+    private lateinit var notificationFadeOut: Animation
+
+
+    private var trackListAdapter: TrackListAdapter? = TrackListAdapter(
+        onSingleTap = { track ->
+            trackListBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            viewModel.showTrackPlayer(track)
+        },
+        onLongPress = { track ->
+            trackId = track.trackId
+            trackNotificationFadeIn()
+        }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,8 +81,14 @@ class PlaylistDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        notificationFadeIn =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        notificationFadeOut =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+
         val playlistId = arguments?.getLong(PLAYLIST_NAME_KEY)
         if (playlistId != null) {
+            playListId = playlistId
             viewModel.loadPlayListDetails(playlistId)
 //            viewModel.loadPlaylistDetailsState(playlistName)
 //            viewModel.getAllTracksFromPlaylist(playlistName)
@@ -92,7 +113,7 @@ class PlaylistDetailsFragment : Fragment() {
                 processData(playListDetails)
             }
 
-        viewModel.getShowFragmentLiveData().observe(viewLifecycleOwner){ parameter ->
+        viewModel.getShowFragmentLiveData().observe(viewLifecycleOwner) { parameter ->
             showFragment(parameter)
 //            handler.postDelayed(
 //                { findNavController().navigate(
@@ -113,11 +134,13 @@ class PlaylistDetailsFragment : Fragment() {
             editPLBHBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-        binding.editEditPl.setOnClickListener{
+        binding.editEditPl.setOnClickListener {
             viewModel.showEditPlayListFragment(playListId)
         }
         currentAction = 0
         binding.toolbar.setOnClickListener {
+            playlistNotificationFadeOut()
+            trackNotificationFadeOut()
             closeBottomSheetAndNavigateBack()
 //            if (trackListBHBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
 //                when (currentAction) {
@@ -130,10 +153,30 @@ class PlaylistDetailsFragment : Fragment() {
 //            currentAction = (currentAction + 1) % 2
         }
 
+        binding.deleteButton.setOnClickListener {
+            onDeleteTrackButtonPressed(playListId, trackId)
+        }
+
+        binding.cancel.setOnClickListener {
+            onCancelButtonPressed()
+        }
+
+        binding.editDeletePl.setOnClickListener {
+            playlistNotificationFadeIn()
+        }
+
+        binding.deletePlaylistButton.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                onDeletePlaylistButtonPressed(playListId)
+            }
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
+                    playlistNotificationFadeOut()
+                    trackNotificationFadeOut()
                     closeBottomSheetAndNavigateBack()
 //                    if (trackListBHBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
 //                        when (currentAction) {
@@ -149,21 +192,26 @@ class PlaylistDetailsFragment : Fragment() {
 
     }
 
-    private fun showFragment(state: NavigateFragment){
-        when(state){
+    private fun showFragment(state: NavigateFragment) {
+        when (state) {
             is NavigateFragment.PlayerFragment -> handler.postDelayed(
-                { findNavController().navigate(
-                    R.id.action_playlistDetailsFragment_to_playerFragment,
-                    PlayerFragment.createArgs(state.trackGson)
-                )},
+                {
+                    findNavController().navigate(
+                        R.id.action_playlistDetailsFragment_to_playerFragment,
+                        PlayerFragment.createArgs(state.trackGson)
+                    )
+                },
                 keyObject,
                 300
             )
+
             is NavigateFragment.EditPlayListFragment -> handler.postDelayed(
-                { findNavController().navigate(
-                    R.id.action_playlistDetailsFragment_to_editPlayListFragment,
-                    EditPlayListFragment.createArgs(state.playListId)
-                )},
+                {
+                    findNavController().navigate(
+                        R.id.action_playlistDetailsFragment_to_editPlayListFragment,
+                        EditPlayListFragment.createArgs(state.playListId)
+                    )
+                },
                 keyObject,
                 300
             )
@@ -215,6 +263,7 @@ class PlaylistDetailsFragment : Fragment() {
             playListId = state.playlist.id
             binding.tracksNumber.text = getTracksNumberAsTextField(state.playlist)
             binding.playlistDuration.text = getPlaylistDurationTextField(state.overallDuration)
+            Log.d("OverAllDuration", "${state.overallDuration}")
         }
     }
 
@@ -252,7 +301,7 @@ class PlaylistDetailsFragment : Fragment() {
         binding.playListPreviewTrackCount.text = getTracksNumberAsTextField(playList)
     }
 
-    private fun upLoadImage(uri: Uri?, imageView: ImageView){
+    private fun upLoadImage(uri: Uri?, imageView: ImageView) {
         Glide.with(binding.root.context)
             .load(uri)
             .placeholder(R.drawable.vector_empty_album_placeholder)
@@ -288,6 +337,74 @@ class PlaylistDetailsFragment : Fragment() {
         binding.emptyPlaylistsPH.isVisible = true
     }
 
+    private fun trackNotificationFadeIn() {
+        handler.removeCallbacksAndMessages(keyObject)
+        handler.postDelayed(
+            {
+                binding.deleteTrackDialog.startAnimation(notificationFadeIn)
+                binding.deleteTrackDialog.isVisible = true
+            },
+            keyObject,
+            ANIMATION_DELAY_MILLIS
+        )
+    }
+
+    private fun trackNotificationFadeOut() {
+        handler.removeCallbacksAndMessages(keyObject)
+        handler.postDelayed(
+            {
+                binding.deleteTrackDialog.startAnimation(notificationFadeOut)
+                binding.deleteTrackDialog.isVisible = false
+            },
+            keyObject,
+            ANIMATION_DELAY_MILLIS
+        )
+    }
+
+    private fun playlistNotificationFadeIn() {
+        handler.removeCallbacksAndMessages(keyObject)
+        handler.postDelayed(
+            {
+                binding.deletePlaylistDialog.startAnimation(notificationFadeIn)
+                binding.deletePlaylistDialog.isVisible = true
+            },
+            keyObject,
+            ANIMATION_DELAY_MILLIS
+        )
+    }
+
+    private fun playlistNotificationFadeOut() {
+        handler.removeCallbacksAndMessages(keyObject)
+        handler.postDelayed(
+            {
+                binding.deletePlaylistDialog.startAnimation(notificationFadeOut)
+                binding.deletePlaylistDialog.isVisible = false
+            },
+            keyObject,
+            200
+        )
+    }
+
+    private fun onDeleteTrackButtonPressed(playListId: Long, trackId: String) {
+        trackNotificationFadeOut()
+        viewModel.deleteTrackFromPlaylist(playListId, trackId)
+    }
+
+    private suspend fun onDeletePlaylistButtonPressed(playListId: Long) {
+        playlistNotificationFadeOut()
+        delay(200)
+        editPLBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        delay(200)
+        viewModel.deletePlaylist(playListId)
+        findNavController().navigate(
+            R.id.action_playlistDetailsFragment_to_mediaLibraryFragment
+        )
+    }
+
+    private fun onCancelButtonPressed() {
+        trackNotificationFadeOut()
+    }
+
 
     private fun attachWordEndingTracks(trackNumber: Int): String {
         return when {
@@ -305,6 +422,7 @@ class PlaylistDetailsFragment : Fragment() {
             minutesAmount % 10 == 0L -> "минут"
             minutesAmount < 10 && minutesAmount % 10 == 1L -> "минута"
             minutesAmount < 10 && minutesAmount % 10 in 2..4 -> "минуты"
+            minutesAmount % 10 in 2..4 -> "минуты"
             minutesAmount % 10 in 5..9 -> "минут"
             minutesAmount % 100 in 11..20 -> "минут"
             else -> ""
@@ -314,6 +432,7 @@ class PlaylistDetailsFragment : Fragment() {
     companion object {
         private val keyObject = Unit
         private const val PLAYLIST_NAME_KEY = "playlistName"
+        private const val ANIMATION_DELAY_MILLIS = 300L
         fun createArgs(playlistId: Long) = bundleOf(
             PLAYLIST_NAME_KEY to playlistId
         )

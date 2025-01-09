@@ -1,17 +1,23 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment
 
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.databinding.TrackItemBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
+import com.practicum.playlistmaker.medialibrary.presentation.utils.CustomGestureListener
 import com.practicum.playlistmaker.medialibrary.ui.favorite_tracks_fragment.FavoriteTrackViewHolder
 
 class TrackListAdapter(
-    private val onTrackClicked: (track: Track) -> Unit,
+//    private val onTrackClicked: (track: Track) -> Unit,
+    private val onSingleTap: (track: Track) -> Unit,
+    private val onLongPress: (track: Track) -> Unit,
 ) : RecyclerView.Adapter<TrackItemViewHolder>() {
 
+    private var gestureDetector: GestureDetector? = null
     private var favoriteTrackList = emptyList<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackItemViewHolder {
         val binding = TrackItemBinding.inflate(
@@ -19,21 +25,70 @@ class TrackListAdapter(
             parent,
             false
         )
-        return TrackItemViewHolder(binding) { position: Int ->
-            if (position != RecyclerView.NO_POSITION)
-                favoriteTrackList.getOrNull(position)?.let { track ->
-                    onTrackClicked(track)
+        return TrackItemViewHolder(
+            binding,
+            onSingleTap = { position: Int ->
+                if (position != RecyclerView.NO_POSITION) {
+                    favoriteTrackList.getOrNull(position)?.let { track ->
+                        onSingleTap(track)
+                    }
                 }
-
-        }
+            },
+            onLongPress = { position: Int ->
+                if (position != RecyclerView.NO_POSITION) {
+                    favoriteTrackList.getOrNull(position)?.let { track ->
+                        onLongPress(track)
+                    }
+                }
+            }
+        )
     }
 
     override fun getItemCount(): Int = favoriteTrackList.size
 
     override fun onBindViewHolder(holder: TrackItemViewHolder, position: Int) {
-        favoriteTrackList.getOrNull(position)?.let { track ->
-            holder.bind(track)
+
+        if (position != RecyclerView.NO_POSITION) {
+            favoriteTrackList.getOrNull(position)?.let { track ->
+                holder.bind(track)
+            }
+
+//            gestureDetector = GestureDetector(
+//                holder.itemView.context,
+//                object : CustomGestureListener(
+//                    onSingleTap = { onSingleTap(favoriteTrackList[holder.bindingAdapterPosition]) },
+//                    onLongPress = { onLongPress(favoriteTrackList[holder.bindingAdapterPosition]) }
+//                ) {
+//                    override fun onLongPress(e: MotionEvent) {
+//                        onLongPress(favoriteTrackList[holder.bindingAdapterPosition])
+//                        super.onLongPress(e)
+//                    }
+//
+//                    override fun onSingleTapUp(e: MotionEvent): Boolean {
+//                        onSingleTap(favoriteTrackList[holder.bindingAdapterPosition])
+//                        return super.onSingleTapUp(e)
+//                    }
+//                }
+//            )
+
+
+
+//            holder.itemView.setOnTouchListener { _, event ->
+//                gestureDetector?.onTouchEvent(event)
+//                true
+//            }
         }
+
+
+//            val gestureDetector = GestureDetector(
+//                holder.itemView.context,
+//                CustomGestureListener(
+//                    onSingleTap = { onSingleTap(position) },
+//                    onLongPress = { onLongPress(position) }
+//                )
+//            )
+
+
     }
 
     fun updateItems(items: List<Track>) {
