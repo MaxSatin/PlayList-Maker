@@ -10,6 +10,7 @@ import com.practicum.playlistmaker.player.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.player.domain.repository.DatabaseRepository
 import com.practicum.playlistmaker.player.domain.model.track_model.Track
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -30,6 +31,16 @@ class DatabaseRepositoryImpl(
         withContext(Dispatchers.IO) {
             val trackEntity = converter.map(track)
             appDatabase.playerTrackDao().removeFromFavorite(trackEntity)
+        }
+    }
+
+    override suspend fun updateIsFavoriteStatus(isFavorite: Boolean, track: Track) {
+        val isInDataBase = appDatabase.playerTrackDao().isTrackInDataBase(track.trackId)
+        if (isInDataBase) {
+            appDatabase.playerTrackDao().updateIsFavoriteStatus(isFavorite, track.trackId)
+        } else {
+            appDatabase.playerTrackDao().insertTrack(converter.map(track))
+            appDatabase.playerTrackDao().updateIsFavoriteStatus(isFavorite, track.trackId)
         }
     }
 

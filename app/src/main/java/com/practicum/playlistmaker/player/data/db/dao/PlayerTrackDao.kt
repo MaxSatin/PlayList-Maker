@@ -21,6 +21,16 @@ interface PlayerTrackDao {
     suspend fun removeFromFavorite(track: TrackEntity)
 
     @Transaction
+    @Query(
+        """
+            UPDATE tracks_table
+            SET isFavorite =:isInFavorite
+            WHERE trackId =:trackID
+            """
+    )
+    suspend fun updateIsFavoriteStatus(isInFavorite:Boolean, trackID: String)
+
+    @Transaction
     @Query("SELECT * FROM playlist_table")
     fun getPlaylists(): Flow<List<PlaylistEntity>>
 

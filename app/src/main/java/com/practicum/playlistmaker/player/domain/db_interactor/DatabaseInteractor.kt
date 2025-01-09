@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface DatabaseInteractor {
     suspend fun saveTrackToDatabase(track: Track)
     suspend fun removeFromFavorite(track: Track)
+    suspend fun updateIsFavoriteStatus(isFavorite: Boolean, track: Track)
     suspend fun getAllTracksFromPlaylist(playlistId: Long): List<Track>
     suspend fun insertPlayListTrackCrossRef(playlistId: Long, track: Track): Long
     suspend fun checkPlaylistHasTrack(trackId: String, playlistId: Long): Boolean

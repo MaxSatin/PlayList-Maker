@@ -17,6 +17,10 @@ class DatabaseInteractorImpl(
         databaseRepository.removeFromFavorite(track)
     }
 
+    override suspend fun updateIsFavoriteStatus(isFavorite: Boolean, track: Track) {
+        databaseRepository.updateIsFavoriteStatus(isFavorite, track)
+    }
+
     override suspend fun getAllTracksFromPlaylist(playlistId: Long): List<Track> {
         return databaseRepository.getAllTracksFromPlaylist(playlistId)
     }
