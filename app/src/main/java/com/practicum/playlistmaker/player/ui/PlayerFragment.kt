@@ -28,12 +28,15 @@ import com.practicum.playlistmaker.player.presentation.state.PlayerState
 import com.practicum.playlistmaker.player.presentation.state.TrackState
 import com.practicum.playlistmaker.player.presentation.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class PlayerFragment : Fragment() {
 
     private var _binding: PlayerFragmentBinding? = null
     private val binding: PlayerFragmentBinding get() = _binding!!
+
+//    private val viewModel: PlayerViewModel by viewModel()
 
     private lateinit var viewModel: PlayerViewModel
     private var isPlayerStarted: Boolean = false
@@ -71,6 +74,7 @@ class PlayerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val trackGson = requireArguments().getString(TRACK_ITEM_KEY)
         viewModel = getViewModel { parametersOf(trackGson) }
+//        viewModel.setTrackGson(trackGson)
 
         trackAddedNotificationFadeIn =
             AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)

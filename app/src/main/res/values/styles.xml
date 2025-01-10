@@ -252,8 +252,9 @@
     </style>
 
     <style name="ClassicAttributes">
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@drawable/playlist_edit_bottom_background</item>
         <item name="android:textColor">@color/yp_black</item>
+
     </style>
 
     <style name="PlaylistNotificationStyle">

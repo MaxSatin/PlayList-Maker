@@ -32,7 +32,6 @@ class PlayerViewModel(
     private val playerInteractor: MediaPlayerInteractor,
     private val gson: Gson,
 ) : AndroidViewModel(application) {
-
     private val trackItem = loadTrackScreen(trackGson)
 
 
@@ -71,6 +70,11 @@ class PlayerViewModel(
     fun resetPlayer() {
         playerInteractor.resetPlayer()
     }
+
+//    fun setTrackGson(trackGson: String?){
+//        if (!trackGson.isNullOrEmpty())
+//        this.trackGson = trackGson
+//    }
 
     fun getPlaylists() {
         viewModelScope.launch {

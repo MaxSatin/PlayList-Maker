@@ -169,40 +169,45 @@ class EditPlayListFragment: Fragment() {
 
 
         binding.imagepickArea.setOnClickListener {
-            lifecycleScope.launch {
-                requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                    .collect { result ->
-                        when (result) {
-                            is PermissionResult.Granted -> {
-                                pickMedia.launch(
-                                    PickVisualMediaRequest(
-                                        ActivityResultContracts.PickVisualMedia.ImageOnly
-                                    )
-                                )
-                            }
-
-                            is PermissionResult.Denied.DeniedPermanently -> {
-                                val intent = Intent(Settings.ACTION_APPLICATION_SETTINGS).apply {
-                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    data = Uri.fromParts("package", context?.packageName, null)
-                                }
-                                context?.startActivity(intent)
-                            }
-
-                            is PermissionResult.Denied.NeedsRationale -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Разрешение требуется для загрузки обложки плейлистов",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-
-                            is PermissionResult.Cancelled -> {
-                                return@collect
-                            }
-                        }
-                    }
-            }
+            pickMedia.launch(
+                PickVisualMediaRequest(
+                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                )
+            )
+//            lifecycleScope.launch {
+//                requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+//                    .collect { result ->
+//                        when (result) {
+//                            is PermissionResult.Granted -> {
+//                                pickMedia.launch(
+//                                    PickVisualMediaRequest(
+//                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+//                                    )
+//                                )
+//                            }
+//
+//                            is PermissionResult.Denied.DeniedPermanently -> {
+//                                val intent = Intent(Settings.ACTION_APPLICATION_SETTINGS).apply {
+//                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                                    data = Uri.fromParts("package", context?.packageName, null)
+//                                }
+//                                context?.startActivity(intent)
+//                            }
+//
+//                            is PermissionResult.Denied.NeedsRationale -> {
+//                                Toast.makeText(
+//                                    requireContext(),
+//                                    "Разрешение требуется для загрузки обложки плейлистов",
+//                                    Toast.LENGTH_LONG
+//                                ).show()
+//                            }
+//
+//                            is PermissionResult.Cancelled -> {
+//                                return@collect
+//                            }
+//                        }
+//                    }
+//            }
 
         }
 

@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment
 
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -174,19 +175,11 @@ class PlaylistDetailsFragment : Fragment() {
         }
 
         binding.shareIc.setOnClickListener{
-            if (isTrackListEmpty){
-                showNothingToShareNote()
-            } else {
-                viewModel.share()
-            }
+           sharePlaylist()
         }
 
         binding.editShare.setOnClickListener{
-            if (isTrackListEmpty){
-                showNothingToShareNote()
-            } else {
-                viewModel.share()
-            }
+            sharePlaylist()
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -237,7 +230,13 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun sharePlaylist() {
-
+        if (isTrackListEmpty){
+            editPLBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            showNothingToShareNote()
+        } else {
+            editPLBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            viewModel.share()
+        }
     }
 
     private fun closeBottomSheetAndNavigateBack() {
@@ -338,12 +337,16 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun upLoadImage(uri: Uri?, imageView: ImageView) {
-        Glide.with(binding.root.context)
-            .load(uri)
-            .placeholder(R.drawable.vector_empty_album_placeholder)
-            .fitCenter()
-            .transform(RoundedCorners(8))
-            .into(imageView)
+//        Glide.with(binding.root.context)
+//            .load(uri)
+//            .placeholder(R.drawable.vector_empty_album_placeholder)
+//            .fitCenter()
+//            .transform(RoundedCorners(8))
+//            .into(imageView)
+        val inputStream = requireContext().contentResolver.openInputStream(uri!!)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        imageView.setImageBitmap(bitmap)
+        inputStream?.close()
     }
 
     private fun getTracksNumberAsTextField(playlist: Playlist): String {
@@ -463,6 +466,11 @@ class PlaylistDetailsFragment : Fragment() {
             minutesAmount % 100 in 11..20 -> "минут"
             else -> ""
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadPlayListDetails(this.playListId)
     }
 
     companion object {
