@@ -39,10 +39,10 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
-class CreatePlayListsFragment : Fragment() {
+open class CreatePlayListsFragment : Fragment() {
 
-    private var _binding: CreatePlaylistFragmentBinding? = null
-    private val binding get() = _binding!!
+    var _binding: CreatePlaylistFragmentBinding? = null
+    val binding get() = _binding!!
 
     private val requester = PermissionRequester.instance()
 
@@ -61,7 +61,7 @@ class CreatePlayListsFragment : Fragment() {
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private val viewModel: CreatePlayListsViewModel by viewModel()
+    open val viewModel: CreatePlayListsViewModel by viewModel()
 
     private var isClickAllowed: Boolean = true
     private val setClickTrueDebounce = debounce<Boolean>(

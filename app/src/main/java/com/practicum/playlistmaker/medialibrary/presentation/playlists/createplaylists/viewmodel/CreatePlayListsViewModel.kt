@@ -12,8 +12,7 @@ import com.practicum.playlistmaker.medialibrary.domain.screen_state.create_playl
 import com.practicum.playlistmaker.search.presentation.utils.debounce
 import kotlinx.coroutines.launch
 
-
-class CreatePlayListsViewModel(
+open class CreatePlayListsViewModel(
     private val mediaLibraryInteractor: MediaLibraryInteractor,
 ) : ViewModel() {
 

@@ -230,10 +230,11 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    fun showEditPlayListFragment(playListId: Long) {
+    fun showEditPlayListFragment(playList: Playlist?) {
         if (clickDebounce()) {
+            val playlistGson = gson.toJson(playList)
             showFragmentLiveData.postValue(
-                NavigateFragment.EditPlayListFragment(playListId)
+                NavigateFragment.EditPlayListFragment(playlistGson)
             )
         }
     }

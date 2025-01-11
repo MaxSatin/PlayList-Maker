@@ -32,6 +32,7 @@ import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_det
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.PlaylistDetailsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlist_details.viewmodel.PlaylistDetailsViewModel
 import com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlayListFragment
+import com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlaylistDataFragment
 import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.player.ui.PlayerFragment.Companion
 import kotlinx.coroutines.delay
@@ -51,6 +52,7 @@ class PlaylistDetailsFragment : Fragment() {
     private var playListId: Long = 0
     private var isTrackListEmpty: Boolean = false
     private lateinit var trackId: String
+    private var playlist: Playlist? = null
 
     private lateinit var trackListBHBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var editPLBHBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -138,7 +140,7 @@ class PlaylistDetailsFragment : Fragment() {
         }
 
         binding.editEditPl.setOnClickListener {
-            viewModel.showEditPlayListFragment(playListId)
+            viewModel.showEditPlayListFragment(playlist)
         }
         currentAction = 0
         binding.toolbar.setOnClickListener {
@@ -219,8 +221,8 @@ class PlaylistDetailsFragment : Fragment() {
             is NavigateFragment.EditPlayListFragment -> handler.postDelayed(
                 {
                     findNavController().navigate(
-                        R.id.action_playlistDetailsFragment_to_editPlayListFragment,
-                        EditPlayListFragment.createArgs(state.playListId)
+                        R.id.action_playlistDetailsFragment_to_editPlaylistDataFragment,
+                        EditPlaylistDataFragment.createArgs(state.playListGson)
                     )
                 },
                 keyObject,
@@ -282,6 +284,7 @@ class PlaylistDetailsFragment : Fragment() {
         if (state.playlist != null) {
             loadPlayListData(state.playlist)
             playListId = state.playlist.id
+            this.playlist = state.playlist
             binding.tracksNumber.text = getTracksNumberAsTextField(state.playlist)
             binding.playlistDuration.text = getPlaylistDurationTextField(state.overallDuration)
             Log.d("OverAllDuration", "${state.overallDuration}")
@@ -471,6 +474,12 @@ class PlaylistDetailsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.loadPlayListDetails(this.playListId)
+    }
+
+    override fun onDestroyView() {
+        trackListAdapter = null
+        playlist = null
+        super.onDestroyView()
     }
 
     companion object {
