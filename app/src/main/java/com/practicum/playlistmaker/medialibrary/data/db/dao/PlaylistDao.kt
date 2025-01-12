@@ -54,7 +54,7 @@ interface PlaylistDao {
     LEFT JOIN playlistcrossref_table AS crossref
         ON p.playlistId = crossref.playListId
     WHERE p.playlistId = :playListId
-    GROUP BY p.playlistName
+    GROUP BY p.playlistId, p.playlistName, p.description, p.coverUri, p.trackCount, p.containsCurrentTrack
     LIMIT 1
         """
     )

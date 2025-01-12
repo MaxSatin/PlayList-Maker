@@ -54,7 +54,7 @@ open class CreatePlayListsViewModel(
         }
     }
 
-    private fun clickDebounce(): Boolean {
+    fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false

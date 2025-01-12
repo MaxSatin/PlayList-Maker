@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -140,7 +141,7 @@ class PlaylistDetailsFragment : Fragment() {
         }
 
         binding.editEditPl.setOnClickListener {
-            viewModel.showEditPlayListFragment(playlist)
+            viewModel.showEditPlayListFragment(playListId)
         }
         currentAction = 0
         binding.toolbar.setOnClickListener {
@@ -174,6 +175,10 @@ class PlaylistDetailsFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 onDeletePlaylistButtonPressed(playListId)
             }
+        }
+
+        binding.cancelPlaylistDeletion.setOnClickListener{
+            onCancelButtonPressed()
         }
 
         binding.shareIc.setOnClickListener{
@@ -222,7 +227,7 @@ class PlaylistDetailsFragment : Fragment() {
                 {
                     findNavController().navigate(
                         R.id.action_playlistDetailsFragment_to_editPlaylistDataFragment,
-                        EditPlaylistDataFragment.createArgs(state.playListGson)
+                        EditPlaylistDataFragment.createArgs(state.playListId)
                     )
                 },
                 keyObject,
@@ -340,16 +345,30 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun upLoadImage(uri: Uri?, imageView: ImageView) {
-//        Glide.with(binding.root.context)
-//            .load(uri)
-//            .placeholder(R.drawable.vector_empty_album_placeholder)
-//            .fitCenter()
-//            .transform(RoundedCorners(8))
-//            .into(imageView)
-        val inputStream = requireContext().contentResolver.openInputStream(uri!!)
-        val bitmap = BitmapFactory.decodeStream(inputStream)
-        imageView.setImageBitmap(bitmap)
-        inputStream?.close()
+        Glide.with(binding.root.context)
+            .load(uri)
+            .placeholder(R.drawable.vector_empty_album_placeholder)
+            .fitCenter()
+            .transform(RoundedCorners(8))
+            .into(imageView)
+
+//        val contentResolver = requireContext().contentResolver
+//
+//        val inputStream = requireContext().contentResolver.openInputStream(uri!!)
+//        val bitmap = BitmapFactory.decodeStream(inputStream)
+//        imageView.setImageBitmap(bitmap)
+//        inputStream?.close()
+    }
+
+    private fun takePersistableUriPermission(uri: Uri) {
+        try {
+            val contentResolver = requireActivity().contentResolver
+            val flags =
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            contentResolver.takePersistableUriPermission(uri, flags)
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
     }
 
     private fun getTracksNumberAsTextField(playlist: Playlist): String {

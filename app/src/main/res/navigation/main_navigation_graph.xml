@@ -101,9 +101,6 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
         <action
-            android:id="@+id/action_playlistDetailsFragment_to_editPlayListFragment"
-            app:destination="@id/editPlayListFragment" />
-        <action
             android:id="@+id/action_playlistDetailsFragment_to_mediaLibraryFragment"
             app:destination="@id/mediaLibraryFragment" />
         <action
@@ -129,5 +126,9 @@
     <fragment
         android:id="@+id/editPlaylistDataFragment"
         android:name="com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlaylistDataFragment"
-        android:label="EditPlaylistDataFragment" />
+        android:label="EditPlaylistDataFragment" >
+        <action
+            android:id="@+id/action_editPlaylistDataFragment_to_playlistDetailsFragment"
+            app:destination="@id/playlistDetailsFragment" />
+    </fragment>
 </navigation>

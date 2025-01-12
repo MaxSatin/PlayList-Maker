@@ -97,9 +97,9 @@ class EditPlayListFragment: Fragment() {
             AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
 
         val pickMedia =
-            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                 uri?.let {
-                    grantPersistableUriPermission(it)
+                    takePersistableUriPermission(it)
                     coverUri = uri
                     binding.imagepickArea.setImageURI(uri)
                     saveImageToPrivateStorage(uri)
@@ -169,45 +169,43 @@ class EditPlayListFragment: Fragment() {
 
 
         binding.imagepickArea.setOnClickListener {
-            pickMedia.launch(
-                PickVisualMediaRequest(
-                    ActivityResultContracts.PickVisualMedia.ImageOnly
-                )
-            )
-//            lifecycleScope.launch {
-//                requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-//                    .collect { result ->
-//                        when (result) {
-//                            is PermissionResult.Granted -> {
-//                                pickMedia.launch(
-//                                    PickVisualMediaRequest(
-//                                        ActivityResultContracts.PickVisualMedia.ImageOnly
-//                                    )
-//                                )
-//                            }
-//
-//                            is PermissionResult.Denied.DeniedPermanently -> {
-//                                val intent = Intent(Settings.ACTION_APPLICATION_SETTINGS).apply {
-//                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                                    data = Uri.fromParts("package", context?.packageName, null)
-//                                }
-//                                context?.startActivity(intent)
-//                            }
-//
-//                            is PermissionResult.Denied.NeedsRationale -> {
-//                                Toast.makeText(
-//                                    requireContext(),
-//                                    "Разрешение требуется для загрузки обложки плейлистов",
-//                                    Toast.LENGTH_LONG
-//                                ).show()
-//                            }
-//
-//                            is PermissionResult.Cancelled -> {
-//                                return@collect
-//                            }
-//                        }
-//                    }
-//            }
+//            pickMedia.launch(
+//                PickVisualMediaRequest(
+//                    ActivityResultContracts.PickVisualMedia.ImageOnly
+//                )
+//            )
+            lifecycleScope.launch {
+                requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    .collect { result ->
+                        when (result) {
+                            is PermissionResult.Granted -> {
+                                pickMedia.launch(
+                                    arrayOf("image/*")
+                                )
+                            }
+
+                            is PermissionResult.Denied.DeniedPermanently -> {
+                                val intent = Intent(Settings.ACTION_APPLICATION_SETTINGS).apply {
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    data = Uri.fromParts("package", context?.packageName, null)
+                                }
+                                context?.startActivity(intent)
+                            }
+
+                            is PermissionResult.Denied.NeedsRationale -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Разрешение требуется для загрузки обложки плейлистов",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
+                            is PermissionResult.Cancelled -> {
+                                return@collect
+                            }
+                        }
+                    }
+            }
 
         }
 
@@ -273,6 +271,7 @@ class EditPlayListFragment: Fragment() {
             initPlayListDescription = description
             binding.playlistDescriptionInputEditText.setText(initPlayListDescription)
             initCoverUri = coverUri
+            takePersistableUriPermission(coverUri!!)
             binding.imagepickArea.setImageURI(initCoverUri)
         }
     }
@@ -392,7 +391,7 @@ class EditPlayListFragment: Fragment() {
         return this + suffix
     }
 
-    private fun grantPersistableUriPermission(uri: Uri) {
+    private fun takePersistableUriPermission(uri: Uri) {
         try {
             val contentResolver = requireActivity().contentResolver
             val flags =

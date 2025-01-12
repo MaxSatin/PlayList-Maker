@@ -91,7 +91,7 @@ open class CreatePlayListsFragment : Fragment() {
             AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
 
         val pickMedia =
-            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                 uri?.let {
                     grantPersistableUriPermission(it)
                     coverUri = uri
@@ -157,19 +157,23 @@ open class CreatePlayListsFragment : Fragment() {
 
         binding.imagepickArea.setOnClickListener {
             lifecycleScope.launch {
-                requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                requester.request(
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.READ_MEDIA_IMAGES,
+                    )
                     .collect { result ->
                         when (result) {
                             is PermissionResult.Granted -> {
                                 pickMedia.launch(
-                                    PickVisualMediaRequest(
-                                        ActivityResultContracts.PickVisualMedia.ImageOnly
-                                    )
+                                    arrayOf("image/*")
+//                                    PickVisualMediaRequest(
+//                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+//                                    )
                                 )
                             }
 
                             is PermissionResult.Denied.DeniedPermanently -> {
-                                val intent = Intent(Settings.ACTION_APPLICATION_SETTINGS).apply {
+                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     data = Uri.fromParts("package", context?.packageName, null)
                                 }
@@ -293,7 +297,7 @@ open class CreatePlayListsFragment : Fragment() {
         )
     }
 
-    private fun endEditing() {
+    open fun endEditing() {
         notificationFadeOut()
         findNavController().navigateUp()
     }
@@ -302,7 +306,7 @@ open class CreatePlayListsFragment : Fragment() {
         notificationFadeOut()
     }
 
-    private fun saveImageToPrivateStorage(uri: Uri) {
+    fun saveImageToPrivateStorage(uri: Uri) {
         val filePath = File(
             requireActivity()
                 .getExternalFilesDir(Environment.DIRECTORY_PICTURES),
@@ -326,7 +330,7 @@ open class CreatePlayListsFragment : Fragment() {
             )
     }
 
-    private fun clickDebounce(): Boolean {
+    fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
