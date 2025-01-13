@@ -42,13 +42,15 @@
     <string name="check_deletion_intent">Вы уверены, что хотите удалить трек из\nплейлиста?</string>
 
     <string name="delete_playlist">Удалить плейлист</string>
-    <string name="check_playlist_deletion_intent">Вы уверены, что хотите удалить плейлист?</string>
+    <string name="check_playlist_deletion_intent">Хотите удалить плейлист?</string>
     <string name="nothing_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
 
 
     <string name="finish_editing">Завершить</string>
     <string name="cancel">Отмена</string>
     <string name="confirm_deletion">Удалить</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 
 
     <string name="add_to_playlist">Добавить в плейлист</string>
