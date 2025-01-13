@@ -185,22 +185,12 @@ class PlayerViewModel(
 
     fun controlFavoriteState() {
         if (trackItem.isFavorite) {
-//            removeFromFavorite()
             updateIsFavoriteStatus(false, trackItem)
         } else {
-//            saveTrackToFavorites()
             updateIsFavoriteStatus(true, trackItem)
         }
     }
 
-//    private fun saveTrackToFavorites() {
-//        if (clickDebounce()) {
-//            viewModelScope.launch {
-//                trackItem.isFavorite = true
-//                databaseInteractor.saveTrackToDatabase(trackItem)
-//            }
-//        }
-//    }
 
     private fun updateIsFavoriteStatus(isFavorite: Boolean, track: Track){
         if (clickDebounce()){
@@ -209,15 +199,6 @@ class PlayerViewModel(
             }
         }
     }
-
-//    private fun removeFromFavorite() {
-//        if (clickDebounce()) {
-//            viewModelScope.launch {
-//                trackItem.isFavorite = false
-//                databaseInteractor.removeFromFavorite(trackItem)
-//            }
-//        }
-//    }
 
     fun playerController() {
         if (playerInteractor.isPlaying()) {

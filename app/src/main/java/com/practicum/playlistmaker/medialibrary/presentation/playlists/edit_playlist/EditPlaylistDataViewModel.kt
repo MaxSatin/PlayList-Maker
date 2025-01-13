@@ -18,27 +18,12 @@ class EditPlaylistDataViewModel(
     private val gson: Gson,
 ) : CreatePlayListsViewModel(mediaLibraryInteractor) {
 
-//    private val playlistEditInfoLiveData = MutableLiveData<EditPlaylistDataState>()
-//    fun getPlayListInfoLiveData(): LiveData<EditPlaylistDataState> = playlistEditInfoLiveData
-//
-//    fun initializePlaylistData(playlistGson: String){
-//        val playlist = gson.fromJson<Playlist>(playlistGson, Playlist::class.java)
-//        playlistEditInfoLiveData.postValue(
-//            EditPlaylistDataState.Content(
-//                playlist,
-//                "Редактировать",
-//                "Сохранить"
-//            )
-//        )
-//    }
-
     private var isCopyNeeded = false
 
     private val playlistDetailsLiveData = MutableLiveData<EditPlaylistDataState>()
     fun getPlaylistDetailsLiveData(): LiveData<EditPlaylistDataState> = playlistDetailsLiveData
 
     private val playlistsState = MutableLiveData<CreatePlaylistState>()
-//    fun permissionStateLiveData(): LiveData<CreatePlaylistState> = playlistsState
 
     private var isClickAllowed = true
     private val setIsClickAllowed = debounce<Boolean>(
@@ -54,23 +39,6 @@ class EditPlaylistDataViewModel(
     init {
         isCopyNeeded = false
     }
-
-//    fun checkPlaylistDebounce(playlist: Playlist) {
-//        if (latestCheckedPlayList == playlist) {
-//            return
-//        }
-//        this.latestCheckedPlayList = playlist
-//        checkPlaylistDebounce(playlist)
-//    }
-
-//    fun checkCurrentPlaylists() {
-//        viewModelScope.launch {
-//            mediaLibraryInteractor.getPlaylists()
-//                .collect { playlists ->
-//                    renderState(CreatePlaylistState.Content(playlists))
-//                }
-//        }
-//    }
 
     fun loadPlaylistDetailsState(playlistId: Long) {
         viewModelScope.launch {

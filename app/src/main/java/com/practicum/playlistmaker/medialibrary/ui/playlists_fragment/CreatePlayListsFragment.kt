@@ -175,9 +175,6 @@ open class CreatePlayListsFragment : Fragment() {
                             is PermissionResult.Granted -> {
                                 pickMedia.launch(
                                     arrayOf("image/*")
-//                                    PickVisualMediaRequest(
-//                                        ActivityResultContracts.PickVisualMedia.ImageOnly
-//                                    )
                                 )
                             }
 

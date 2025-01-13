@@ -19,8 +19,3 @@ data class PlaylistEntity(
     val containsCurrentTrack: Boolean,
     val timeStamp:Long = System.currentTimeMillis()
 )
-//    @Relation(
-//        parentColumn = "playlistName",
-//        entityColumn = "trackId",
-//        associateBy = Junction(PlaylistCrossRef::class)
-//    )

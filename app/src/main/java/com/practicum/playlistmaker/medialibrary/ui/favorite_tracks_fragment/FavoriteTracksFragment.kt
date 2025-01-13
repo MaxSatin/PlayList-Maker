@@ -103,9 +103,7 @@ class FavoriteTracksFragment() : Fragment() {
 
         fun newInstance(favoriteListScreenState: FavoriteListScreenState): FavoriteTracksFragment {
             TODO()
-//            return FavoriteTracksFragment().apply {
-//                arguments = bundleOf(FAVORITE_TRACKLIST to ArrayList(favoriteTracks))
-//                Log.d("favoritesFragmentNewInstance", "$favoriteTracks")
+
         }
     }
 }

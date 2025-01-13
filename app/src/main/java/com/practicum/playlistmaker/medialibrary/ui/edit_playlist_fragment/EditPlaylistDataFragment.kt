@@ -87,7 +87,6 @@ class EditPlaylistDataFragment : CreatePlayListsFragment() {
                     takePersistableUriPermission(it)
                     coverUri = uri
                     upLoadImage(uri, binding.imagepickArea)
-//                    binding.imagepickArea.setImageURI(uri)
                     saveImageToPrivateStorage(uri)
                     Log.d("ViewmodelCoverUri", "$coverUri")
                 }
@@ -127,8 +126,6 @@ class EditPlaylistDataFragment : CreatePlayListsFragment() {
             isClickAllowed = true
         }
 
-//        viewModel.checkCurrentPlaylists()
-
         viewModel.permissionStateLiveData().observe(viewLifecycleOwner) { state ->
             if (state is CreatePlaylistState.Content) {
                 this.playLists = state.playLists
@@ -143,39 +140,6 @@ class EditPlaylistDataFragment : CreatePlayListsFragment() {
 
         binding.imagepickArea.setOnClickListener {
             pickMedia.launch(arrayOf("image/*"))
-//            lifecycleScope.launch {
-//                requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-//                    .collect { result ->
-//                        when (result) {
-//                            is PermissionResult.Granted -> {
-//                                pickMedia.launch(
-//                                    arrayOf("image/*")
-//                                )
-//                            }
-//
-//                            is PermissionResult.Denied.DeniedPermanently -> {
-//                                val intent = Intent(Settings.ACTION_APPLICATION_SETTINGS).apply {
-//                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                                    data = Uri.fromParts("package", context?.packageName, null)
-//                                }
-//                                context?.startActivity(intent)
-//                            }
-//
-//                            is PermissionResult.Denied.NeedsRationale -> {
-//                                Toast.makeText(
-//                                    requireContext(),
-//                                    "Разрешение требуется для загрузки обложки плейлистов",
-//                                    Toast.LENGTH_LONG
-//                                ).show()
-//                            }
-//
-//                            is PermissionResult.Cancelled -> {
-//                                return@collect
-//                            }
-//                        }
-//                    }
-//            }
-
         }
 
         confirmDialogPlaylistExists = MaterialAlertDialogBuilder(requireContext())
@@ -245,7 +209,6 @@ class EditPlaylistDataFragment : CreatePlayListsFragment() {
             initPlayListDescription = description
             binding.playlistDescriptionInputEditText.setText(initPlayListDescription)
             initCoverUri = coverUri
-//            takePersistableUriPermission(coverUri!!)
             upLoadImage(initCoverUri, binding.imagepickArea)
         }
         binding.toolbar.title = state.fragmentTitle
@@ -264,17 +227,10 @@ class EditPlaylistDataFragment : CreatePlayListsFragment() {
     private fun processState(state: CreatePlaylistState) {
         when (state) {
             is CreatePlaylistState.Content -> {
-//                playlist = Playlist(
-//                    playlistId, this.playListName, playListDescription, coverUri, 0, false)
-//                val filteredPlaylist = this.playLists.find { it.name == this.playListName }
-
                 Log.d("ViewmodelInitName", "$initPlayListName")
                 Log.d("Viewmodelname", "$playListName")
                 Log.d("ViewmodelCoverUri", "$coverUri")
 
-//                if (filteredPlaylist == null) {
-//                    if (playListName != initPlayListName || playListDescription != initPlayListDescription || coverUri != initCoverUri) {
-//                        viewModel.addPlaylistWithReplace(playlist)
                 val playlistNameUpdated =
                     if (!initPlayListName.equals(playListName)) playListName else initPlayListName
                 val playlistDescriptionUpdated =
@@ -292,18 +248,12 @@ class EditPlaylistDataFragment : CreatePlayListsFragment() {
                     R.id.action_editPlaylistDataFragment_to_playlistDetailsFragment,
                     PlaylistDetailsFragment.createArgs(playlistId)
                 )
-
-//                    }
-//                } else if(playListName == initPlayListName && playListDescription == initPlayListDescription && coverUri == initCoverUri) {
-//                    confirmDialogPlaylistExists?.show()
-//                }
                 Log.d("Playlists", "${state.playLists}")
             }
         }
     }
 
     private fun checkExistsAndSet() {
-//        playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
         val filteredPlaylist = playLists.find { it.name == playlist.name }
         Log.d("ViewmodelPlaylist", "$filteredPlaylist")
         if (filteredPlaylist == null) {

@@ -100,45 +100,7 @@ class PlaylistDetailsViewModel(
         }
     }
 
-
-    fun getPlayListDetailsMediatorLiveData(): LiveData<PlaylistDetailsScreenState> =
-        playListMediatorLiveData
-//    private val playListMediatorLiveData =
-//        MediatorLiveData<PlaylistDetailsScreenState>().also { liveData ->
-//
-//            var overallDuration: Long = 0L
-//            var playlist: Playlist? = null
-//            var trackList: List<Track>? = null
-//            liveData.addSource(playlistDetailsLiveData) { playListState ->
-//                playlist = when (playListState) {
-//                    is PlaylistState.DetailsState -> playListState.playlist
-//                    is PlaylistState.Empty -> null
-//                }
-//            }
-//            liveData.addSource(trackListLiveData) { trackListState ->
-//                when (trackListState) {
-//                    is TrackListState.Contents -> {
-//                        viewModelScope.launch {
-//                            overallDuration = provideOverallTrackLength(trackListState.trackList)
-//                        }
-//                        trackList = trackListState.trackList
-//                    }
-//                    is TrackListState.Empty -> trackList = emptyList()
-//                }
-//            }
-//
-//            liveData.postValue(PlaylistDetailsScreenState.Loading)
-//
-//            if (playlist != null && trackList != null) {
-//                liveData.postValue(
-//                    PlaylistDetailsScreenState.DetailsState(
-//                        overallDuration,
-//                        playlist,
-//                        trackList
-//                    )
-//                )
-//            }
-//        }
+    fun getPlayListDetailsMediatorLiveData(): LiveData<PlaylistDetailsScreenState> = playListMediatorLiveData
 
     private var isClickAllowed: Boolean = true
 
@@ -152,8 +114,6 @@ class PlaylistDetailsViewModel(
 
     fun loadPlayListDetails(playlistId: Long) {
         viewModelScope.launch {
-//            val playList = mediaLibraryInteractor.getPlaylistByName(playlistName)
-//            processPlayListResult(playList)
 
             val playlistFlow = async {
                 mediaLibraryInteractor.getPlaylistById(playlistId)
@@ -187,25 +147,6 @@ class PlaylistDetailsViewModel(
                 }
         }
     }
-
-//    private fun loadPlaylistDetailsState(playlistName: String) {
-//        viewModelScope.launch {
-//            val playList = mediaLibraryInteractor.getPlaylistByName(playlistName)
-//            processPlayListResult(playList)
-//        }
-//    }
-
-//    fun loadPlaylistDetails(playlistName: String) {
-//        viewModelScope.launch {
-//            val playlist = mediaLibraryInteractor.getPlaylistByName(playlistName)
-//            renderPlaylistState(
-//                getCurrentPlaylistDetailsScreenState().copy(
-//                    playlist = playlist,
-//                    emptyMessage = ""
-//                )
-//            )
-//        }
-//    }
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
@@ -242,26 +183,11 @@ class PlaylistDetailsViewModel(
         }
     }
 
-//    fun updatePlayList(oldName: String, newName: String) {
-//        viewModelScope.launch {
-//            mediaLibraryInteractor.updatePlaylist(oldName, newName)
-//        }
-//    }
-
     fun deleteTrackFromPlaylist(playlistId: Long, trackId: String) {
         viewModelScope.launch {
             mediaLibraryInteractor.deleteTrackFromPlaylist(playlistId, trackId)
         }
     }
-
-//    private fun getCurrentPlaylistDetailsScreenState(): PlaylistDetailsScreenState {
-//        return playlistDetailsLiveData.value ?: PlaylistDetailsScreenState(
-//            0L,
-//            null,
-//            emptyList(),
-//            "Данные о треках и плейлисте отсутствуют"
-//        )
-//    }
 
     private fun renderPlaylistState(state: PlaylistState) {
         playlistDetailsLiveData.postValue(state)
@@ -284,30 +210,16 @@ class PlaylistDetailsViewModel(
         }
     }
 
-
     private fun processTrackListResult(trackList: List<Track>) {
         if (trackList.isEmpty()) {
             renderTrackListState(
                 TrackListState.Empty("Список треков пуст!")
-//                getCurrentPlaylistDetailsScreenState().copy(
-//                    contents = emptyList(),
-//                    emptyMessage = "Список плейлистов пуст!"
-//                )
             )
         } else {
-//            viewModelScope.launch {
-//                val playlistDuration = provideOverallTrackLength(trackList)
             renderTrackListState(
                 TrackListState.Contents(
-//                        overallDuration = playlistDuration,
                     trackList = trackList,
                 )
-//                    getCurrentPlaylistDetailsScreenState().copy(
-//                        isLoading = false,
-//                        overallDuration = playlistDuration,
-//                        contents = trackList,
-//                        emptyMessage = ""
-//                    )
             )
         }
 
@@ -323,7 +235,6 @@ class PlaylistDetailsViewModel(
             else -> ""
         }
     }
-
 
     private companion object {
 

@@ -77,13 +77,6 @@ class PlayListsFragment() : Fragment() {
                 processState(playlistScreenState)
             }
 
-//        if (!arguments?.getString(PLAYLIST_CREATED).isNullOrEmpty()) {
-//            var playlistName: String? = arguments?.getString(PLAYLIST_CREATED)
-//            Log.d("PlaylistArgs", "${arguments?.getString(PLAYLIST_CREATED)}")
-//            showAddedInPlaylistNotification("Плейлист $playlistName создан!")
-//        }
-
-
         binding.createPlayListButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_mediaLibraryFragment_to_createPlayListsFragment
@@ -109,9 +102,6 @@ class PlayListsFragment() : Fragment() {
 
     private fun showContent(playlists: List<Playlist>) {
         val playlist = playlists.firstOrNull()
-//        if (isFirstTimeLoaded) {
-//            isFirstTimeLoaded = false
-//        } else {
             var areListsEqual = areListsAreEqual(lastPostedList, playlists) { p1, p2 ->
                 p1.id == p2.id
             }

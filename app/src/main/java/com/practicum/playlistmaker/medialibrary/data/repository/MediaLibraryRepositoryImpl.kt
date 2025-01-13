@@ -86,19 +86,6 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-//    override suspend fun getPlaylistByName(playlistName: String): Playlist {
-//        return withContext(Dispatchers.IO) {
-//            try {
-//                val playlistEntity = appDatabase.playlistDao().getPlaylistByName(playlistName)
-//                    ?: throw NullPointerException("Playlist not found")
-//                converter.map(playlistEntity)
-//            } catch (e: NullPointerException) {
-//                Log.e("PlaylistRepository", "Error fetching playlist", e)
-//                Playlist("", "", "".toUri(), 0, false)
-//            }
-//        }
-//    }
-
     override suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: String) {
         withContext(Dispatchers.IO) {
             appDatabase.playlistDao().deleteTrackFromPlaylist(playlistId, trackId)
@@ -130,26 +117,6 @@ class MediaLibraryRepositoryImpl(
         }
     }
 
-//    override suspend fun updatePlaylist(
-//        playlistId: Long,
-//        newPlaylistName: String,
-//        newDescription: String,
-//        newCoverUri: String
-//    ) {
-
-//        withContext(Dispatchers.IO) {
-//            appDatabase.playlistDao()
-//                .updatePlaylistTable(oldPlaylistName, newPlaylistName, newDescription, newCoverUri)
-//        }
-//        appDatabase.playlistDao().updateCrossRefTable(oldPlaylistName, newPlaylistName)
-//        val name = oldPlaylistName
-//        val new = newPlaylistName
-//        Log.d("oldPlaylistName","$name")
-//        Log.d("newPlaylistName","$new")
-//        appDatabase.playlistDao().updatePlaylistTable(oldPlaylistName, newPlaylistName, newDescription, newCoverUri)
-//    }
-
-
     override suspend fun addPlaylistWithReplace(playlist: Playlist) {
         withContext(Dispatchers.IO) {
             val playlistEntity = converter.map(playlist)
@@ -169,13 +136,6 @@ class MediaLibraryRepositoryImpl(
             appDatabase.playlistDao().deletePlaylist(playListId)
         }
     }
-
-//    override suspend fun deletePlaylist(playlist: Playlist) {
-//        withContext(Dispatchers.IO) {
-//            val playlistEntity = converter.map(playlist)
-//            appDatabase.playlistDao().deletePlaylist(playlistEntity)
-//        }
-//    }
 
     private fun getPlaylistsFromStorage(): List<List<Track>>? {
         val playlistsGson: String? = sharedPrefs.getString(PLAYLIST_KEY, null)

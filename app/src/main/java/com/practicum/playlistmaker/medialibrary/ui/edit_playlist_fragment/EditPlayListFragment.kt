@@ -169,11 +169,6 @@ class EditPlayListFragment: Fragment() {
 
 
         binding.imagepickArea.setOnClickListener {
-//            pickMedia.launch(
-//                PickVisualMediaRequest(
-//                    ActivityResultContracts.PickVisualMedia.ImageOnly
-//                )
-//            )
             lifecycleScope.launch {
                 requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE)
                     .collect { result ->
@@ -286,9 +281,6 @@ class EditPlayListFragment: Fragment() {
                 Log.d("ViewmodelInitName", "$initPlayListName")
                 Log.d("Viewmodelname", "$playListName")
 
-//                if (filteredPlaylist == null) {
-//                    if (playListName != initPlayListName || playListDescription != initPlayListDescription || coverUri != initCoverUri) {
-//                        viewModel.addPlaylistWithReplace(playlist)
                         viewModel.updatePlaylist(
                             playlistId,
                             playListName,
@@ -300,17 +292,12 @@ class EditPlayListFragment: Fragment() {
                             PlaylistDetailsFragment.createArgs(playlistId)
                         )
 
-//                    }
-//                } else if(playListName == initPlayListName && playListDescription == initPlayListDescription && coverUri == initCoverUri) {
-//                    confirmDialogPlaylistExists?.show()
-//                }
                 Log.d("Playlists", "${state.playLists}")
             }
         }
     }
 
     private fun checkExistsAndSet() {
-//        playlist = Playlist(playListName, playListDescription, coverUri, 0, false)
         val filteredPlaylist = playLists.find { it.name == playlist.name }
         Log.d("ViewmodelPlaylist", "$filteredPlaylist")
         if (filteredPlaylist == null) {

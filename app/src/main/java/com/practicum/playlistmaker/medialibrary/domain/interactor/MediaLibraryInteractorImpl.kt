@@ -29,10 +29,6 @@ class MediaLibraryInteractorImpl(
         return mediaLibraryRepository.getPlaylistById(playlistId)
     }
 
-//    override suspend fun getPlaylistByName(playlistName: String): Playlist {
-//        return mediaLibraryRepository.getPlaylistByName(playlistName)
-//    }
-
     override suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: String) {
         mediaLibraryRepository.deleteTrackFromPlaylist(playlistId, trackId)
     }
@@ -58,9 +54,5 @@ class MediaLibraryInteractorImpl(
     override suspend fun deletePlaylist(playListId: Long) {
         mediaLibraryRepository.deletePlaylist(playListId)
     }
-
-//    override suspend fun deletePlaylist(playlist: Playlist) {
-//        mediaLibraryRepository.deletePlaylist(playlist)
-//    }
 
 }

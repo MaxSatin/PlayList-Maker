@@ -12,18 +12,9 @@ import java.util.Locale
 
 class TrackItemViewHolder(
     private val binding: TrackItemBinding,
-//    private val gestureDetector: GestureDetector
     onSingleTap: (position: Int) -> Unit,
     onLongPress: (position: Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
-
-//    init{
-//        itemView.setOnTouchListener { _, e ->
-////            onTrackClicked(bindingAdapterPosition)
-//            gestureDetector.onTouchEvent(e)
-//            true
-//        }
-//    }
 
     init {
         itemView.apply {

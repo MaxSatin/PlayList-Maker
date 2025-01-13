@@ -12,7 +12,6 @@ import com.practicum.playlistmaker.medialibrary.presentation.utils.CustomGesture
 import com.practicum.playlistmaker.medialibrary.ui.favorite_tracks_fragment.FavoriteTrackViewHolder
 
 class TrackListAdapter(
-//    private val onTrackClicked: (track: Track) -> Unit,
     private val onSingleTap: (track: Track) -> Unit,
     private val onLongPress: (track: Track) -> Unit,
 ) : RecyclerView.Adapter<TrackItemViewHolder>() {
@@ -52,42 +51,7 @@ class TrackListAdapter(
             favoriteTrackList.getOrNull(position)?.let { track ->
                 holder.bind(track)
             }
-
-//            gestureDetector = GestureDetector(
-//                holder.itemView.context,
-//                object : CustomGestureListener(
-//                    onSingleTap = { onSingleTap(favoriteTrackList[holder.bindingAdapterPosition]) },
-//                    onLongPress = { onLongPress(favoriteTrackList[holder.bindingAdapterPosition]) }
-//                ) {
-//                    override fun onLongPress(e: MotionEvent) {
-//                        onLongPress(favoriteTrackList[holder.bindingAdapterPosition])
-//                        super.onLongPress(e)
-//                    }
-//
-//                    override fun onSingleTapUp(e: MotionEvent): Boolean {
-//                        onSingleTap(favoriteTrackList[holder.bindingAdapterPosition])
-//                        return super.onSingleTapUp(e)
-//                    }
-//                }
-//            )
-
-
-
-//            holder.itemView.setOnTouchListener { _, event ->
-//                gestureDetector?.onTouchEvent(event)
-//                true
-//            }
         }
-
-
-//            val gestureDetector = GestureDetector(
-//                holder.itemView.context,
-//                CustomGestureListener(
-//                    onSingleTap = { onSingleTap(position) },
-//                    onLongPress = { onLongPress(position) }
-//                )
-//            )
-
 
     }
 

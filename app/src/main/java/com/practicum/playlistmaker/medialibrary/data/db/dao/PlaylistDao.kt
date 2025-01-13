@@ -59,8 +59,6 @@ interface PlaylistDao {
         """
     )
     fun getPlaylistById(playListId: Long): Flow<PlaylistEntity>
-//    suspend fun getPlaylistByName(playListName: String): PlaylistEntity?
-
 
     @Query("DELETE FROM playlistcrossref_table WHERE playListId =:playListId AND trackId =:trackId")
     suspend fun deleteTrackFromPlaylist(playListId: Long, trackId: String)
@@ -80,18 +78,6 @@ interface PlaylistDao {
     @Query("DELETE FROM tracks_table WHERE trackId =:trackID")
     suspend fun deleteTrackFromDataBase(trackID: String)
 
-//    @Delete(entity = PlaylistEntity::class)
-//    suspend fun deletePlaylist(playlist: PlaylistEntity)
-
-//    @Query(
-//        """
-//            UPDATE playlist_table
-//            SET playlistName =:newPlaylistName
-//            WHERE playlistName =:oldPlaylistName
-//            """
-//    )
-//    suspend fun updatePlaylistTable(oldPlaylistName: String, newPlaylistName: String)
-
     @Transaction
     @Query(
         """UPDATE playlist_table
@@ -108,25 +94,4 @@ interface PlaylistDao {
         newDescription: String,
         newCoverUri: String,
     )
-
-//    @Transaction
-//    @Query(
-//        """
-//            UPDATE playlistcrossref_table
-//            SET playlistName =:newPlaylistName
-//            WHERE playlistName =:oldPlaylistName
-//        """
-//    )
-//    suspend fun updateCrossRefTable(oldPlaylistName: String, newPlaylistName: String)
-
-//    @Transaction
-//    suspend fun updateDependencies(
-//        oldPlaylistName: String,
-//        newPlaylistName: String,
-//        newDescription: String,
-//        newCoverUri: String,
-//    ){
-//        updateCrossRefTable(oldPlaylistName, newPlaylistName)
-//        updatePlaylistTable(oldPlaylistName, newPlaylistName, newDescription, newCoverUri)
-//    }
 }

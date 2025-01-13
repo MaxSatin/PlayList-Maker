@@ -121,20 +121,9 @@ class PlaylistDetailsFragment : Fragment() {
 
         viewModel.getShowFragmentLiveData().observe(viewLifecycleOwner) { parameter ->
             showFragment(parameter)
-//            handler.postDelayed(
-//                { findNavController().navigate(
-//                    R.id.action_playlistDetailsFragment_to_playerFragment,
-//                    PlayerFragment.createArgs(track)
-//                )},
-//                keyObject,
-//                300
-//            )
 
         }
 
-//        viewModel.getPlaylistDetailsLiveData().observe(viewLifecycleOwner){ playlistState ->
-//            processData(playlistState)
-//        }
 
         binding.moreIc.setOnClickListener {
             editPLBHBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -148,15 +137,6 @@ class PlaylistDetailsFragment : Fragment() {
             playlistNotificationFadeOut()
             trackNotificationFadeOut()
             closeBottomSheetAndNavigateBack()
-//            if (trackListBHBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
-//                when (currentAction) {
-//                    0 -> trackListBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-//                    1 -> findNavController().navigateUp()
-//                }
-//            } else if (trackListBHBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
-//                findNavController().navigateUp()
-//            }
-//            currentAction = (currentAction + 1) % 2
         }
 
         binding.deleteButton.setOnClickListener {
@@ -194,15 +174,6 @@ class PlaylistDetailsFragment : Fragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     closeBottomSheetAndNavigateBack()
-//                    if (trackListBHBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
-//                        when (currentAction) {
-//                            0 -> trackListBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-//                            1 -> findNavController().navigateUp()
-//                        }
-//                    } else if (trackListBHBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
-//                        findNavController().navigateUp()
-//                    }
-//                    currentAction = (currentAction + 1) % 2
                 }
             })
 
@@ -273,10 +244,6 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun processData(state: PlaylistDetailsScreenState) {
-//        when {
-//            state.isLoading -> showLoading()
-//            state.playlist != null -> showPlaylistInfo(state)
-//        }
         when (state) {
             is PlaylistDetailsScreenState.Loading -> showLoading()
             is PlaylistDetailsScreenState.DetailsState -> {
@@ -331,23 +298,11 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun loadPlayListData(playList: Playlist) {
-//        Glide.with(binding.root.context)
-//            .load(playList.coverUri)
-//            .placeholder(R.drawable.vector_empty_album_placeholder)
-//            .fitCenter()
-//            .transform(RoundedCorners(8))
-//            .into(binding.poster)
         upLoadImage(playList.coverUri, binding.poster)
         binding.playlistTitle.text = playList.name
         binding.playlistDescription.text = playList.description
         binding.tracksNumber.text = getTracksNumberAsTextField(playList)
 
-//        Glide.with(binding.root.context)
-//            .load(playList.coverUri)
-//            .placeholder(R.drawable.vector_empty_album_placeholder)
-//            .fitCenter()
-//            .transform(RoundedCorners(8))
-//            .into(binding.playListPreviewImage)
         upLoadImage(playList.coverUri, binding.playListPreviewImage)
         binding.playListPreviewName.text = playList.name
         binding.playListPreviewTrackCount.text = getTracksNumberAsTextField(playList)
@@ -361,12 +316,6 @@ class PlaylistDetailsFragment : Fragment() {
             .transform(RoundedCorners(8))
             .into(imageView)
 
-//        val contentResolver = requireContext().contentResolver
-//
-//        val inputStream = requireContext().contentResolver.openInputStream(uri!!)
-//        val bitmap = BitmapFactory.decodeStream(inputStream)
-//        imageView.setImageBitmap(bitmap)
-//        inputStream?.close()
     }
 
     private fun takePersistableUriPermission(uri: Uri) {

@@ -41,7 +41,5 @@ val mediaLibraryViewModelModule = module {
         EditPlaylistDataViewModel(get(), get())
     }
 
-
-
     single { Gson() }
 }
