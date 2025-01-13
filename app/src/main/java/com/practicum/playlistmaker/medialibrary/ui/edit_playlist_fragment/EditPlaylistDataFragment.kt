@@ -86,7 +86,8 @@ class EditPlaylistDataFragment : CreatePlayListsFragment() {
                 uri?.let {
                     takePersistableUriPermission(it)
                     coverUri = uri
-                    binding.imagepickArea.setImageURI(uri)
+                    upLoadImage(uri, binding.imagepickArea)
+//                    binding.imagepickArea.setImageURI(uri)
                     saveImageToPrivateStorage(uri)
                     Log.d("ViewmodelCoverUri", "$coverUri")
                 }

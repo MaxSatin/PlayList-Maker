@@ -74,6 +74,12 @@ interface PlaylistDao {
     @Query("DELETE FROM playlist_table WHERE playlistId =:playListId")
     suspend fun deletePlaylist(playListId: Long)
 
+    @Query("SELECT EXISTS (SELECT 1 FROM playlistcrossref_table WHERE trackId =:trackID)")
+    suspend fun isTrackInOtherPlaylists(trackID: String): Boolean
+
+    @Query("DELETE FROM tracks_table WHERE trackId =:trackID")
+    suspend fun deleteTrackFromDataBase(trackID: String)
+
 //    @Delete(entity = PlaylistEntity::class)
 //    suspend fun deletePlaylist(playlist: PlaylistEntity)
 

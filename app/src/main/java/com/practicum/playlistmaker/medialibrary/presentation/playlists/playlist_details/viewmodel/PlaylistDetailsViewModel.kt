@@ -20,6 +20,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlaylistDetailsViewModel(
     private val mediaLibraryInteractor: MediaLibraryInteractor,
@@ -90,9 +92,10 @@ class PlaylistDetailsViewModel(
         val playlist = this.playlist
         val trackList = this.trackList
         if (playlist != null && !trackList.isNullOrEmpty()) {
+            val timeFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
             var textMessage =
                 "${playlist.name}\n${trackList.size} ${attachWordEndingTracks(trackList.size)}"
-            trackList.forEachIndexed { index, track -> textMessage += "\n${index + 1}. ${track.artistName} - ${track.trackName} ${track.trackTimeMillis}" }
+            trackList.forEachIndexed { index, track -> textMessage += "\n${index + 1}. ${track.artistName} - ${track.trackName} ${timeFormatter.format(track.trackTimeMillis)}" }
             mediaLibraryInteractor.share(textMessage)
         }
     }

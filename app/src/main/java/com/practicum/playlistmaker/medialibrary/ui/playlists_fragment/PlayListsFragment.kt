@@ -109,19 +109,20 @@ class PlayListsFragment() : Fragment() {
 
     private fun showContent(playlists: List<Playlist>) {
         val playlist = playlists.firstOrNull()
-        if (isFirstTimeLoaded) {
-            isFirstTimeLoaded = false
-        } else {
+//        if (isFirstTimeLoaded) {
+//            isFirstTimeLoaded = false
+//        } else {
             var areListsEqual = areListsAreEqual(lastPostedList, playlists) { p1, p2 ->
-                p1.name == p2.name
+                p1.id == p2.id
             }
-            if (!areListsEqual && lastPostedList.isEmpty()) {
+            if (!areListsEqual && lastPostedList.isEmpty() && isFirstTimeLoaded) {
                 lastPostedList = playlists
-            } else if (!areListsEqual){
+            } else if (!areListsEqual) {
                 lastPostedList = playlists
                 showAddedInPlaylistNotification("Плейлист ${playlist?.name} создан!")
             }
-        }
+
+
 
         playlistAdapter.updateItems(playlists)
         Log.d("PlaylistAdapter", "$playlists")

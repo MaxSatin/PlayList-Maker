@@ -14,6 +14,7 @@ import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Play
 import com.practicum.playlistmaker.medialibrary.domain.repository.MediaLibraryRepository
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -24,8 +25,8 @@ class MediaLibraryRepositoryImpl(
     private val converter: TrackDbConverter,
     private val gson: Gson,
     private val sharedPrefs: SharedPreferences,
-    private val context: Context
-    ) : MediaLibraryRepository {
+    private val context: Context,
+) : MediaLibraryRepository {
 
     override fun share(text: String) {
         context.startActivity(
@@ -101,8 +102,17 @@ class MediaLibraryRepositoryImpl(
     override suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: String) {
         withContext(Dispatchers.IO) {
             appDatabase.playlistDao().deleteTrackFromPlaylist(playlistId, trackId)
+
+            val isTrackInOtherLists = async {
+                appDatabase.playlistDao().isTrackInOtherPlaylists(trackId)
+            }.await()
+
+            if (!isTrackInOtherLists) {
+                appDatabase.playlistDao().deleteTrackFromDataBase(trackId)
+            }
         }
     }
+
 
     override suspend fun updatePlaylistTable(
         playListId: Long,
@@ -110,7 +120,7 @@ class MediaLibraryRepositoryImpl(
         newDescription: String,
         newCoverUri: String,
     ) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             appDatabase.playlistDao().updatePlaylistTable(
                 playListId,
                 newPlaylistName,
