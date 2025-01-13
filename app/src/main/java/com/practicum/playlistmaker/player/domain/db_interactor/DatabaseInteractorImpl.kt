@@ -21,6 +21,10 @@ class DatabaseInteractorImpl(
         databaseRepository.updateIsFavoriteStatus(isFavorite, track)
     }
 
+    override fun getFavoriteStatus(trackID: String): Flow<Boolean> {
+        return databaseRepository.getFavoriteStatus(trackID)
+    }
+
     override suspend fun getAllTracksFromPlaylist(playlistId: Long): List<Track> {
         return databaseRepository.getAllTracksFromPlaylist(playlistId)
     }

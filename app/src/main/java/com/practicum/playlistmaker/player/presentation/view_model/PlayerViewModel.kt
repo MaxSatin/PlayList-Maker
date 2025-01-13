@@ -228,9 +228,14 @@ class PlayerViewModel(
     }
 
     fun loadContent() {
-        playerStateLiveData.value = getCurrentPlayerState().copy(
-            track = TrackInfoMapper.map(trackItem),
-        )
+        viewModelScope.launch {
+            val track = TrackInfoMapper.map(trackItem)
+            databaseInteractor.getFavoriteStatus(track.trackId).collect { isFavorite ->
+                playerStateLiveData.value = getCurrentPlayerState().copy(
+                    track = track.copy(isInFavorite = isFavorite)
+                )
+            }
+        }
     }
 
     fun showLoading() {

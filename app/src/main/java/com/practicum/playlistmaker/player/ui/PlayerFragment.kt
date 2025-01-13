@@ -75,6 +75,7 @@ class PlayerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val trackGson = requireArguments().getString(TRACK_ITEM_KEY)
         viewModel = getViewModel { parametersOf(trackGson) }
+        viewModel.loadContent()
 //        viewModel.setTrackGson(trackGson)
 
         trackAddedNotificationFadeIn =

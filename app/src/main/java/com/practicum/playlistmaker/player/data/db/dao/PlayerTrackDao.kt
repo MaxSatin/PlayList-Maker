@@ -30,6 +30,9 @@ interface PlayerTrackDao {
     )
     suspend fun updateIsFavoriteStatus(isInFavorite:Boolean, trackID: String)
 
+    @Query("SELECT isFavorite FROM tracks_table WHERE trackId =:trackID")
+    fun getFavoriteStatus(trackID: String): Flow<Boolean?>
+
     @Transaction
     @Query("SELECT * FROM playlist_table")
     fun getPlaylists(): Flow<List<PlaylistEntity>>
