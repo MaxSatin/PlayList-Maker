@@ -32,10 +32,8 @@ import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.NavigateFragment
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.PlaylistDetailsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlist_details.viewmodel.PlaylistDetailsViewModel
-import com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlayListFragment
 import com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlaylistDataFragment
 import com.practicum.playlistmaker.player.ui.PlayerFragment
-import com.practicum.playlistmaker.player.ui.PlayerFragment.Companion
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
