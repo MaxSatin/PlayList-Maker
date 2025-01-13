@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 
 class EditPlaylistDataViewModel(
     private val mediaLibraryInteractor: MediaLibraryInteractor,
-    private val gson: Gson
-): CreatePlayListsViewModel(mediaLibraryInteractor) {
+    private val gson: Gson,
+) : CreatePlayListsViewModel(mediaLibraryInteractor) {
 
 //    private val playlistEditInfoLiveData = MutableLiveData<EditPlaylistDataState>()
 //    fun getPlayListInfoLiveData(): LiveData<EditPlaylistDataState> = playlistEditInfoLiveData
@@ -34,8 +34,8 @@ class EditPlaylistDataViewModel(
 
     private var isCopyNeeded = false
 
-    private val playlistDetailsLiveData = MutableLiveData<PlaylistState>()
-    fun getPlaylistDetailsLiveData(): LiveData<PlaylistState> = playlistDetailsLiveData
+    private val playlistDetailsLiveData = MutableLiveData<EditPlaylistDataState>()
+    fun getPlaylistDetailsLiveData(): LiveData<EditPlaylistDataState> = playlistDetailsLiveData
 
     private val playlistsState = MutableLiveData<CreatePlaylistState>()
 //    fun permissionStateLiveData(): LiveData<CreatePlaylistState> = playlistsState
@@ -96,16 +96,20 @@ class EditPlaylistDataViewModel(
     private fun processPlayListResult(playList: Playlist) {
         if (playList.name.isEmpty()) {
             renderPlaylistState(
-                PlaylistState.Empty("Плейлист не найден!")
+                EditPlaylistDataState.Empty("Плейлист не найден!")
             )
         } else {
             renderPlaylistState(
-                PlaylistState.DetailsState(playList)
+                EditPlaylistDataState.Content(
+                    playList,
+                    "Редактировать",
+                    "Сохранить"
+                )
             )
         }
     }
 
-    private fun renderPlaylistState(state: PlaylistState) {
+    private fun renderPlaylistState(state: EditPlaylistDataState) {
         playlistDetailsLiveData.postValue(state)
     }
 

@@ -63,7 +63,7 @@
     </style>
 
     <style name="SettingsActivityButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_width">28dp</item>
         <item name="android:layout_height">24dp</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="iconTint">@color/grey</item>

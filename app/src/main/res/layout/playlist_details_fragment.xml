@@ -374,10 +374,6 @@
         android:background="@drawable/exitdialogshape"
         android:elevation="@dimen/padding_24"
         android:layout_gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintStart_toEndOf="@id/leftBorder"
-        app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -400,7 +396,7 @@
 
             <TextView
                 android:id="@+id/dataWillBeLosttv"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_8"
                 android:fontFamily="@font/ys_display_medium"
@@ -408,6 +404,8 @@
                 android:gravity="start"
                 android:paddingHorizontal="@dimen/padding_16"
                 android:text="@string/check_deletion_intent"
+                android:breakStrategy="simple"
+                android:maxLines="2"
                 android:textColor="@color/grey"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/endEditingtv" />

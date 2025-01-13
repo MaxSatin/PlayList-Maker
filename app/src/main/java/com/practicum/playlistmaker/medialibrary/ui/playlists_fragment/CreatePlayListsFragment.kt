@@ -1,9 +1,11 @@
 package com.practicum.playlistmaker.medialibrary.ui.playlists_fragment
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -21,6 +23,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -45,7 +48,7 @@ open class CreatePlayListsFragment : Fragment() {
     val binding get() = _binding!!
 
     private val requester = PermissionRequester.instance()
-
+    private lateinit var permissionsNeeded: String
 
     private var playListName: String = ""
     private var playListDescription: String = ""
@@ -155,12 +158,18 @@ open class CreatePlayListsFragment : Fragment() {
         }
 
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionsNeeded = android.Manifest.permission.READ_MEDIA_IMAGES
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)  {
+            permissionsNeeded = android.Manifest.permission.READ_EXTERNAL_STORAGE
+
+        }
+
+
         binding.imagepickArea.setOnClickListener {
             lifecycleScope.launch {
-                requester.request(
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.READ_MEDIA_IMAGES,
-                    )
+                requester.request(permissionsNeeded)
                     .collect { result ->
                         when (result) {
                             is PermissionResult.Granted -> {

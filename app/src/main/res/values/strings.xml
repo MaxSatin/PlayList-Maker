@@ -39,7 +39,7 @@
     <string name="is_playlistfinished_dialog_hint">Завершить создание плейлиста?</string>
     <string name="data_will_be_lost_hint">Все несохраненные данные будут потеряны</string>
     <string name="delete_track_from_playlist">Удалить трек</string>
-    <string name="check_deletion_intent">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="check_deletion_intent">Вы уверены, что хотите удалить трек из\nплейлиста?</string>
 
     <string name="delete_playlist">Удалить плейлист</string>
     <string name="check_playlist_deletion_intent">Вы уверены, что хотите удалить плейлист?</string>

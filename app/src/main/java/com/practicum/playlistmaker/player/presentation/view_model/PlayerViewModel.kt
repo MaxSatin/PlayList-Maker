@@ -59,7 +59,7 @@ class PlayerViewModel(
     init {
         showLoading()
         loadContent()
-
+        preparePlayer()
         getPlaylists()
     }
 
@@ -69,6 +69,10 @@ class PlayerViewModel(
 
     fun resetPlayer() {
         playerInteractor.resetPlayer()
+    }
+
+    fun isPlayerPrepared(): Boolean{
+        return playerInteractor.isPlayerPrepared()
     }
 
 //    fun setTrackGson(trackGson: String?){

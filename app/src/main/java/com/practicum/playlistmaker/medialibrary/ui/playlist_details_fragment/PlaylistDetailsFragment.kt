@@ -164,7 +164,7 @@ class PlaylistDetailsFragment : Fragment() {
         }
 
         binding.cancel.setOnClickListener {
-            onCancelButtonPressed()
+            onTracklistCancelButtonPressed()
         }
 
         binding.editDeletePl.setOnClickListener {
@@ -178,7 +178,7 @@ class PlaylistDetailsFragment : Fragment() {
         }
 
         binding.cancelPlaylistDeletion.setOnClickListener{
-            onCancelButtonPressed()
+            onPlaylistCancelButtonPressed()
         }
 
         binding.shareIc.setOnClickListener{
@@ -193,8 +193,6 @@ class PlaylistDetailsFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    playlistNotificationFadeOut()
-                    trackNotificationFadeOut()
                     closeBottomSheetAndNavigateBack()
 //                    if (trackListBHBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
 //                        when (currentAction) {
@@ -250,15 +248,25 @@ class PlaylistDetailsFragment : Fragment() {
         if (trackListBHBehavior.state != BottomSheetBehavior.STATE_COLLAPSED && editPLBHBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
             when (currentAction) {
                 0 -> trackListBHBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                1 -> findNavController().navigateUp()
+                1 -> {
+                    findNavController().navigate(
+                        R.id.action_playlistDetailsFragment_to_mediaLibraryFragment
+                    )
+                }
             }
         } else if (trackListBHBehavior.state == BottomSheetBehavior.STATE_COLLAPSED && editPLBHBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
             when (currentAction) {
                 0 -> editPLBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                1 -> findNavController().navigateUp()
+                1 -> {
+                    findNavController().navigate(
+                        R.id.action_playlistDetailsFragment_to_mediaLibraryFragment
+                    )
+                }
             }
         } else if (trackListBHBehavior.state == BottomSheetBehavior.STATE_COLLAPSED && editPLBHBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
-            findNavController().navigateUp()
+            findNavController().navigate(
+                R.id.action_playlistDetailsFragment_to_mediaLibraryFragment
+            )
         }
         currentAction = (currentAction + 1) % 2
 
@@ -300,6 +308,7 @@ class PlaylistDetailsFragment : Fragment() {
         if (!trackList.isNullOrEmpty()) {
             binding.trackListRV.isVisible = true
             binding.emptyPlaylistsPH.isVisible = false
+            Log.d("TracklistAdapter", "${trackList}")
             trackListAdapter?.updateItems(trackList)
         } else {
             isTrackListEmpty = true
@@ -462,7 +471,11 @@ class PlaylistDetailsFragment : Fragment() {
         )
     }
 
-    private fun onCancelButtonPressed() {
+    private fun onPlaylistCancelButtonPressed() {
+        playlistNotificationFadeOut()
+    }
+
+    private fun onTracklistCancelButtonPressed() {
         trackNotificationFadeOut()
     }
 
@@ -496,9 +509,13 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        trackListAdapter = null
         playlist = null
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        trackListAdapter = null
+        super.onDestroy()
     }
 
     companion object {

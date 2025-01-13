@@ -9,4 +9,8 @@ sealed interface EditPlaylistDataState {
         val fragmentTitle: String,
         val buttonTitle: String
     ): EditPlaylistDataState
+
+    data class Empty(
+        val message: String
+    ): EditPlaylistDataState
 }

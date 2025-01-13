@@ -29,6 +29,7 @@ import com.markodevcic.peko.PermissionRequester
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.create_playlist.CreatePlaylistState
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.edit_playlist_data_state.EditPlaylistDataState
 import com.practicum.playlistmaker.medialibrary.domain.screen_state.playlist_details.PlaylistState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.edit_playlist.EditPlaylistDataViewModel
 import com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment.PlaylistDetailsFragment
@@ -38,7 +39,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 
-class EditPlaylistDataFragment: CreatePlayListsFragment() {
+class EditPlaylistDataFragment : CreatePlayListsFragment() {
 
     override val viewModel: EditPlaylistDataViewModel by viewModel()
 
@@ -97,7 +98,7 @@ class EditPlaylistDataFragment: CreatePlayListsFragment() {
 
         viewModel.loadPlaylistDetailsState(playlistId)
 
-        viewModel.getPlaylistDetailsLiveData().observe(viewLifecycleOwner){ playlistState ->
+        viewModel.getPlaylistDetailsLiveData().observe(viewLifecycleOwner) { playlistState ->
             processPlayListData(playlistState)
         }
         binding.toolbar.setOnClickListener {
@@ -111,14 +112,7 @@ class EditPlaylistDataFragment: CreatePlayListsFragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (clickDebounce()) {
-                        when {
-                            playListName.isNotEmpty() -> notificationFadeIn()
-                            coverUri != null -> notificationFadeIn()
-                            playListDescription.isNotEmpty() -> notificationFadeIn()
-                            else -> {
-                                findNavController().navigateUp()
-                            }
-                        }
+                       endEditing()
                     }
                 }
             })
@@ -132,7 +126,7 @@ class EditPlaylistDataFragment: CreatePlayListsFragment() {
             isClickAllowed = true
         }
 
-        viewModel.checkCurrentPlaylists()
+//        viewModel.checkCurrentPlaylists()
 
         viewModel.permissionStateLiveData().observe(viewLifecycleOwner) { state ->
             if (state is CreatePlaylistState.Content) {
@@ -230,16 +224,20 @@ class EditPlaylistDataFragment: CreatePlayListsFragment() {
         )
     }
 
-    private fun processPlayListData(state: PlaylistState){
-        when(state){
-            is PlaylistState.DetailsState -> loadPlayListData(state.playlist)
-            is PlaylistState.Empty -> Toast.makeText(requireContext(), "Информация отсутсвует", Toast.LENGTH_LONG).show()
+    private fun processPlayListData(state: EditPlaylistDataState) {
+        when (state) {
+            is EditPlaylistDataState.Content -> loadPlayListData(state)
+            is EditPlaylistDataState.Empty -> Toast.makeText(
+                requireContext(),
+                "Информация отсутсвует",
+                Toast.LENGTH_LONG
+            ).show()
         }
 
     }
 
-    private fun loadPlayListData(playList: Playlist?){
-        if (playList != null) with(playList){
+    private fun loadPlayListData(state: EditPlaylistDataState.Content) {
+        with(state.playlist) {
             playlistId = id
             initPlayListName = name
             binding.playlistNameInputEditText.setText(initPlayListName)
@@ -249,6 +247,8 @@ class EditPlaylistDataFragment: CreatePlayListsFragment() {
 //            takePersistableUriPermission(coverUri!!)
             upLoadImage(initCoverUri, binding.imagepickArea)
         }
+        binding.toolbar.title = state.fragmentTitle
+        binding.createPlayListButton.text = state.buttonTitle
     }
 
     private fun upLoadImage(uri: Uri?, imageView: ImageView) {
@@ -263,9 +263,9 @@ class EditPlaylistDataFragment: CreatePlayListsFragment() {
     private fun processState(state: CreatePlaylistState) {
         when (state) {
             is CreatePlaylistState.Content -> {
-                playlist = Playlist(
-                    playlistId, this.playListName, playListDescription, coverUri, 0, false)
-                val filteredPlaylist = this.playLists.find { it.name == playlist.name }
+//                playlist = Playlist(
+//                    playlistId, this.playListName, playListDescription, coverUri, 0, false)
+//                val filteredPlaylist = this.playLists.find { it.name == this.playListName }
 
                 Log.d("ViewmodelInitName", "$initPlayListName")
                 Log.d("Viewmodelname", "$playListName")
@@ -274,9 +274,12 @@ class EditPlaylistDataFragment: CreatePlayListsFragment() {
 //                if (filteredPlaylist == null) {
 //                    if (playListName != initPlayListName || playListDescription != initPlayListDescription || coverUri != initCoverUri) {
 //                        viewModel.addPlaylistWithReplace(playlist)
-                val playlistNameUpdated = if (!initPlayListName.equals(playListName)) playListName else initPlayListName
-                val playlistDescriptionUpdated = if (!initPlayListDescription.equals(playListDescription)) playListDescription else initPlayListDescription
-                val posterUriUpdated = if (initCoverUri != coverUri && coverUri != null) coverUri else initCoverUri
+                val playlistNameUpdated =
+                    if (!initPlayListName.equals(playListName)) playListName else initPlayListName
+                val playlistDescriptionUpdated =
+                    if (!initPlayListDescription.equals(playListDescription)) playListDescription else initPlayListDescription
+                val posterUriUpdated =
+                    if (initCoverUri != coverUri && coverUri != null) coverUri else initCoverUri
                 viewModel.updatePlaylist(
                     playlistId,
                     playlistNameUpdated,

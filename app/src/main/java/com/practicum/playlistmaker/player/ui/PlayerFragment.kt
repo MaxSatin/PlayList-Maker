@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.player.ui
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -81,9 +82,9 @@ class PlayerFragment : Fragment() {
         trackAddedNotificationFadeOut =
             AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
 
-        if (!isPlayerStarted) {
-            viewModel.preparePlayer()
-        }
+//        if (!isPlayerStarted) {
+//            viewModel.preparePlayer()
+//        }
 
         binding.playlistsRV.adapter = playlistAdapter
         binding.playButton.isEnabled = false
@@ -294,7 +295,6 @@ class PlayerFragment : Fragment() {
         binding.playButton.isChecked = false
         viewModel.pausePlayer()
     }
-
 
     override fun onDestroyView() {
         handler.removeCallbacksAndMessages(keyObject)
