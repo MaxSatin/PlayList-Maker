@@ -146,6 +146,7 @@ class PlaylistDetailsFragment : Fragment() {
         }
 
         binding.editDeletePl.setOnClickListener {
+            editPLBHBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             playlistNotificationFadeIn()
         }
 

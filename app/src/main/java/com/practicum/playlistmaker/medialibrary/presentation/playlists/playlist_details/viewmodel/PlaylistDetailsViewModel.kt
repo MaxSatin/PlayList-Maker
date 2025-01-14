@@ -94,7 +94,7 @@ class PlaylistDetailsViewModel(
         if (playlist != null && !trackList.isNullOrEmpty()) {
             val timeFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
             var textMessage =
-                "${playlist.name}\n${trackList.size} ${attachWordEndingTracks(trackList.size)}"
+                "${playlist.name}\n${playlist.description}\n${trackList.size} ${attachWordEndingTracks(trackList.size)}"
             trackList.forEachIndexed { index, track -> textMessage += "\n${index + 1}. ${track.artistName} - ${track.trackName} ${timeFormatter.format(track.trackTimeMillis)}" }
             mediaLibraryInteractor.share(textMessage)
         }

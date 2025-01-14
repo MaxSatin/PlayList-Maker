@@ -7,17 +7,39 @@
     android:orientation="vertical"
     tools:context=".medialibrary.ui.playlists_fragment.CreatePlayListsFragment">
 
-    <Toolbar
-        android:id="@+id/toolbar"
-        style="@style/ToolBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:navigationIcon="@drawable/vector_arrow_back"
-        android:title="@string/new_playlist"
-        android:titleTextAppearance="@style/ToolbarHeader"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageButton
+        style="@style/PlayerTrackButtonBack"
+        android:id="@+id/buttonBack"
+        app:layout_constraintTag="playerButtonBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/padding_4"
+        android:layout_marginStart="@dimen/padding_4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/NewPlaylistTitleStyle"
+        android:id="@+id/screenTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_playlist"
+        android:layout_marginLeft="@dimen/padding_12"
+        app:layout_constraintStart_toEndOf="@id/buttonBack"
+        app:layout_constraintBottom_toBottomOf="@id/buttonBack"
+        app:layout_constraintTop_toTopOf="@id/buttonBack"/>
+
+<!--    <Toolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        style="@style/ToolBarStyle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:navigationIcon="@drawable/vector_arrow_back"-->
+<!--        android:title="@string/new_playlist"-->
+<!--        android:titleTextAppearance="@style/ToolbarHeader"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder"
@@ -44,7 +66,7 @@
         app:layout_constraintDimensionRatio="h,1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/buttonBack" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/playlistNameInputLayout"

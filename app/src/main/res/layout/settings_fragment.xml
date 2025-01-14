@@ -42,9 +42,9 @@
             <TextView style="@style/SettingsActivityButtonText"
                 android:text="@string/Share"/>
 
-            <Button style="@style/SettingsActivityButton"
+            <ImageView style="@style/SettingsActivityButton"
                 android:layout_gravity="end"
-                app:icon="@drawable/share_light_mode"
+                android:src="@drawable/share_light_mode"
                 app:iconGravity="textStart"
                 android:clickable="true"/>
 
@@ -55,10 +55,10 @@
             <TextView style="@style/SettingsActivityButtonText"
                 android:text="@string/Support"/>
 
-            <Button style="@style/SettingsActivityButton"
+            <ImageView style="@style/SettingsActivityButton"
                 android:id="@+id/buttonSettingsSupport"
                 android:layout_gravity="end"
-                app:icon="@drawable/light_mode_support"
+                android:src="@drawable/light_mode_support"
                 app:iconGravity="textStart"/>
 
         </FrameLayout>
@@ -68,10 +68,11 @@
             <TextView style="@style/SettingsActivityButtonText"
                 android:text="@string/user_Argeement"/>
 
-            <Button style="@style/SettingsActivityButton"
+            <ImageView style="@style/SettingsActivityButton"
                 android:id="@+id/buttonSettingsUserAgreement"
+                android:layout_height="24dp"
                 android:layout_gravity="end"
-                app:icon="@drawable/vector_arrow_forward"
+                android:src="@drawable/track_arrow_forward"
                 app:iconGravity="textStart"/>
 
         </FrameLayout>

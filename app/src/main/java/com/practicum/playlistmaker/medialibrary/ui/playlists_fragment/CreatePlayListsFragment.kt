@@ -105,7 +105,7 @@ open class CreatePlayListsFragment : Fragment() {
 
         binding.createPlayListButton.isEnabled = false
 
-        binding.toolbar.setOnClickListener {
+        binding.buttonBack.setOnClickListener {
             if (clickDebounce()) {
                 when {
                     playListName.isNotEmpty() -> notificationFadeIn()

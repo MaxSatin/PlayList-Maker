@@ -101,7 +101,7 @@ class EditPlaylistDataFragment : CreatePlayListsFragment() {
         viewModel.getPlaylistDetailsLiveData().observe(viewLifecycleOwner) { playlistState ->
             processPlayListData(playlistState)
         }
-        binding.toolbar.setOnClickListener {
+        binding.buttonBack.setOnClickListener {
             if (clickDebounce()) {
                 endEditing()
             }
@@ -211,7 +211,7 @@ class EditPlaylistDataFragment : CreatePlayListsFragment() {
             initCoverUri = coverUri
             upLoadImage(initCoverUri, binding.imagepickArea)
         }
-        binding.toolbar.title = state.fragmentTitle
+        binding.screenTitle.text = state.fragmentTitle
         binding.createPlayListButton.text = state.buttonTitle
     }
 

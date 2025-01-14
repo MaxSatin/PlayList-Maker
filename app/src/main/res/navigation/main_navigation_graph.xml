@@ -102,10 +102,18 @@
             app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_playlistDetailsFragment_to_mediaLibraryFragment"
-            app:destination="@id/mediaLibraryFragment" />
+            app:destination="@id/mediaLibraryFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_playlistDetailsFragment_to_editPlaylistDataFragment"
-            app:destination="@id/editPlaylistDataFragment" />
+            app:destination="@id/editPlaylistDataFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/editPlayListFragment"
@@ -129,6 +137,10 @@
         android:label="EditPlaylistDataFragment" >
         <action
             android:id="@+id/action_editPlaylistDataFragment_to_playlistDetailsFragment"
-            app:destination="@id/playlistDetailsFragment" />
+            app:destination="@id/playlistDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left"/>
     </fragment>
 </navigation>
