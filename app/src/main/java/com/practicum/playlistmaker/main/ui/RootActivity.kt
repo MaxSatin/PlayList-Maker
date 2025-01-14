@@ -43,7 +43,7 @@ class RootActivity : AppCompatActivity() {
             when(destination.id) {
                 R.id.playerFragment -> hideBottomBar()
                 R.id.playlistDetailsFragment -> hideBottomBar()
-                R.id.editPlayListFragment -> hideBottomBar()
+                R.id.editPlaylistDataFragment -> hideBottomBar()
                 R.id.createPlayListsFragment -> hideBottomBar()
                 else -> binding.bottomNavigationView.isVisible = true
             }
