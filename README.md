@@ -14,8 +14,8 @@
 
 ## Screencasts ## 
 
-![Image](https://github.com/user-attachments/assets/05b81b88-7f37-415c-bad9-b3e46e7e8f37)
-![Image](https://github.com/user-attachments/assets/ee9d13ab-b4b1-48b3-8875-278bfabf5188) ![Image](https://github.com/user-attachments/assets/742475a8-2604-4481-82cb-c434d57e1adf)
+![Image](https://github.com/user-attachments/assets/57b758d4-179a-4b60-ad9c-86f683455a00) ![Image](https://github.com/user-attachments/assets/05b81b88-7f37-415c-bad9-b3e46e7e8f37)
+![Image](https://github.com/user-attachments/assets/742475a8-2604-4481-82cb-c434d57e1adf) ![Image](https://github.com/user-attachments/assets/ee9d13ab-b4b1-48b3-8875-278bfabf5188) 
 
 ## Цель проекта
 Проект является индивидуальной работой и основным в портфолио. Приложение демонстрирует основные навыки, полученные в ходе проектной работы.
