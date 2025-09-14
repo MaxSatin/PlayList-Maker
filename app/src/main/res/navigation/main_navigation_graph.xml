@@ -29,6 +29,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_playlistDetailsFragment"
+            app:destination="@id/playlistDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -80,5 +87,60 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/playlistDetailsFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment.PlaylistDetailsFragment"
+        android:label="playlist_details_fragment"
+        tools:layout="@layout/playlist_details_fragment" >
+        <action
+            android:id="@+id/action_playlistDetailsFragment_to_playerFragment"
+            app:destination="@id/playerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_playlistDetailsFragment_to_mediaLibraryFragment"
+            app:destination="@id/mediaLibraryFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_playlistDetailsFragment_to_editPlaylistDataFragment"
+            app:destination="@id/editPlaylistDataFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/editPlayListFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlayListFragment"
+        android:label="edit_playlist_fragment"
+        tools:layout="@layout/edit_playlist_fragment" >
+        <action
+            android:id="@+id/action_editPlayListFragment_to_playlistDetailsFragment"
+            app:destination="@id/playlistDetailsFragment" />
+        <action
+            android:id="@+id/action_editPlayListFragment_to_mediaLibraryFragment"
+            app:destination="@id/mediaLibraryFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlaylistDataFragment"
+        android:name="com.practicum.playlistmaker.medialibrary.ui.edit_playlist_fragment.EditPlaylistDataFragment"
+        android:label="EditPlaylistDataFragment" >
+        <action
+            android:id="@+id/action_editPlaylistDataFragment_to_playlistDetailsFragment"
+            app:destination="@id/playlistDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left"/>
     </fragment>
 </navigation>

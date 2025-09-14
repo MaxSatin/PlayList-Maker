@@ -76,6 +76,7 @@
         android:layout_weight="2"
         android:orientation="vertical">
     <ImageView
+        style="@style/SettingsActivityButton"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginTop="20dp"

@@ -32,7 +32,6 @@ class PlayerViewModel(
     private val playerInteractor: MediaPlayerInteractor,
     private val gson: Gson,
 ) : AndroidViewModel(application) {
-
     private val trackItem = loadTrackScreen(trackGson)
 
 
@@ -60,7 +59,7 @@ class PlayerViewModel(
     init {
         showLoading()
         loadContent()
-
+        preparePlayer()
         getPlaylists()
     }
 
@@ -72,6 +71,15 @@ class PlayerViewModel(
         playerInteractor.resetPlayer()
     }
 
+    fun isPlayerPrepared(): Boolean{
+        return playerInteractor.isPlayerPrepared()
+    }
+
+//    fun setTrackGson(trackGson: String?){
+//        if (!trackGson.isNullOrEmpty())
+//        this.trackGson = trackGson
+//    }
+
     fun getPlaylists() {
         viewModelScope.launch {
             databaseInteractor.getPlaylistsWithTrackCount()
@@ -81,9 +89,9 @@ class PlayerViewModel(
         }
     }
 
-    private fun addTrackPlayListCrossRef(playlistName: String) {
+    private fun addTrackPlayListCrossRef(playlistId: Long) {
         viewModelScope.launch {
-            databaseInteractor.insertPlayListTrackCrossRef(playlistName, trackItem)
+            databaseInteractor.insertPlayListTrackCrossRef(playlistId, trackItem)
         }
     }
 
@@ -91,7 +99,7 @@ class PlayerViewModel(
         if (clickDebounce()) {
             viewModelScope.launch {
                 val isAlreadyInPlayList = async(Dispatchers.IO) {
-                    databaseInteractor.checkPlaylistHasTrack(trackItem.trackId, playlist.name)
+                    databaseInteractor.checkPlaylistHasTrack(trackItem.trackId, playlist.id)
                 }.await()
                 if (isAlreadyInPlayList) {
                     renderState(
@@ -102,9 +110,9 @@ class PlayerViewModel(
                     )
                 } else {
                     val id = async(Dispatchers.IO) {
-                        databaseInteractor.insertPlayListTrackCrossRef(playlist.name, trackItem)
+                        databaseInteractor.insertPlayListTrackCrossRef(playlist.id, trackItem)
                     }.await()
-                    addTrackPlayListCrossRef(playlist.name)
+                    addTrackPlayListCrossRef(playlist.id)
                     renderState(
                         TrackState.TrackInfo(
                             trackItem.trackName, false,
@@ -129,7 +137,7 @@ class PlayerViewModel(
                             playlist.copy(
                                 containsCurrentTrack = databaseInteractor.checkPlaylistHasTrack(
                                     trackItem.trackId,
-                                    playlist.name
+                                    playlist.id
                                 )
                             )
                         }
@@ -177,26 +185,17 @@ class PlayerViewModel(
 
     fun controlFavoriteState() {
         if (trackItem.isFavorite) {
-            removeFromFavorite()
+            updateIsFavoriteStatus(false, trackItem)
         } else {
-            saveTrackToFavorites()
+            updateIsFavoriteStatus(true, trackItem)
         }
     }
 
-    private fun saveTrackToFavorites() {
-        if (clickDebounce()) {
-            viewModelScope.launch {
-                trackItem.isFavorite = true
-                databaseInteractor.saveTrackToDatabase(trackItem)
-            }
-        }
-    }
 
-    private fun removeFromFavorite() {
-        if (clickDebounce()) {
+    private fun updateIsFavoriteStatus(isFavorite: Boolean, track: Track){
+        if (clickDebounce()){
             viewModelScope.launch {
-                trackItem.isFavorite = false
-                databaseInteractor.removeFromFavorite(trackItem)
+                databaseInteractor.updateIsFavoriteStatus(isFavorite, track)
             }
         }
     }
@@ -210,9 +209,14 @@ class PlayerViewModel(
     }
 
     fun loadContent() {
-        playerStateLiveData.value = getCurrentPlayerState().copy(
-            track = TrackInfoMapper.map(trackItem),
-        )
+        viewModelScope.launch {
+            val track = TrackInfoMapper.map(trackItem)
+            databaseInteractor.getFavoriteStatus(track.trackId).collect { isFavorite ->
+                playerStateLiveData.value = getCurrentPlayerState().copy(
+                    track = track.copy(isInFavorite = isFavorite)
+                )
+            }
+        }
     }
 
     fun showLoading() {

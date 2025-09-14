@@ -9,17 +9,38 @@ class MediaLibraryInteractorImpl(
     private val mediaLibraryRepository: MediaLibraryRepository,
 ) : MediaLibraryInteractor {
 
-    override fun getFavoriteTrackList(): Flow<List<Track>> {
-        return mediaLibraryRepository.getFavoriteTrackList()
-
+    override fun share(text: String){
+        mediaLibraryRepository.share(text)
     }
 
-    override suspend fun getAllTracksFromPlaylist(playlistName: String): List<Track> {
-        return mediaLibraryRepository.getAllTracksFromPlaylist(playlistName)
+    override fun getFavoriteTrackList(): Flow<List<Track>> {
+        return mediaLibraryRepository.getFavoriteTrackList()
+    }
+
+    override fun getAllTracksFromPlaylist(playlistId: Long): Flow<List<Track>> {
+        return mediaLibraryRepository.getAllTracksFromPlaylist(playlistId)
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> {
         return mediaLibraryRepository.getPlaylists()
+    }
+
+    override fun getPlaylistById(playlistId: Long): Flow<Playlist>{
+        return mediaLibraryRepository.getPlaylistById(playlistId)
+    }
+
+    override suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: String) {
+        mediaLibraryRepository.deleteTrackFromPlaylist(playlistId, trackId)
+    }
+
+    override suspend fun updatePlaylistTable(
+        playlistId: Long, newPlaylistName: String,
+        newDescription: String, newCoverUri: String,
+    ) {
+        mediaLibraryRepository.updatePlaylistTable(
+            playlistId, newPlaylistName,
+            newDescription, newCoverUri
+        )
     }
 
     override suspend fun addPlaylistWithReplace(playlist: Playlist) {
@@ -30,8 +51,8 @@ class MediaLibraryInteractorImpl(
         mediaLibraryRepository.addPlaylist(playlist)
     }
 
-    override suspend fun deletePlaylist(playlist: Playlist) {
-        mediaLibraryRepository.deletePlaylist(playlist)
+    override suspend fun deletePlaylist(playListId: Long) {
+        mediaLibraryRepository.deletePlaylist(playListId)
     }
 
 }

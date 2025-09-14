@@ -22,9 +22,12 @@
     <string name="you_searched">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
     <string name="create_playlist">Создать</string>
+    <string name="save_edited_playlist">Сохранить</string>
+    <string name="edit_playlist">Редактировать</string>
 
     <string name="library_is_empty">Ваша медиатека пуста</string>
     <string name="playlists_are_empty">Вы не создали\n ни одного плейлиста</string>
+    <string name="playlist_is_empty">Вы не добавили ни одного трека</string>
     <string name="new_playlist">Новый плейлист</string>
     <string name="new_playlist_name">Название*</string>
     <string name="new_playlist_description">Описание</string>
@@ -35,9 +38,19 @@
     <string name="create_playlist_dialog_hint">Плейлист уже существует. Создать копию?</string>
     <string name="is_playlistfinished_dialog_hint">Завершить создание плейлиста?</string>
     <string name="data_will_be_lost_hint">Все несохраненные данные будут потеряны</string>
+    <string name="delete_track_from_playlist">Удалить трек</string>
+    <string name="check_deletion_intent">Вы уверены, что хотите удалить трек из\nплейлиста?</string>
+
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="check_playlist_deletion_intent">Хотите удалить плейлист?</string>
+    <string name="nothing_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
+
 
     <string name="finish_editing">Завершить</string>
     <string name="cancel">Отмена</string>
+    <string name="confirm_deletion">Удалить</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 
 
     <string name="add_to_playlist">Добавить в плейлист</string>

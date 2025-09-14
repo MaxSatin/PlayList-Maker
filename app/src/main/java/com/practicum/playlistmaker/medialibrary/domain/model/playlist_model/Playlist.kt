@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
 
 data class Playlist(
+    val id: Long,
     val name: String,
     val description: String,
     val coverUri: Uri?,

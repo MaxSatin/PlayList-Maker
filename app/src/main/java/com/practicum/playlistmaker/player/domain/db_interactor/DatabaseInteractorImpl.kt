@@ -17,16 +17,24 @@ class DatabaseInteractorImpl(
         databaseRepository.removeFromFavorite(track)
     }
 
-    override suspend fun getAllTracksFromPlaylist(playlistName: String): List<Track> {
-        return databaseRepository.getAllTracksFromPlaylist(playlistName)
+    override suspend fun updateIsFavoriteStatus(isFavorite: Boolean, track: Track) {
+        databaseRepository.updateIsFavoriteStatus(isFavorite, track)
     }
 
-    override suspend fun insertPlayListTrackCrossRef(playlistName: String, track: Track): Long {
-        return databaseRepository.insertPlayListTrackCrossRef(playlistName, track)
+    override fun getFavoriteStatus(trackID: String): Flow<Boolean> {
+        return databaseRepository.getFavoriteStatus(trackID)
     }
 
-    override suspend fun checkPlaylistHasTrack(trackId: String, playlistName: String): Boolean {
-        return databaseRepository.checkPlaylistHasTrack(trackId, playlistName)
+    override suspend fun getAllTracksFromPlaylist(playlistId: Long): List<Track> {
+        return databaseRepository.getAllTracksFromPlaylist(playlistId)
+    }
+
+    override suspend fun insertPlayListTrackCrossRef(playlistId: Long, track: Track): Long {
+        return databaseRepository.insertPlayListTrackCrossRef(playlistId, track)
+    }
+
+    override suspend fun checkPlaylistHasTrack(trackId: String, playlistId: Long): Boolean {
+        return databaseRepository.checkPlaylistHasTrack(trackId, playlistId)
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> {

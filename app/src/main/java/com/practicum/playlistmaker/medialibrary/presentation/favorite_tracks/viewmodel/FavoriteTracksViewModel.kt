@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import com.practicum.playlistmaker.medialibrary.domain.screen_state.FavoriteListScreenState
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.media_library.FavoriteListScreenState
 import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryInteractor
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
 import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.utils.SingleLineEvent
@@ -39,9 +39,9 @@ class FavoriteTracksViewModel(
 
 
     fun loadFavoriteTrackList() {
-        render(
-            FavoriteListScreenState.Loading
-        )
+//        render(
+//            FavoriteListScreenState.Loading
+//        )
 
         viewModelScope.launch {
             mediaLibraryInteractor.getFavoriteTrackList()

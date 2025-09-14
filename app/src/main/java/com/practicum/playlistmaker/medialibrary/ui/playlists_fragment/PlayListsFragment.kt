@@ -16,9 +16,10 @@ import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistsFragmentBinding
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
-import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlayListsScreenState
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.media_library.PlayListsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.playlists.playlists.viewmodel.PlaylistViewModel
 import com.practicum.playlistmaker.medialibrary.ui.decorations.GridLayoutItemDecorations
+import com.practicum.playlistmaker.medialibrary.ui.playlist_details_fragment.PlaylistDetailsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayListsFragment() : Fragment() {
@@ -38,8 +39,12 @@ class PlayListsFragment() : Fragment() {
 
     private var isFirstTimeLoaded: Boolean = true
 
-    private val playlistAdapter = PlaylistAdapter {
-        Log.d("Openplaylists", "playlist is open!")
+    private val playlistAdapter = PlaylistAdapter { playlist ->
+
+        findNavController().navigate(
+            R.id.action_mediaLibraryFragment_to_playlistDetailsFragment,
+            PlaylistDetailsFragment.createArgs(playlist.id)
+        )
     }
 
     override fun onCreateView(
@@ -48,7 +53,6 @@ class PlayListsFragment() : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         _binding = PlaylistsFragmentBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -61,7 +65,6 @@ class PlayListsFragment() : Fragment() {
             AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
 
         viewModel.getPlaylists()
-
         with(binding.playlistsRecyclerView) {
             adapter = playlistAdapter
             addItemDecoration(GridLayoutItemDecorations(2, 8, true))
@@ -73,13 +76,6 @@ class PlayListsFragment() : Fragment() {
                 Log.d("PlaylistState", "$playlistScreenState")
                 processState(playlistScreenState)
             }
-
-        if (!arguments?.getString(PLAYLIST_CREATED).isNullOrEmpty()) {
-            var playlistName: String? = arguments?.getString(PLAYLIST_CREATED)
-            Log.d("PlaylistArgs", "${arguments?.getString(PLAYLIST_CREATED)}")
-            showAddedInPlaylistNotification("Плейлист $playlistName создан!")
-        }
-
 
         binding.createPlayListButton.setOnClickListener {
             findNavController().navigate(
@@ -106,19 +102,20 @@ class PlayListsFragment() : Fragment() {
 
     private fun showContent(playlists: List<Playlist>) {
         val playlist = playlists.firstOrNull()
-        if (isFirstTimeLoaded) {
-            isFirstTimeLoaded = false
-        } else {
             var areListsEqual = areListsAreEqual(lastPostedList, playlists) { p1, p2 ->
-                p1.name == p2.name
+                p1.id == p2.id
             }
-            if (!areListsEqual) {
+            if (!areListsEqual && lastPostedList.isEmpty() && isFirstTimeLoaded) {
+                lastPostedList = playlists
+            } else if (!areListsEqual) {
                 lastPostedList = playlists
                 showAddedInPlaylistNotification("Плейлист ${playlist?.name} создан!")
             }
-        }
+
+
 
         playlistAdapter.updateItems(playlists)
+        Log.d("PlaylistAdapter", "$playlists")
         binding.playlistsRecyclerView.isVisible = true
     }
 
@@ -149,6 +146,17 @@ class PlayListsFragment() : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onResume() {
+        super.onResume()
+        isFirstTimeLoaded = true
+    }
+
+    override fun onStart() {
+        super.onStart()
+        isFirstTimeLoaded = true
+    }
+
 
     companion object {
 

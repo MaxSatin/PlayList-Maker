@@ -6,6 +6,7 @@
     <dimen name="padding_8">8dp</dimen>
     <dimen name="padding_12">12dp</dimen>
     <dimen name="padding_16">16dp</dimen>
+    <dimen name="padding_20">20dp</dimen>
     <dimen name="padding_24">24dp</dimen>
     <dimen name="padding_26">26dp</dimen>
     <dimen name="padding_28">28dp</dimen>
@@ -16,12 +17,12 @@
     <dimen name="padding_104">104dp</dimen>
     <dimen name="button_width">328dp</dimen>
     <dimen name="button_high">220dp</dimen>
-    <dimen name="corner_radius">16dp</dimen>
-    <dimen name="corner_radius_400">400dp</dimen>
     <dimen name="small_corner_radius">2dp</dimen>
 
     <dimen name="stroke_1dp">1dp</dimen>
     <dimen name="stroke_2dp">2dp</dimen>
+    <dimen name="corner_radius_16">16dp</dimen>
+    <dimen name="corner_radius_400">400dp</dimen>
 
 
     <dimen name="radius_2">2dp</dimen>
@@ -34,7 +35,9 @@
     <dimen name="text_size_13sp">13sp</dimen>
     <dimen name="text_size_14sp">14sp</dimen>
     <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="text_size_18sp">16sp</dimen>
     <dimen name="text_size_22sp">22sp</dimen>
+    <dimen name="text_size_24sp">24sp</dimen>
 
 
 </resources>

@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.medialibrary.presentation.playlists.playlists.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,12 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.medialibrary.domain.interactor.MediaLibraryInteractor
 import com.practicum.playlistmaker.medialibrary.domain.model.playlist_model.Playlist
-import com.practicum.playlistmaker.medialibrary.domain.screen_state.PlayListsScreenState
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.media_library.PlayListsScreenState
 import com.practicum.playlistmaker.medialibrary.presentation.utils.SingleLineEvent
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
@@ -26,7 +23,7 @@ class PlaylistViewModel(
     private val playlistScreenStateLiveData = MutableLiveData<PlayListsScreenState>()
     fun getPlayListScreenState(): LiveData<PlayListsScreenState> = playlistScreenStateLiveData
 
-    private val mediatorStateLiveData = SingleLineEvent<PlayListsScreenState>().also { livedata ->
+    private val mediatorStateLiveData = MediatorLiveData<PlayListsScreenState>().also { livedata ->
         livedata.addSource(playlistScreenStateLiveData) { playlistState ->
             when (playlistState) {
                 is PlayListsScreenState.Content -> {
@@ -59,6 +56,7 @@ class PlaylistViewModel(
         viewModelScope.launch {
             mediaLibraryInteractor.getPlaylists()
                 .collect { playLists ->
+                    Log.d("PlaylistsFragment", "$playLists")
                     processResult(playLists)
                 }
         }

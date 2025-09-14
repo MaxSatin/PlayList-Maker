@@ -62,8 +62,8 @@
         <item name="android:textFontWeight">400</item>
     </style>
 
-    <style name="SettingsActivityButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="android:layout_width">24dp</item>
+    <style name="SettingsActivityButton">
+        <item name="android:layout_width">28dp</item>
         <item name="android:layout_height">24dp</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="iconTint">@color/grey</item>
@@ -181,6 +181,14 @@
         <item name="android:textSize">@dimen/text_size_22sp</item>
     </style>
 
+    <style name="NewPlaylistTitleStyle">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:textSize">@dimen/text_size_22sp</item>
+    </style>
+
     <style name="TabLayOutTextStyle" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/yp_black</item>
@@ -204,6 +212,7 @@
 
     <style name="ToolBarStyle">
         <item name="android:titleTextColor">@color/yp_black</item>
+        <item name="navigationIcon">@drawable/vector_arrow_back</item>
     </style>
 
     <style name="BottomNavigationStyle">
@@ -252,8 +261,9 @@
     </style>
 
     <style name="ClassicAttributes">
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@drawable/playlist_edit_bottom_background</item>
         <item name="android:textColor">@color/yp_black</item>
+
     </style>
 
     <style name="PlaylistNotificationStyle">

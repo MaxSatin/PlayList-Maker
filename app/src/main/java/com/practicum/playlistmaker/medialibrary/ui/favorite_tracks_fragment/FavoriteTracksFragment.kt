@@ -13,9 +13,8 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.medialibrary.presentation.favorite_tracks.viewmodel.FavoriteTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.practicum.playlistmaker.databinding.FavoriteTracksFragmentBinding
-import com.practicum.playlistmaker.medialibrary.domain.screen_state.FavoriteListScreenState
+import com.practicum.playlistmaker.medialibrary.domain.screen_state.media_library.FavoriteListScreenState
 import com.practicum.playlistmaker.medialibrary.domain.model.track_model.Track
-import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.player.ui.PlayerFragment
 
 class FavoriteTracksFragment() : Fragment() {
@@ -104,9 +103,7 @@ class FavoriteTracksFragment() : Fragment() {
 
         fun newInstance(favoriteListScreenState: FavoriteListScreenState): FavoriteTracksFragment {
             TODO()
-//            return FavoriteTracksFragment().apply {
-//                arguments = bundleOf(FAVORITE_TRACKLIST to ArrayList(favoriteTracks))
-//                Log.d("favoritesFragmentNewInstance", "$favoriteTracks")
+
         }
     }
 }

@@ -6,15 +6,28 @@ import kotlinx.coroutines.flow.Flow
 
 interface MediaLibraryInteractor {
 
-    suspend fun getAllTracksFromPlaylist(playlistName: String): List<Track>
+    fun share(text: String)
+
+    fun getAllTracksFromPlaylist(playlistId: Long): Flow<List<Track>>
 
     fun getPlaylists(): Flow<List<Playlist>>
+
+    fun getPlaylistById(playlistId: Long): Flow<Playlist>
+
+    suspend fun deleteTrackFromPlaylist(playlistId: Long, trackId: String)
+
+    suspend fun updatePlaylistTable(
+        playListId: Long,
+        newPlaylistName: String,
+        newDescription: String,
+        newCoverUri: String,
+    )
 
     suspend fun addPlaylistWithReplace(playlist: Playlist)
 
     suspend fun addPlaylist(playlist: Playlist)
 
-    suspend fun deletePlaylist(playlist: Playlist)
+    suspend fun deletePlaylist(playListId: Long)
 
     fun getFavoriteTrackList(): Flow<List<Track>>
 }
